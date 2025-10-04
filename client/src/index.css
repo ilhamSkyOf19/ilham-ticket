@@ -29,3 +29,11 @@
         background: none;
     }
 }
+
+
+
+/* hidden eye default */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
