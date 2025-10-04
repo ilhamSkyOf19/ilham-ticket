@@ -8,7 +8,7 @@ type Props = {
 
 const ErrorMessage: FC<Props> = ({ message }) => {
     return (
-        <div className='w-full h-6'>
+        <div className='w-full h-4 '>
             <p className={clsx(
                 'text-red-500 text-xs font-medium transition-all duration-300 ease-in-out capitalize italic',
                 message ? 'visible' : 'invisible'

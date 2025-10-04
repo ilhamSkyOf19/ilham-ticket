@@ -19,7 +19,7 @@ type Props = {
     error?: string;
 }
 
-const InputSing: FC<Props> = ({ name, label, type, placeholder, value, register, error }) => {
+const InputSign: FC<Props> = ({ name, label, type, placeholder, value, register, error }) => {
 
     // state eye 
     const [eye, setEye] = useState<boolean>(false);
@@ -74,4 +74,4 @@ const InputSing: FC<Props> = ({ name, label, type, placeholder, value, register,
     )
 }
 
-export default InputSing
+export default InputSign
