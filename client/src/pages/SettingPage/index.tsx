@@ -8,6 +8,7 @@ import helpCenter from '../../assets/images/icons/24-support.svg';
 import like from '../../assets/images/icons/like.svg';
 import cards from '../../assets/images/icons/cards.svg';
 import ButtonActionSetting from '../../components/ButtonActionSetting';
+import HeaderPage from '../../components/HeaderPage';
 
 
 // type action 
@@ -33,9 +34,9 @@ const SettingPage: FC = () => {
 
 
     return (
-        <div className='w-full h-full bg-transparent flex flex-col justify-start items-start pt-18 px-6 gap-6'>
+        <div className='w-full h-full bg-transparent flex flex-col justify-start items-start px-6 gap-6'>
             {/* header */}
-            <h1 className='text-white font-bold text-3xl'>Settings</h1>
+            <HeaderPage label='Settings' />
 
 
             <div className='w-full flex flex-col justify-start items-center gap-6'>

@@ -20,7 +20,7 @@ const ClientLayout: FC = () => {
 
 
             {/* children */}
-            <div className='z-10 bg-transparent w-full min-h-[100vh] backdrop-blur-3xl'>
+            <div className='z-10 bg-transparent w-full min-h-[100vh] backdrop-blur-3xl pt-18 pb-26'>
                 <Outlet />
 
             </div>

@@ -4,6 +4,7 @@ import ClientLayout from "../Layouts/ClientLayout";
 import SignInPage from "../pages/SignInPage";
 import SignUpPage from "../pages/SignUpPage";
 import SettingPage from "../pages/SettingPage";
+import EWalletPage from "../pages/EWalletPage";
 
 // router 
 const router = createBrowserRouter([
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/wallet',
-                element: <SettingPage />
+                element: <EWalletPage />
             },
             {
                 path: '/setting',
