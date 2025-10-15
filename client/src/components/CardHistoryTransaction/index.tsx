@@ -2,9 +2,10 @@ import { type FC } from 'react'
 
 // thumbnail
 import noteFavorite from '../../assets/images/icons/note-favorite.svg'
-import { FormatIDR } from '../../helpers/formated'
+import { formatIDR } from '../../helpers/formated'
 import clsx from 'clsx'
 import cards from '../../assets/images/icons/cards.svg'
+import Status from '../Status'
 
 
 // props
@@ -50,12 +51,7 @@ const CardHistoryTransaction: FC<Props> = ({ plus, nominal, name, thumbnail, sta
 
             {/* ket */}
             <div className='flex-1 flex flex-col justify-center items-end gap-2'>
-                <h2 className={clsx(
-                    'uppercase text-xs py-1.5 px-2 rounded-full font-medium',
-                    status === 'success' ? 'text-green-700 bg-green-200' : 'text-red-500 bg-red-200'
-                )}>
-                    {status}
-                </h2>
+                <Status status={status} />
 
                 {/* date */}
                 <p className='text-xs text-slate-200 italic font-light'>
@@ -84,7 +80,7 @@ const Nominal: FC<NominalProps> = ({ plus, nominal }) => {
                 <span className='mr-0.5'>
                     {plus ? '+' : '-'}
                 </span>
-                <span>{FormatIDR(nominal)}</span>
+                <span>{formatIDR(nominal)}</span>
             </p>
 
         </div>

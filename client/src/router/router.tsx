@@ -5,6 +5,8 @@ import SignInPage from "../pages/SignInPage";
 import SignUpPage from "../pages/SignUpPage";
 import SettingPage from "../pages/SettingPage";
 import EWalletPage from "../pages/EWalletPage";
+import TicketPage from "../pages/TicketPage";
+import TicketDetailPage from "../pages/TicketDetailPage";
 
 // router 
 const router = createBrowserRouter([
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/ticket',
-                element: <SettingPage />
+                element: <TicketPage />
             },
             {
                 path: '/wallet',
@@ -41,6 +43,12 @@ const router = createBrowserRouter([
                 element: <SettingPage />
             }
         ]
+    },
+
+    // ticket detail
+    {
+        path: '/ticket/:id',
+        element: <TicketDetailPage />
     }
 ])
 

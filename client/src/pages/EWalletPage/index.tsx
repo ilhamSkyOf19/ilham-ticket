@@ -2,7 +2,7 @@ import { type FC } from 'react'
 import HeaderPage from '../../components/HeaderPage'
 import ButtonWhiteBlack from '../../components/ButtonWhiteBlack'
 import CardHistoryTransaction from '../../components/CardHistoryTransaction'
-import { FormatIDR } from '../../helpers/formated'
+import { formatIDR } from '../../helpers/formated'
 
 
 
@@ -61,7 +61,7 @@ const Saldo: FC<SaldoProps> = ({ saldo, name, expired, branch }) => {
 
                 {/* price */}
                 <div className='w-full flex flex-row justify-start items-start z-10 px-6 pb-5'>
-                    <h2 className='text-white font-bold text-4xl'>{FormatIDR(saldo)}</h2>
+                    <h2 className='text-white font-bold text-4xl'>{formatIDR(saldo)}</h2>
                 </div>
             </div>
 
