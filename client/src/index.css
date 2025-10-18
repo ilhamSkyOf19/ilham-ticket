@@ -7,6 +7,7 @@
     --font-poppins: 'Poppins', sans-serif;
     --color-carbon: #0B0B0B;
     --color-blue-dark: #000015;
+    --text-to-small: 0.6rem;
 }
 
 
@@ -37,4 +38,16 @@
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
+}
+
+
+
+/* hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }

@@ -27,6 +27,7 @@ import note from '../../assets/images/icons/note.svg'
 
 // thumbnail
 import dumyThumb from '../../assets/images/thumbnails/th3.png'
+import CardBonus from '../../components/CardBonus';
 
 
 const TicketDetailPage: FC = () => {
@@ -35,7 +36,7 @@ const TicketDetailPage: FC = () => {
     const [active, setActive] = useState<boolean>(false);
 
     // state bonus
-    const [activeBonus, setActiveBonus] = useState<boolean>(false);
+    const [activeBonus, setActiveBonus] = useState<boolean>(true);
 
     // navigate
     const navigate = useNavigate();
@@ -227,7 +228,21 @@ const TicketDetailPage: FC = () => {
 
                     {
                         activeBonus ? (
-                            <p>Ada Bonus</p>
+                            <div className='w-full flex flex-row justify-start items-start overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory'>
+                                {/* card bonus */}
+                                <CardBonus
+                                    code='PS1'
+                                />
+                                <CardBonus
+                                    code='PS2'
+                                />
+                                <CardBonus
+                                    code='PS2'
+                                />
+                                <CardBonus
+                                    code='M1'
+                                />
+                            </div>
                         ) : (
                             <p className='text-slate-500 font-semibold'>Tidak Ada Bonus</p>
                         )

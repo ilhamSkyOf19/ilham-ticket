@@ -54,7 +54,7 @@ const CardHistoryTransaction: FC<Props> = ({ plus, nominal, name, thumbnail, sta
                 <Status status={status} />
 
                 {/* date */}
-                <p className='text-xs text-slate-200 italic font-light'>
+                <p className='text-to-small text-slate-200 italic font-light'>
                     {date}
                 </p>
             </div>
@@ -74,7 +74,7 @@ const Nominal: FC<NominalProps> = ({ plus, nominal }) => {
         <div className='flex flex-row justify-start items-start'>
             {/* plus */}
             <p className={clsx(
-                'text-sm',
+                'text-xs',
                 plus ? 'text-green-500' : 'text-red-500'
             )}>
                 <span className='mr-0.5'>
