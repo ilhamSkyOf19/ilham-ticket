@@ -32,7 +32,7 @@ const CardTicket: FC<Props> = ({ id, thumbnail, name, genre, location, date, sta
             {/* thumbnail */}
             <div className='flex-1'>
                 <div className='w-[6.5rem] h-[7.5rem] rounded-2xl overflow-hidden'>
-                    <img src={thumbnail ?? thumbDefault} alt="thumbnail" className='w-full h-full object-cover' />
+                    <img src={thumbnail ?? thumbDefault} alt="thumbnail" className='w-full h-full object-cover' loading='lazy' />
                 </div>
             </div>
 

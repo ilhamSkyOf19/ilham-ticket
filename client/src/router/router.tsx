@@ -7,6 +7,7 @@ import SettingPage from "../pages/SettingPage";
 import EWalletPage from "../pages/EWalletPage";
 import TicketPage from "../pages/TicketPage";
 import TicketDetailPage from "../pages/TicketDetailPage";
+import HomePage from "../pages/HomePage";
 
 // router 
 const router = createBrowserRouter([
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <SettingPage />
+                element: <HomePage />
             },
             {
                 path: '/ticket',

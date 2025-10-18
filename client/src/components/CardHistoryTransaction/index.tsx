@@ -30,7 +30,7 @@ const CardHistoryTransaction: FC<Props> = ({ plus, nominal, name, thumbnail, sta
                 )}>
                     <img src={thumbnail ?? cards} alt="thumbnail" className={clsx(
                         plus ? 'object-cover w-full h-full' : 'w-9 h-9'
-                    )} />
+                    )} loading='lazy' />
 
                 </div>
 
