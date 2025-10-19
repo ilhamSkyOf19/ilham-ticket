@@ -13,6 +13,7 @@ import domyThhumbnail from '../../assets/images/thumbnails/th1.png'
 import domyThhumbnail2 from '../../assets/images/thumbnails/th3.png'
 import iconNotification from '../../assets/images/icons/notification-bell.svg'
 import CardMovie from '../../components/CardMovie'
+import CardComingSoon from '../../components/CardComingSoon'
 
 const HomePage: FC = () => {
     // genre 
@@ -83,7 +84,7 @@ const HomePage: FC = () => {
             {/* card movie */}
             <div className='w-full flex flex-col justify-start items-start gap-3'>
                 {/* title */}
-                <h2 className='text-white font-semibold capitalize text-lg'>
+                <h2 className=' text-white font-semibold capitalize text-lg'>
                     all new movies
                 </h2>
 
@@ -92,6 +93,20 @@ const HomePage: FC = () => {
                     <CardMovie />
                     <CardMovie />
                     <CardMovie />
+                </div>
+            </div>
+
+            {/* coming soon movie */}
+            <div className='w-full flex flex-col justify-start items-start gap-3'>
+                {/* title */}
+                <h2 className=' text-white font-semibold capitalize text-lg'>
+                    coming soon
+                </h2>
+
+
+                {/* content card */}
+                <div className='w-full flex flex-row justify-start items-start gap-5 snap-x snap-mandatory'>
+                    <CardComingSoon />
                 </div>
             </div>
         </div>
