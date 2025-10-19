@@ -1,41 +1,38 @@
-import { useEffect, useState, type FC } from 'react'
-import CardHighlightFilm from '../../components/CardHighlightFilm'
+import { type FC } from 'react'
 import SearchBox from '../../components/SearchBox'
+import { useForm } from 'react-hook-form'
+import { SearchValidation } from '../../validations/search-validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { SearchModel } from '../../models/search-model'
+import clsx from 'clsx'
+import CardHighlightMovie from '../../components/CardHighlightMovie'
 
 // profile dumy 
 import dumy from '../../assets/images/photos/dumy.png'
 import domyThhumbnail from '../../assets/images/thumbnails/th1.png'
 import domyThhumbnail2 from '../../assets/images/thumbnails/th3.png'
 import iconNotification from '../../assets/images/icons/notification-bell.svg'
-import { useForm } from 'react-hook-form'
-import { SearchValidation } from '../../validations/search-validation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import type { SearchModel } from '../../models/search-model'
-import clsx from 'clsx'
+import CardMovie from '../../components/CardMovie'
 
 const HomePage: FC = () => {
     // genre 
     const genre: string[] = ['All', 'Animation', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Thriller']
 
-    // state active 
-    const [active, setActive] = useState<string>('All');
-
 
     // use hook form 
-    const { register, watch } = useForm<SearchModel>({
+    const { register, watch, setValue } = useForm<SearchModel>({
+        values: {
+            keyword: '',
+            genre: 'All'
+        },
         resolver: zodResolver(SearchValidation.SEARCH)
     })
 
 
-    useEffect(() => {
-        console.log(watch('keyword'));
-    }, [watch('keyword')])
-
-    // handle active
-
-    const handleActive = (path: string) => {
-        setActive(path);
-    }
+    // cek keyword
+    // useEffect(() => {
+    //     console.log(watch('keyword'));
+    // }, [watch('keyword')])
 
 
 
@@ -49,9 +46,9 @@ const HomePage: FC = () => {
 
             {/* thumbnails film slide */}
             <div className='w-full overflow-x-auto scrollbar-hide flex flex-row justify-start items-start gap-4 snap-x snap-mandatory'>
-                {/* thumbnails film */}
-                <CardHighlightFilm thumbnail={domyThhumbnail} />
-                <CardHighlightFilm thumbnail={domyThhumbnail2} />
+                {/* thumbnails Movie */}
+                <CardHighlightMovie thumbnail={domyThhumbnail} />
+                <CardHighlightMovie thumbnail={domyThhumbnail2} />
             </div>
 
 
@@ -68,17 +65,33 @@ const HomePage: FC = () => {
                 </h2>
 
                 {/* list genre */}
-                <div className='w-full flex flex-row justify-start items-start gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide'>
+                <div className='w-full flex flex-row justify-start items-start gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide'>
                     {
                         genre.map((label, index: number) => (
                             <GenreComponent
-                                active={label === active}
+                                active={label === watch('genre')}
                                 key={index}
                                 label={label}
-                                handleClick={() => handleActive(label)}
+                                handleClick={() => setValue('genre', label as SearchModel['genre'])}
                             />
                         ))
                     }
+                </div>
+            </div>
+
+
+            {/* card movie */}
+            <div className='w-full flex flex-col justify-start items-start gap-3'>
+                {/* title */}
+                <h2 className='text-white font-semibold capitalize text-lg'>
+                    all new movies
+                </h2>
+
+                {/* content card */}
+                <div className='w-full flex flex-col justify-start items-start gap-5'>
+                    <CardMovie />
+                    <CardMovie />
+                    <CardMovie />
                 </div>
             </div>
         </div>
@@ -132,7 +145,7 @@ const GenreComponent: FC<PropsGenre> = ({ label, handleClick, active }) => {
     return (
         <button type='button' className={clsx(
             '  capitalize text-base font-semibold py-2.5 px-4 rounded-full transition-all duration-300 ease-in-out snap-start',
-            active ? 'bg-white text-black' : 'bg-transparent text-white'
+            active ? 'bg-white text-black' : 'bg-white/10 text-white'
         )} onClick={handleClick}>
             {label}
         </button>

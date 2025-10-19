@@ -1,3 +1,4 @@
 export type SearchModel = {
-    keyword: string
+    keyword: string;
+    genre: 'All' | 'Animation' | 'Comedy' | 'Drama' | 'Fantasy' | 'Horror' | 'Romance' | 'Thriller'
 }

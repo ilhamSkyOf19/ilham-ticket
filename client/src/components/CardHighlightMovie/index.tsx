@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 type Props = {
     thumbnail: string;
 }
-const CardHighlightFilm: FC<Props> = ({ thumbnail }) => {
+const CardHighlightMovie: FC<Props> = ({ thumbnail }) => {
     return (
         <Link to={'/'} className='w-[18rem] h-[12rem] flex flex-row justify-center items-center relative rounded-3xl overflow-hidden shrink-0 snap-start'>
             {/* img */}
@@ -20,4 +20,4 @@ const CardHighlightFilm: FC<Props> = ({ thumbnail }) => {
     )
 }
 
-export default CardHighlightFilm
+export default CardHighlightMovie
