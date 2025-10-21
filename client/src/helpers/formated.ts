@@ -13,3 +13,14 @@ export const formatDate = (date: Date): string => {
             minute: '2-digit',
         })
 }
+
+
+// format date 
+export const formatOnlyDate = (date: Date): string => {
+    return date.toLocaleString('id-ID',
+        {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+        })
+}

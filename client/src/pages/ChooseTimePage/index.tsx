@@ -4,8 +4,10 @@ import HeaderBack from '../../components/HeaderBack';
 import theaterDumy from '../../assets/images/thumbnails/theater1.png';
 import CardMovie from '../../components/CardMovie';
 import ListTheater from '../../components/ListTheater';
+import CardTime from '../../components/CardTime';
+import type { TimeType } from '../../types/types';
 
-const ChooseTheaterPage: FC = () => {
+const ChooseTimePage: FC = () => {
 
 
     // navigate 
@@ -25,13 +27,47 @@ const ChooseTheaterPage: FC = () => {
         // cek active
         if (active) {
             // redirect 
-            navigate(`/choose-time/${active}`);
+            navigate(`/choose-seat/${active}`);
         } else {
             // alert 
             alert('Please choose theater');
         }
 
     }
+
+
+    const dataTime: TimeType[] = [
+        {
+            id: 1,
+            status: 'available',
+            time: '10:00',
+            date: new Date()
+        },
+        {
+            id: 2,
+            status: 'full',
+            time: '12:00',
+            date: new Date()
+        },
+        {
+            id: 3,
+            status: 'available',
+            time: '14:00',
+            date: new Date()
+        },
+        {
+            id: 4,
+            status: 'available',
+            time: '16:00',
+            date: new Date()
+        },
+        {
+            id: 5,
+            status: 'available',
+            time: '18:00',
+            date: new Date()
+        },
+    ]
 
 
     useEffect(() => { console.log(active) }, [active])
@@ -41,7 +77,7 @@ const ChooseTheaterPage: FC = () => {
         <div className='w-full min-h-[100vh] flex flex-col justify-start items-start relative bg-black pt-12 gap-6 pb-32'>
             <div className='w-full px-4'>
                 {/* header */}
-                <HeaderBack label='choose theater' />
+                <HeaderBack label='choose time' />
             </div>
 
             {/* thumbnail movie */}
@@ -58,18 +94,32 @@ const ChooseTheaterPage: FC = () => {
                         thumbnail: theaterDumy,
                         name: 'Cinema 1',
                         location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
-                    },
-                    {
-                        id: 2,
-                        thumbnail: theaterDumy,
-                        name: 'Cinema 1',
-                        location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
                     }
                 ]}
-                    choose={true}
-                    active={active as number}
-                    selected={handleActive}
                 />
+            </div>
+
+
+            {/* choose time */}
+            <div className='w-full flex flex-col justify-start items-start gap-5 px-4'>
+                {/* title */}
+                <h3 className='text-white text-base font-semibold'>
+                    Choose Time
+                </h3>
+
+                {/* time */}
+                <div className='w-full grid grid-cols-2 auto-cols-max gap-3 md:grid-cols-3'>
+                    {/* card  time */}
+                    {
+                        dataTime.length > 0 && (
+                            dataTime.map((item: TimeType, index: number) => (
+                                <CardTime key={index} id={item.id} status={item.status} time={item.time} date={item.date} selected={handleActive} active={active === item.id} />
+                            ))
+                        )
+                    }
+                </div>
+
+
             </div>
 
 
@@ -83,4 +133,4 @@ const ChooseTheaterPage: FC = () => {
     )
 }
 
-export default ChooseTheaterPage
+export default ChooseTimePage

@@ -27,3 +27,12 @@ export type TheatersType = {
     name: string;
     location: string;
 }
+
+
+// type time 
+export type TimeType = {
+    id: number;
+    status: 'available' | 'full';
+    time: string;
+    date: Date;
+}

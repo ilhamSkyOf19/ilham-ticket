@@ -11,7 +11,7 @@ type Props = TheatersType & {
 const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active, selected }) => {
     return (
         <button type='submit' disabled={!choose} className={clsx(
-            'w-full h-[9rem]  flex flex-row justify-start items-start gap-4 px-4 py-3 rounded-3xl text-left',
+            'w-full h-[8.5rem]  flex flex-row justify-start items-start gap-4 px-4.5 py-3.5 rounded-3xl text-left',
             choose && (active === id) ? 'bg-blue-800' : 'bg-white/10'
         )}
 
@@ -22,7 +22,7 @@ const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active,
             </div>
 
             {/* description */}
-            <div className='flex-2 h-full flex flex-col justify-center items-start gap-2'>
+            <div className='flex-2/5 h-full flex flex-col justify-center items-start gap-2'>
                 {/* name */}
                 <h3 className='text-white text-base font-semibold'>
                     {name}
