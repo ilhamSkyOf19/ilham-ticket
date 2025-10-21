@@ -5,17 +5,16 @@ import { Link } from 'react-router-dom'
 type Props = {
     active: boolean,
     path: string
-    handleActive: (path: string) => void
     icon: string
     name: string
 }
 
-const ButtonNav: FC<Props> = ({ active, path, handleActive, icon, name }) => {
+const ButtonNav: FC<Props> = ({ active, path, icon, name }) => {
     return (
         <Link to={path} className={clsx(
             'w-12 h-12 rounded-full  backdrop-blur-sm flex flex-row justify-center items-center transition-all duration-300 ease-in-out',
             active ? 'bg-white px-3.5 w-32 gap-2' : 'bg-white/10'
-        )} onClick={() => { handleActive(path) }} >
+        )}  >
             <img src={icon} alt="icon" className={clsx(
                 'w-6 h-6',
                 active ? 'invert' : 'grayscale'

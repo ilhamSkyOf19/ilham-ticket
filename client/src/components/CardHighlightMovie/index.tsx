@@ -6,7 +6,7 @@ type Props = {
 }
 const CardHighlightMovie: FC<Props> = ({ thumbnail }) => {
     return (
-        <Link to={'/'} className='w-[18rem] h-[12rem] flex flex-row justify-center items-center relative rounded-3xl overflow-hidden shrink-0 snap-start'>
+        <Link to={'/movie-detail/1'} className='w-[18rem] h-[12rem] flex flex-row justify-center items-center relative rounded-3xl overflow-hidden shrink-0 snap-start'>
             {/* img */}
             <div className='absolute w-full h-full overflow-hidden'>
                 <img src={thumbnail} alt="thumbnail" className='w-full h-full object-cover' loading='lazy' />

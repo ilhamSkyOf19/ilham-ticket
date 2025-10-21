@@ -7,12 +7,13 @@ import { useEffect, useState, type FC } from 'react'
 import popcorn from '../../assets/images/thumbnails/popcorn.png'
 import milk from '../../assets/images/thumbnails/milk.png'
 import coffe from '../../assets/images/icons/coffee.svg'
+import type { BonusType } from '../../types/types'
 
 
 
 // Props
 type Props = {
-    code: 'PS1' | 'PS2' | 'PS3' | 'M1'
+    code: BonusType;
 }
 
 

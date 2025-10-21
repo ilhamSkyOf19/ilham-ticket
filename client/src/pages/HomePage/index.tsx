@@ -14,10 +14,11 @@ import domyThhumbnail2 from '../../assets/images/thumbnails/th3.png'
 import iconNotification from '../../assets/images/icons/notification-bell.svg'
 import CardMovie from '../../components/CardMovie'
 import CardComingSoon from '../../components/CardComingSoon'
+import type { Genre } from '../../types/types'
 
 const HomePage: FC = () => {
     // genre 
-    const genre: string[] = ['All', 'Animation', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Thriller']
+    const genre: Genre[] = ['All', 'Animation', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Thriller', 'Action']
 
 
     // use hook form 
@@ -40,35 +41,44 @@ const HomePage: FC = () => {
 
 
     return (
-        <div className='w-full flex flex-col justify-start items-start px-6 gap-6'>
+        <div className='w-full flex flex-col justify-start items-start gap-6'>
             {/* header */}
             <HeaderComponent />
 
 
             {/* thumbnails film slide */}
             <div className='w-full overflow-x-auto scrollbar-hide flex flex-row justify-start items-start gap-4 snap-x snap-mandatory'>
+                {/* spacer */}
+                <div className='shrink-0 snap-start' />
                 {/* thumbnails Movie */}
                 <CardHighlightMovie thumbnail={domyThhumbnail} />
                 <CardHighlightMovie thumbnail={domyThhumbnail2} />
+                <CardHighlightMovie thumbnail={domyThhumbnail} />
+                <CardHighlightMovie thumbnail={domyThhumbnail2} />
+                <CardHighlightMovie thumbnail={domyThhumbnail} />
+                <CardHighlightMovie thumbnail={domyThhumbnail2} />
+                {/* spacer */}
+                <div className='shrink-0 snap-start' />
             </div>
 
 
             {/* search box */}
-            <div className='w-full '>
+            <div className='w-full px-4'>
                 <SearchBox register={register('keyword')} />
             </div>
 
             {/* genre */}
             <div className='w-full flex flex-col justify-start items-start gap-2'>
                 {/* title */}
-                <h2 className='text-white font-semibold text-lg'>
+                <h2 className='text-white font-semibold text-lg pl-4'>
                     Browse Genre
                 </h2>
 
                 {/* list genre */}
                 <div className='w-full flex flex-row justify-start items-start gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide'>
+                    <div className='w-1 shrink-0 snap-start' />
                     {
-                        genre.map((label, index: number) => (
+                        genre.map((label: Omit<Genre, 'All'>, index: number) => (
                             <GenreComponent
                                 active={label === watch('genre')}
                                 key={index}
@@ -77,12 +87,13 @@ const HomePage: FC = () => {
                             />
                         ))
                     }
+                    <div className='w-1 shrink-0 snap-start' />
                 </div>
             </div>
 
 
             {/* card movie */}
-            <div className='w-full flex flex-col justify-start items-start gap-3'>
+            <div className='w-full flex flex-col justify-start items-start gap-3 px-4'>
                 {/* title */}
                 <h2 className=' text-white font-semibold capitalize text-lg'>
                     all new movies
@@ -99,14 +110,17 @@ const HomePage: FC = () => {
             {/* coming soon movie */}
             <div className='w-full flex flex-col justify-start items-start gap-3'>
                 {/* title */}
-                <h2 className=' text-white font-semibold capitalize text-lg'>
+                <h2 className=' text-white font-semibold capitalize text-lg pl-4'>
                     coming soon
                 </h2>
 
 
                 {/* content card */}
-                <div className='w-full flex flex-row justify-start items-start gap-5 snap-x snap-mandatory'>
+                <div className='w-full flex flex-row justify-start items-start gap-5 snap-x snap-mandatory overflow-x-auto scrollbar-hide'>
+                    <div className='shrink-0 snap-start' />
                     <CardComingSoon />
+                    <CardComingSoon />
+                    <div className='shrink-0 snap-start' />
                 </div>
             </div>
         </div>
@@ -117,7 +131,7 @@ const HomePage: FC = () => {
 // header 
 const HeaderComponent: FC = () => {
     return (
-        <div className='w-full flex flex-row justify-between items-center'>
+        <div className='w-full flex flex-row justify-between items-center px-4'>
             {/* profile */}
             <div className='flex-3/4 flex flex-row justify-start items-center gap-4'>
                 {/* img */}
@@ -152,7 +166,7 @@ const HeaderComponent: FC = () => {
 
 // genre 
 type PropsGenre = {
-    label: string;
+    label: Omit<Genre, 'All'>;
     handleClick: () => void;
     active: boolean
 }

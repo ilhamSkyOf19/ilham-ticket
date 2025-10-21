@@ -8,6 +8,7 @@ import EWalletPage from "../pages/EWalletPage";
 import TicketPage from "../pages/TicketPage";
 import TicketDetailPage from "../pages/TicketDetailPage";
 import HomePage from "../pages/HomePage";
+import MovieDetailPage from "../pages/MovieDetailPage";
 
 // router 
 const router = createBrowserRouter([
@@ -25,32 +26,43 @@ const router = createBrowserRouter([
     // layout client 
     {
         path: "/",
-        element: <ClientLayout />,
         children: [
             {
-                index: true,
-                element: <HomePage />
+                path: '/',
+                element: <ClientLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <HomePage />
+                    },
+                    {
+                        path: '/ticket',
+                        element: <TicketPage />
+                    },
+                    {
+                        path: '/wallet',
+                        element: <EWalletPage />
+                    },
+                    {
+                        path: '/setting',
+                        element: <SettingPage />
+                    }
+                ]
             },
+            // ticket detail
             {
-                path: '/ticket',
-                element: <TicketPage />
+                path: '/movie-detail/:id',
+                element: <MovieDetailPage />
             },
+            // ticket detail
             {
-                path: '/wallet',
-                element: <EWalletPage />
-            },
-            {
-                path: '/setting',
-                element: <SettingPage />
+                path: '/ticket/:id',
+                element: <TicketDetailPage />
             }
         ]
     },
 
-    // ticket detail
-    {
-        path: '/ticket/:id',
-        element: <TicketDetailPage />
-    }
+
 ])
 
 

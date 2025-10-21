@@ -4,7 +4,7 @@ import ComponentInfo from '../ComponentInfo'
 import th2 from '../../assets/images/thumbnails/th2.png'
 import iconVideo from '../../assets/images/icons/video-vertical-grey.svg'
 import iconLocation from '../../assets/images/icons/location.svg'
-import iconStar from '../../assets/images/icons/star.svg'
+import Rating from '../Rating'
 
 
 const CardMovie: FC = () => {
@@ -46,11 +46,7 @@ const CardMovie: FC = () => {
 
             {/* rating */}
             <div className='flex-1 h-full flex flex-col justify-center items-end'>
-                <div className='w-full flex flex-row justify-center items-start gap-1 bg-white/10 rounded-full py-1.5 px-4'>
-                    <p className='text-white font-semibold text-xs'>4.5</p>
-                    {/* icon start */}
-                    <img src={iconStar} alt="icon start" className='w-3.5 h-3.5' />
-                </div>
+                <Rating rating={8.5} />
             </div>
         </div>
     )

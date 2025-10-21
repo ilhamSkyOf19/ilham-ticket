@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 
 
 
@@ -10,6 +10,7 @@ import videoPlay from '../../assets/images/icons/video-play.svg'
 import ticket from '../../assets/images/icons/ticket-star.svg'
 import card from '../../assets/images/icons/cards.svg'
 import setting from '../../assets/images/icons/setting-2.svg'
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -18,6 +19,14 @@ const BottomNavbar: FC = () => {
     // active 
     const [active, setActive] = useState<string>('/');
 
+
+    // pathname
+    const pathname = useLocation().pathname;
+
+    // handle active 
+    useEffect(() => {
+        setActive(pathname);
+    }, [pathname])
 
     // link
     const LinkNav: LinkType[] = [
@@ -52,7 +61,7 @@ const BottomNavbar: FC = () => {
                 {/* icon */}
                 {
                     LinkNav.map((item: LinkType, index) => (
-                        <ButtonNav key={index} name={item.name} active={active === item.path} path={item.path} handleActive={() => { setActive(item.path) }} icon={item.icon} />
+                        <ButtonNav key={index} name={item.name} active={active === item.path} path={item.path} icon={item.icon} />
                     ))
                 }
             </div>

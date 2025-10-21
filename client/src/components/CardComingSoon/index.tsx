@@ -6,7 +6,7 @@ import videoPlay from '../../assets/images/icons/video-vertical-white.svg'
 
 const CardComingSoon: FC = () => {
     return (
-        <div className='snap-start w-[15rem] h-[17rem] bg-white rounded-3xl relative overflow-hidden'>
+        <div className='snap-start w-[15rem] h-[17rem] bg-white rounded-3xl relative overflow-hidden shrink-0'>
             {/* thumbnail */}
             <div className='absolute w-full h-full'>
                 <img src={thumnDumy} alt="thumbnail" className='w-full h-full object-cover' />
