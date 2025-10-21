@@ -22,6 +22,7 @@ export type ReviewsType = {
 
 // type Theaters
 export type TheatersType = {
+    id: number;
     thumbnail: string;
     name: string;
     location: string;

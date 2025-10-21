@@ -9,6 +9,7 @@ import TicketPage from "../pages/TicketPage";
 import TicketDetailPage from "../pages/TicketDetailPage";
 import HomePage from "../pages/HomePage";
 import MovieDetailPage from "../pages/MovieDetailPage";
+import ChooseTheaterPage from "../pages/ChooseTheaterPage";
 
 // router 
 const router = createBrowserRouter([
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
                     }
                 ]
             },
-            // ticket detail
+            // movie detail
             {
                 path: '/movie-detail/:id',
                 element: <MovieDetailPage />
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
             {
                 path: '/ticket/:id',
                 element: <TicketDetailPage />
+            },
+            {
+                path: '/choose-theater/:id',
+                element: <ChooseTheaterPage />
             }
         ]
     },

@@ -13,9 +13,9 @@ import Rating from '../../components/Rating';
 import Bonus from '../../components/Bonus';
 import { formatIDR } from '../../helpers/formated';
 import type { MovieType } from '../../models/movie-model';
-import type { ReviewsType, TheatersType } from '../../types/types';
+import type { ReviewsType } from '../../types/types';
 import CardReview from '../../components/CardReview';
-import CardTheater from '../../components/CardTheater';
+import ListTheater from '../../components/ListTheater';
 
 
 // Props
@@ -128,13 +128,15 @@ const MovieDetailPage: FC = () => {
                                             comments: 'this is the best movie ever'
                                         },
                                     ]} /> : sectionState === 'theaters' ?
-                                        <Theater theaters={data?.theaters ?? [
+                                        <ListTheater theaters={data?.theaters ?? [
                                             {
+                                                id: 1,
                                                 thumbnail: theaterDumy,
                                                 name: 'Cinema 1',
                                                 location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
                                             },
                                             {
+                                                id: 1,
                                                 thumbnail: theaterDumy,
                                                 name: 'Cinema 1',
                                                 location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
@@ -161,7 +163,7 @@ const MovieDetailPage: FC = () => {
 
 
                     {/* button */}
-                    <Link to={'/booking'} className='text-base font-bold text-black h-full flex justify-center items-center px-4 bg-white rounded-full capitalize'>
+                    <Link to={'/choose-theater/1'} className='text-base font-bold text-black h-full flex justify-center items-center px-4 bg-white rounded-full capitalize'>
                         buy ticket
                     </Link>
                 </div>
@@ -247,34 +249,6 @@ const Review: FC<PropsReview> = ({ reviews }) => {
     )
 }
 
-
-// Theater
-type PropsTheater = {
-    theaters: TheatersType[];
-};
-const Theater: FC<PropsTheater> = ({ theaters }) => {
-    return (
-        <div className='w-full flex flex-col justify-start items-start gap-5'>
-            {/* title */}
-            <h3 className='text-white text-base font-semibold'>
-                Available in Theaters
-            </h3>
-
-
-            {/* theater */}
-            <div className='w-full flex flex-col justify-start items-start gap-4.5'>
-                {/* card theater */}
-                {
-                    theaters.length > 0 && (
-                        theaters.map((item: TheatersType, index: number) => (
-                            <CardTheater key={index} thumbnail={item.thumbnail} name={item.name} location={item.location} />
-                        )
-                        ))
-                }
-            </div>
-        </div>
-    )
-}
 
 
 export default MovieDetailPage

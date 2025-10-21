@@ -1,11 +1,21 @@
 import { type FC } from 'react'
 import type { TheatersType } from '../../types/types'
+import clsx from 'clsx';
 
 
-type Props = TheatersType;
-const CardTheater: FC<Props> = ({ thumbnail, name, location }) => {
+type Props = TheatersType & {
+    choose?: boolean;
+    active?: number;
+    selected?: (id: number) => void
+};
+const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active, selected }) => {
     return (
-        <div className='w-full h-[9rem] bg-white/10 flex flex-row justify-start items-start gap-4 px-4 py-3 rounded-3xl '>
+        <button type='submit' disabled={!choose} className={clsx(
+            'w-full h-[9rem]  flex flex-row justify-start items-start gap-4 px-4 py-3 rounded-3xl text-left',
+            choose && (active === id) ? 'bg-blue-800' : 'bg-white/10'
+        )}
+
+            onClick={() => selected && selected(id)}>
             {/* thumbnail */}
             <div className='flex-1 h-full rounded-2xl overflow-hidden'>
                 <img src={thumbnail} alt="thumbnail" className='w-full h-full object-cover' />
@@ -23,7 +33,7 @@ const CardTheater: FC<Props> = ({ thumbnail, name, location }) => {
                     {location}
                 </p>
             </div>
-        </div>
+        </button>
     )
 }
 
