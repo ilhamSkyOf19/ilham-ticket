@@ -14,6 +14,9 @@ const ChooseTheaterPage: FC = () => {
     // state active 
     const [active, setActive] = useState<number | null>(null);
 
+    // state warning 
+    const [warning, setWarning] = useState<boolean>(false);
+
 
     // handle active
     const handleActive = (id: number) => setActive(id);
@@ -24,11 +27,16 @@ const ChooseTheaterPage: FC = () => {
     const handleContinue = () => {
         // cek active
         if (active) {
+
+            // set warning
+            setWarning(false);
+
+
             // redirect 
-            navigate(`/choose-time/${active}`);
+            navigate(`/choose-seats`);
         } else {
-            // alert 
-            alert('Please choose theater');
+            // set warning 
+            setWarning(true);
         }
 
     }
@@ -67,6 +75,7 @@ const ChooseTheaterPage: FC = () => {
                     }
                 ]}
                     choose={true}
+                    warning={warning}
                     active={active as number}
                     selected={handleActive}
                 />

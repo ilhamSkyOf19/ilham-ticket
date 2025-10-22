@@ -9,13 +9,15 @@ type Props = {
     time: string;
     date: Date;
     selected: (id: number) => void;
-    active: boolean
+    active: number | null;
+    warning?: boolean;
 }
-const CardTime: FC<Props> = ({ id, status, time, date, selected, active }) => {
+const CardTime: FC<Props> = ({ id, status, time, date, selected, active, warning }) => {
     return (
         <button type='button' disabled={status === 'full'} className={clsx(
-            'w-full rounded-3xl',
-            active ? 'bg-blue-800' : status === 'full' ? 'bg-white/8' : 'bg-white/20',
+            'w-full rounded-3xl transition-all duration-300 ease-in-out',
+            (active === id) ? 'bg-blue-800' : status === 'full' ? 'bg-white/8' : 'bg-white/20',
+            warning && !active && status !== 'full' ? 'border-2 border-red-500' : 'border-2 border-transparent'
         )}
             onClick={() => selected(id)}
         >

@@ -17,6 +17,10 @@ const ChooseTimePage: FC = () => {
     const [active, setActive] = useState<number | null>(null);
 
 
+    // state warning 
+    const [warning, setWarning] = useState<boolean>(false);
+
+
     // handle active
     const handleActive = (id: number) => setActive(id);
 
@@ -26,11 +30,15 @@ const ChooseTimePage: FC = () => {
     const handleContinue = () => {
         // cek active
         if (active) {
+
+            // set warning
+            setWarning(false);
             // redirect 
-            navigate(`/choose-seat/${active}`);
+            navigate(`/choose-seats`);
         } else {
-            // alert 
-            alert('Please choose theater');
+
+            // set warning 
+            setWarning(true);
         }
 
     }
@@ -73,6 +81,8 @@ const ChooseTimePage: FC = () => {
     useEffect(() => { console.log(active) }, [active])
 
 
+
+
     return (
         <div className='w-full min-h-[100vh] flex flex-col justify-start items-start relative bg-black pt-12 gap-6 pb-32'>
             <div className='w-full px-4'>
@@ -103,9 +113,16 @@ const ChooseTimePage: FC = () => {
             {/* choose time */}
             <div className='w-full flex flex-col justify-start items-start gap-5 px-4'>
                 {/* title */}
-                <h3 className='text-white text-base font-semibold'>
-                    Choose Time
-                </h3>
+                <div className='w-full flex flex-row justify-start items-center gap-4'>
+                    {/* title */}
+                    <h3 className='text-white text-base font-semibold'>
+                        Choose Time
+                    </h3>
+                    {/* warning */}
+                    <p className="text-red-500 text-xs font-light transition-all duration-300 ease-in-out">
+                        {warning && !active ? 'Please choose theater' : ''}
+                    </p>
+                </div>
 
                 {/* time */}
                 <div className='w-full grid grid-cols-2 auto-cols-max gap-3 md:grid-cols-3'>
@@ -113,7 +130,7 @@ const ChooseTimePage: FC = () => {
                     {
                         dataTime.length > 0 && (
                             dataTime.map((item: TimeType, index: number) => (
-                                <CardTime key={index} id={item.id} status={item.status} time={item.time} date={item.date} selected={handleActive} active={active === item.id} />
+                                <CardTime key={index} id={item.id} status={item.status} time={item.time} date={item.date} selected={handleActive} active={active} warning={warning} />
                             ))
                         )
                     }
