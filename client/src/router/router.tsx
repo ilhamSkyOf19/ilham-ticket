@@ -67,7 +67,7 @@ const router = createBrowserRouter([
                 element: <ChooseTheaterPage />
             },
             {
-                path: '/choose-time/:id',
+                path: '/choose-times/:id',
                 element: <ChooseTimePage />
             },
             {

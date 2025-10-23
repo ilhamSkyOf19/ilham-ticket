@@ -6,6 +6,7 @@ import CardMovie from '../../components/CardMovie';
 import ListTheater from '../../components/ListTheater';
 import CardTime from '../../components/CardTime';
 import type { TimeType } from '../../types/types';
+import ButtonContinue from '../../components/ButtonContinue';
 
 const ChooseTimePage: FC = () => {
 
@@ -135,17 +136,11 @@ const ChooseTimePage: FC = () => {
                         )
                     }
                 </div>
-
-
             </div>
 
 
             {/* button continue */}
-            <div className='fixed w-full flex flex-col justify-center items-center pb-4 bottom-0'>
-                <button type='button' className='w-[90%] bg-white rounded-full text-center capitalize py-3.5 font-bold text-black' onClick={handleContinue}>
-                    continue
-                </button>
-            </div>
+            <ButtonContinue handleContinue={handleContinue} />
         </div>
     )
 }

@@ -4,6 +4,7 @@ import HeaderBack from '../../components/HeaderBack';
 import theaterDumy from '../../assets/images/thumbnails/theater1.png';
 import CardMovie from '../../components/CardMovie';
 import ListTheater from '../../components/ListTheater';
+import ButtonContinue from '../../components/ButtonContinue';
 
 const ChooseTheaterPage: FC = () => {
 
@@ -33,7 +34,7 @@ const ChooseTheaterPage: FC = () => {
 
 
             // redirect 
-            navigate(`/choose-seats`);
+            navigate(`/choose-times/${active}`);
         } else {
             // set warning 
             setWarning(true);
@@ -83,11 +84,7 @@ const ChooseTheaterPage: FC = () => {
 
 
             {/* button continue */}
-            <div className='fixed w-full flex flex-col justify-center items-center pb-4 bottom-0'>
-                <button type='button' className='w-[90%] bg-white rounded-full text-center capitalize py-3.5 font-bold text-black' onClick={handleContinue}>
-                    continue
-                </button>
-            </div>
+            <ButtonContinue handleContinue={handleContinue} />
         </div>
     )
 }
