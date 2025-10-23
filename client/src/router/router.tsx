@@ -12,6 +12,8 @@ import MovieDetailPage from "../pages/MovieDetailPage";
 import ChooseTheaterPage from "../pages/ChooseTheaterPage";
 import ChooseTimePage from "../pages/ChooseTimePage";
 import ChooseSeats from "../pages/ChooseSeats";
+import TicketsPaymentPage from "../pages/TicketsPaymentPage";
+import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 
 // router 
 const router = createBrowserRouter([
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
             {
                 path: '/choose-seats',
                 element: <ChooseSeats />
+            },
+            {
+                path: '/tickets-payment',
+                element: <TicketsPaymentPage />
+            },
+            {
+                path: '/payment-success',
+                element: <PaymentSuccessPage />
             }
         ]
     },

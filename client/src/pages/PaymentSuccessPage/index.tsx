@@ -1,0 +1,49 @@
+import { type FC } from 'react'
+import dumyThumb from '../../assets/images/thumbnails/th3.png'
+import iconNoteFavorite from '../../assets/images/icons/note-favorite.svg'
+import { Link } from 'react-router-dom'
+
+const PaymentSuccessPage: FC = () => {
+    return (
+        <div className='w-full flex flex-col justify-start items-center min-h-[100vh] bg-black'>
+            {/* thumbnail */}
+            <img src={dumyThumb} alt="thumbnail" className='w-full h-[55vh] object-cover fixed' />
+
+            {/* shadow */}
+            <div className='w-full h-[55vh] z-20 flex flex-col justify-end items-center relative'>
+                <div className='w-full bg-gradient-to-b from-black to-transparent z-10 h-[30%] absolute top-0' />
+                <div className='w-full bg-gradient-to-t from-black to-transparent z-10 h-[40%] absolute bottom-0' />
+            </div>
+
+            {/* content */}
+            <div className='w-full min-h-[45vh] flex flex-col justify-start items-center bg-black -mt-1 z-20 gap-5'>
+
+                {/* icon */}
+                <img src={iconNoteFavorite} alt="icon note favorite" className='w-14 h-14 mt-4' />
+
+                {/* big title */}
+                <h2 className='text-white font-extrabold text-3xl'>Booking Successful</h2>
+
+
+                {/* desc */}
+                <p className='text-white text-center text-base font-semibold'>Tiket anda telah berhasil dibeli silahkan <br /> periksa pada menu my tickets</p>
+
+                {/* button */}
+                <div className='w-full flex flex-col justify-start items-center gap-3'>
+                    {/* book more  */}
+                    <Link to={'/'} className='w-[55%] text-center py-3 rounded-full bg-white text-black font-bold text-base capitalize'>
+                        book more
+                    </Link>
+
+                    {/* view my tickets */}
+                    <Link to={'/'} className='w-[55%] text-center py-3 rounded-full bg-white/10 backdrop-blur-sm text-white font-bold text-base capitalize'>
+                        view my tickets
+                    </Link>
+                </div>
+            </div>
+
+        </div>
+    )
+}
+
+export default PaymentSuccessPage

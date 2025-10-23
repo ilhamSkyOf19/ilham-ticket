@@ -42,7 +42,7 @@ const MovieDetailPage: FC = () => {
         <div className='w-full min-h-[100vh] flex flex-col justify-start items-start overflow-hidden bg-black'>
             {/* background */}
             <div className='w-full fixed'>
-                <img src={data?.thumbnail ?? bgDumy} alt="background" className='w-full h-full object-cover' />
+                <img src={data?.thumbnail ?? bgDumy} alt="background" className='w-full h-[55vh] object-cover' />
             </div>
 
 
@@ -50,8 +50,9 @@ const MovieDetailPage: FC = () => {
             <div className='w-full flex flex-col justify-start items-start h-full relative'>
 
                 {/* shadow */}
-                <div className='w-full h-[55vh] bg-transparent flex flex-col justify-end items-center'>
-                    <div className='w-full bg-gradient-to-t from-black to-transparent z-10 h-[40%]' />
+                <div className='w-full h-[55vh] bg-transparent flex flex-col justify-end items-center relative'>
+                    <div className='w-full bg-gradient-to-b from-black to-transparent z-10 h-[30%] absolute top-0' />
+                    <div className='w-full bg-gradient-to-t from-black to-transparent z-10 h-[40%] bottom-0' />
                 </div>
 
 

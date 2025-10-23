@@ -4,7 +4,7 @@ import bgScreen from '../../assets/images/backgrounds/screen-light.svg'
 import Seat from '../../components/Seat'
 import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
-import { formatIDR } from '../../helpers/formated'
+import ButtonPayment from '../../components/ButtonPayment'
 
 const ChooseSeats: FC = () => {
 
@@ -50,7 +50,7 @@ const ChooseSeats: FC = () => {
             setActive(false)
 
             // navigate 
-            navigate(`/payment`);
+            navigate(`/tickets-payment`);
         } else {
             setActive(true)
         }
@@ -116,29 +116,12 @@ const ChooseSeats: FC = () => {
 
 
             {/* button total price & continue */}
-            <div className='w-full flex flex-col justify-start items-center fixed bottom-6'>
-                <div className='w-[80%] rounded-full bg-white/10 flex flex-row justify-between items-center pl-6 pr-3.5 py-3'>
-
-                    {/* total price */}
-                    <div className='flex-3 flex flex-row justify-start items-center flex-wrap gap-1'>
-                        <h4 className={clsx(
-                            'text-white font-bold',
-                            price.toString().length >= 7 ? 'text-base' : 'text-lg'
-                        )}>
-                            {formatIDR(price)}
-                        </h4>
-
-                        <p className='text-white text-base font-semibold'>
-                            /Person
-                        </p>
-                    </div>
-
-                    {/* continue */}
-                    <button type='button' className='flex-1 flex flex-col justify-end items-center  rounded-full bg-white py-3 px-3 font-bold' onClick={handleContinue}>
-                        Continue
-                    </button>
-                </div>
-            </div>
+            <ButtonPayment
+                price={price}
+                handleContinue={handleContinue}
+                labelPrice='/Seat'
+                labelButton='Continue'
+            />
 
         </div >
     )
