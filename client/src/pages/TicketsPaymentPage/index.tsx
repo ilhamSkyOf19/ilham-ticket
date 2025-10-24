@@ -4,8 +4,9 @@ import CardMovie from '../../components/CardMovie'
 import TicketsDetail from '../../components/TicketsDetail'
 import ButtonPayment from '../../components/ButtonPayment'
 import Saldo from '../../components/Saldo'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
+import ButtonTopup from '../../components/ButtonTopup'
 
 const TicketsPaymentPage: FC = () => {
 
@@ -95,7 +96,7 @@ const TicketsPaymentPage: FC = () => {
 
             {/* warning top up */}
             {
-                saldoNotEnough && (
+                !saldoNotEnough && (
                     <div className='w-full flex flex-row justify-between items-center rounded-2xl bg-red-500 py-3 px-4'>
                         {/* label */}
                         <p className='text-white font-semibold text-base'>
@@ -103,9 +104,7 @@ const TicketsPaymentPage: FC = () => {
                         </p>
 
                         {/* button topup */}
-                        <Link to={'/'} className='bg-white py-4 px-5 rounded-full text-base font-bold'>
-                            Top Up
-                        </Link>
+                        <ButtonTopup />
                     </div>
                 )
             }

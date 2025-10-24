@@ -1,7 +1,7 @@
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import ButtonBack from '../../components/ButtonBack';
-import bgDumy from '../../assets/images/backgrounds/details.png'
+import bgDumy from '../../assets/images/thumbnails/th2.png'
 import theaterDumy from '../../assets/images/thumbnails/theater1.png'
 import heart from '../../assets/images/icons/heart.svg'
 import iconVideoPlay from '../../assets/images/icons/video-circle.svg'
@@ -36,6 +36,12 @@ const MovieDetailPage: FC = () => {
     const section: string[] = ['about', 'review', 'theaters', 'cast'];
 
 
+    // scrol top
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
+
 
 
     return (
@@ -51,7 +57,7 @@ const MovieDetailPage: FC = () => {
 
                 {/* shadow */}
                 <div className='w-full h-[55vh] bg-transparent flex flex-col justify-end items-center relative'>
-                    <div className='w-full bg-gradient-to-b from-black to-transparent z-10 h-[30%] absolute top-0' />
+                    <div className='w-full bg-gradient-to-b from-black to-transparent z-10 h-[30%] fixed top-0' />
                     <div className='w-full bg-gradient-to-t from-black to-transparent z-10 h-[40%] bottom-0' />
                 </div>
 

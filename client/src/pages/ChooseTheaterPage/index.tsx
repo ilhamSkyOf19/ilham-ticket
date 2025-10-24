@@ -55,7 +55,7 @@ const ChooseTheaterPage: FC = () => {
 
             {/* thumbnail movie */}
             <div className='w-full px-4 flex flex-row justify-center items-start'>
-                <CardMovie />
+                <CardMovie disable={true} />
             </div>
 
 

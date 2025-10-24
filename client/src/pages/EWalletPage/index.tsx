@@ -1,6 +1,5 @@
 import { type FC } from 'react'
 import HeaderPage from '../../components/HeaderPage'
-import ButtonWhiteBlack from '../../components/ButtonWhiteBlack'
 import CardHistoryTransaction from '../../components/CardHistoryTransaction'
 
 
@@ -8,6 +7,7 @@ import CardHistoryTransaction from '../../components/CardHistoryTransaction'
 
 import th3 from '../../assets/images/thumbnails/th3.png'
 import Saldo from '../../components/Saldo'
+import ButtonTopup from '../../components/ButtonTopup'
 
 const EWalletPage: FC = () => {
     return (
@@ -16,7 +16,7 @@ const EWalletPage: FC = () => {
             {/* header */}
             <HeaderPage label='my wallet'>
                 {/* button top up */}
-                <ButtonWhiteBlack label='top up' />
+                <ButtonTopup />
             </HeaderPage>
 
 

@@ -14,6 +14,9 @@ import ChooseTimePage from "../pages/ChooseTimePage";
 import ChooseSeats from "../pages/ChooseSeats";
 import TicketsPaymentPage from "../pages/TicketsPaymentPage";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
+import TopUpPage from "../pages/TopUpPage";
+import MidtransPaymentPage from "../pages/MidtransPaymentPage";
+import TopupSuccessPage from "../pages/TopupSuccessPage";
 
 // router 
 const router = createBrowserRouter([
@@ -83,6 +86,18 @@ const router = createBrowserRouter([
             {
                 path: '/payment-success',
                 element: <PaymentSuccessPage />
+            },
+            {
+                path: '/topup-wallet',
+                element: <TopUpPage />
+            },
+            {
+                path: '/midtrans-payment',
+                element: <MidtransPaymentPage />
+            },
+            {
+                path: '/topup-success',
+                element: <TopupSuccessPage />
             }
         ]
     },
