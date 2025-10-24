@@ -22,3 +22,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+// genre
+model Genre {
+  id    Int @id @default(autoincrement())
+  name  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,49 @@
+import { NextFunction, Request, Response } from "express";
+import { ResponseType } from "../types/request-response-type";
+import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace";
+
+
+const errorHandler = (
+    err: unknown | any,
+    _req: Request,
+    res: Response<ResponseType<null>>,
+    _next: NextFunction
+) => {
+    // cek console
+    console.log('error', err);
+
+
+    // mapping error prisma
+    if (err instanceof PrismaClientKnownRequestError) {
+        switch (err.code) {
+            case "P2002":
+                return res.status(400).json({
+                    status: "failed",
+                    message: "data sudah ada",
+                    data: null
+                });
+            case "P2025":
+                return res.status(400).json({
+                    status: "failed",
+                    message: "data tidak ditemukan",
+                    data: null
+                });
+            default:
+                return res.status(500).json({
+                    status: "failed",
+                    message: "internal server error",
+                    data: null
+                });
+        }
+    }
+
+    // return 
+    return res.status(500).json({
+        status: "failed",
+        message: "internal server error",
+        data: null
+    });
+}
+
+
+export default errorHandler;
