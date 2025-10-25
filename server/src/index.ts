@@ -8,6 +8,7 @@ import genreRoute from "./routes/genre.route";
 import theaterRoute from "./routes/theater.route";
 import movieRoute from "./routes/movie.route";
 import path from "path";
+import userRoute from "./routes/user.route";
 
 // initialize express
 const app = express();
@@ -43,6 +44,9 @@ app.use('/api/theater', theaterRoute);
 // api movie
 app.use('/api/movie', movieRoute);
 
+
+// api user 
+app.use('/api/user', userRoute);
 
 // next handler error 
 app.use(errorHandler);

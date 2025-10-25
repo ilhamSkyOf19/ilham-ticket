@@ -3,7 +3,7 @@ import { MovieCreateType, MovieResponseReadType, MovieResponseType, MovieUpdateT
 import validationService from "../services/validation.service";
 import { MovieValidation } from "../validations/movie-validation";
 import { ZodError } from "zod";
-import { FileService } from "../services/file..service";
+import { FileService } from "../services/file.service";
 import { generateUrl } from "../helpers/helper";
 import { MovieService } from "../services/movie.service";
 import { ResponseType } from "../types/request-response-type";
@@ -65,20 +65,6 @@ export class MovieController {
                 await FileService.deleteFileRequest(req.file.path)
             }
 
-
-            // error zod
-            if (error instanceof ZodError) {
-
-                // error message
-                const errorMessages = error.issues.map((err) => err.message)[0];
-
-                // return error
-                return res.status(400).json({
-                    status: "failed",
-                    message: errorMessages,
-                    data: null
-                });
-            }
 
             // next error
             next(error)
@@ -162,13 +148,13 @@ export class MovieController {
 
 
             // generate 
-            const url_thumbnail = generateUrl(baseUrl, 'thumbnails', req.file?.filename);
+            const url_thumbnail = req.file ? generateUrl(baseUrl, 'thumbnails', req.file?.filename) : undefined;
 
 
             // get service 
             const response = await MovieService.update(+id, {
                 ...body.data,
-                thumbnail: req.file?.filename ?? '',
+                thumbnail: req.file?.filename,
                 url_thumbnail: url_thumbnail
             });
 
@@ -191,22 +177,6 @@ export class MovieController {
                 await FileService.deleteFileRequest(req.file.path)
             }
 
-            // error zod
-            if (error instanceof ZodError) {
-
-
-
-
-                // error message
-                const errorMessages = error.issues.map((err) => err.message)[0];
-
-                // return error
-                return res.status(400).json({
-                    status: "failed",
-                    message: errorMessages,
-                    data: null
-                });
-            }
             // next error
             next(error)
         }

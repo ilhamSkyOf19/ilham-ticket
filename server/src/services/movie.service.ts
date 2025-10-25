@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { MovieCreateType, MovieResponseReadType, MovieResponseType, MovieUpdateType, toMovieResponse, toMovieResponseRead } from "../models/movie-model";
-import { FileService } from "./file..service";
+import { FileService } from "./file.service";
 import { GenreService } from "./genre.service";
 import { TheaterService } from "./thater.service";
 
@@ -85,7 +85,7 @@ export class MovieService {
 
 
     // update
-    static async update(id: number, req: MovieUpdateType & { url_thumbnail: string }): Promise<MovieResponseType | null> {
+    static async update(id: number, req: MovieUpdateType & { url_thumbnail?: string }): Promise<MovieResponseType | null> {
 
         // cek genre jika ada 
         if (req.genreId) {
@@ -127,16 +127,14 @@ export class MovieService {
     // delete
     static async delete(id: number): Promise<MovieResponseType | null> {
 
-        // get movie
-        const movie = await this.readDetail(id);
-
-        // delete file 
-        if (movie?.thumbnail) {
-            await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
-        }
 
         // delete movie
         const response = await prisma.movie.delete({ where: { id } });
+
+        // delete file 
+        if (response.thumbnail) {
+            await FileService.deleteFIleFormPath('thumbnails', response.thumbnail);
+        }
 
         // return movie
         return toMovieResponse(response);

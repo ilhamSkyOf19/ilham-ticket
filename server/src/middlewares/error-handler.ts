@@ -72,6 +72,21 @@ const errorHandler = (
     }
 
 
+    // error zod 
+    if (err instanceof ZodError) {
+
+        // err message
+        const errMessages = err.issues.map((err) => err.message)[0];
+
+        // return error
+        return res.status(400).json({
+            status: "failed",
+            message: errMessages,
+            data: null
+        });
+    }
+
+
 
 
     // return 

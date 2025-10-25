@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { MovieController } from "../controllers/movie.controller";
-import { FileService } from "../services/file..service";
+import { FileService } from "../services/file.service";
 
 
 // initialize router 
