@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ResponseType } from "../types/request-response-type";
-import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace";
+import { PrismaClientKnownRequestError } from "../../generated/prisma/runtime/library";
 
 
 const errorHandler = (

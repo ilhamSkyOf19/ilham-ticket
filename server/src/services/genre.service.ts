@@ -1,7 +1,5 @@
-import { error } from "console";
 import { prisma } from "../lib/prisma";
 import { GenreCreateType, GenreResponseType, GenreUpdateType, toGenreResponse } from "../models/genre-model";
-import { ResponseType } from "../types/request-response-type";
 
 export class GenreService {
     // create 

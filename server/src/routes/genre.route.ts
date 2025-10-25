@@ -17,7 +17,7 @@ genreRoute.get('/read', GenreController.read);
 
 
 // read by id 
-genreRoute.get('/read/:id', GenreController.readDetail);
+genreRoute.get('/read-detail/:id', GenreController.readDetail);
 
 
 // update 

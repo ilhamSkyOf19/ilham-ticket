@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/cors";
 import errorHandler from "./middlewares/error-handler";
 import genreRoute from "./routes/genre.route";
+import theaterRoute from "./routes/theater.route";
 
 // initialize express
 const app = express();
@@ -23,8 +24,12 @@ app.get("/", (_: Request, res: Response) => {
     res.send("Express berhasil diinstall 🚀");
 });
 
-// api
+// api genre
 app.use('/api/genre', genreRoute);
+
+
+// api theater
+app.use('/api/theater', theaterRoute);
 
 
 // next handler error 
