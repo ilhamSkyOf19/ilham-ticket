@@ -29,6 +29,8 @@ model Genre {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  movies Movie[]
 }
 
 // theater
@@ -38,4 +40,27 @@ model Theater {
   city      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  movies Movie[]
+}
+
+// movie 
+model Movie {
+  id            Int     @id @default(autoincrement())
+  title         String
+  description   String
+  thumbnail     String
+  url_thumbnail String
+  price         Int
+  available     Boolean
+  bonus         String
+
+  genreId   Int // foreign key
+  theaterId Int // foreign key
+
+  // realtion genre many to one
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  // realtion theater many to one
+  theater Theater @relation(fields: [theaterId], references: [id], onDelete: Cascade)
 }

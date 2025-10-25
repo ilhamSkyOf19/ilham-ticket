@@ -6,6 +6,8 @@ import { corsMiddleware } from "./middlewares/cors";
 import errorHandler from "./middlewares/error-handler";
 import genreRoute from "./routes/genre.route";
 import theaterRoute from "./routes/theater.route";
+import movieRoute from "./routes/movie.route";
+import path from "path";
 
 // initialize express
 const app = express();
@@ -20,6 +22,12 @@ app.use(cookieParser());
 // cors 
 app.use(corsMiddleware);
 
+// folder static 
+const publicPath = path.join(__dirname, "../public");
+
+// Middleware static
+app.use("/uploads", express.static(path.join(publicPath, "uploads")));
+
 app.get("/", (_: Request, res: Response) => {
     res.send("Express berhasil diinstall 🚀");
 });
@@ -30,6 +38,10 @@ app.use('/api/genre', genreRoute);
 
 // api theater
 app.use('/api/theater', theaterRoute);
+
+
+// api movie
+app.use('/api/movie', movieRoute);
 
 
 // next handler error 

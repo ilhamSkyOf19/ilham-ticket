@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ResponseType } from "../types/request-response-type";
 import { PrismaClientKnownRequestError } from "../../generated/prisma/runtime/library";
+import multer from "multer";
+import { ZodError } from "zod";
 
 
 const errorHandler = (
@@ -36,6 +38,41 @@ const errorHandler = (
                 });
         }
     }
+
+
+    // error multer 
+    if (err instanceof multer.MulterError) {
+        switch (err.code) {
+            case 'LIMIT_FILE_SIZE':
+                return res.status(400).json({
+                    status: "failed",
+                    message: "file terlalu besar",
+                    data: null
+                });
+
+            case 'LIMIT_FILE_COUNT':
+                return res.status(400).json({
+                    status: "failed",
+                    message: "file terlalu banyak",
+                    data: null
+                });
+            case 'MISSING_FIELD_NAME':
+                return res.status(400).json({
+                    status: "failed",
+                    message: "field name tidak ditemukan",
+                    data: null
+                })
+            default:
+                return res.status(500).json({
+                    status: "failed",
+                    message: "internal server error",
+                    data: null
+                });
+        }
+    }
+
+
+
 
     // return 
     return res.status(500).json({
