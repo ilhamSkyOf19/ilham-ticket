@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from "fs";
 import { access, unlink } from "fs/promises";
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
+import { ResponseType } from "../types/request-response-type";
 
 export class FileService {
     // upload 
@@ -79,13 +80,43 @@ export class FileService {
             await access(path);
 
             // delete
-
             await unlink(path);
             console.log('file deleted successfully');
         } catch (error) {
             // file not found
             console.log(error);
             console.warn('file not found');
+        }
+    }
+
+
+    // delete form path 
+    static async deleteFIleFormPath(filePath: string, filename: string): Promise<ResponseType<null>> {
+        try {
+
+            // file full path 
+            const filePathFull = path.join(__dirname, `../../public/uploads/${filePath}/${filename}`)
+
+
+            // delete file 
+            await this.deleteFileRequest(filePathFull);
+
+            // return 
+            return {
+                status: 'success',
+                message: 'File deleted successfully',
+                data: null
+            }
+
+
+        } catch (error) {
+            console.log(error)
+            return {
+                status: 'failed',
+                message: 'File not exist',
+                data: null
+            }
+
         }
     }
 
