@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserCreateType, UserResponseType, UserUpdateType } from "../models/user-model";
 import { ResponseType } from "../types/request-response-type";
 import { UserService } from "../services/user.service";
@@ -7,6 +7,7 @@ import { FileService } from "../services/file.service";
 import bcrypt from "bcrypt";
 import validationService from "../services/validation.service";
 import { UserValidation } from "../validations/user-validation";
+import jsonwebtoken from "jsonwebtoken";
 
 export class UserController {
     // create 
@@ -37,6 +38,30 @@ export class UserController {
             });
 
 
+            // create payload
+            const payload = {
+                id: response.id,
+                name: response.name,
+                email: response.email,
+                role: response.role
+            }
+
+
+            // generate token 
+            const token = jsonwebtoken.sign(
+                payload,
+                process.env.SECRET_KEY as string,
+                { expiresIn: '1d' });
+
+
+            // set cookie 
+            res.cookie('token', token, {
+                httpOnly: false,
+                secure: true,
+                sameSite: 'none'
+            })
+
+
             // return 
             return res.status(201).json({
                 status: "success",
@@ -55,7 +80,7 @@ export class UserController {
 
 
     // read 
-    static async read(req: Request, res: Response<ResponseType<UserResponseType[] | null>>, next: NextFunction) {
+    static async read(_req: Request, res: Response<ResponseType<UserResponseType[] | null>>, next: NextFunction) {
         try {
             // get service 
             const response = await UserService.read();

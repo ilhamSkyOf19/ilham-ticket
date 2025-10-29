@@ -17,6 +17,8 @@ import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import TopUpPage from "../pages/TopUpPage";
 import MidtransPaymentPage from "../pages/MidtransPaymentPage";
 import TopupSuccessPage from "../pages/TopupSuccessPage";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import AdminMovie from "../pages/AdminMovie";
 
 // router 
 const router = createBrowserRouter([
@@ -101,6 +103,19 @@ const router = createBrowserRouter([
             }
         ]
     },
+
+    // dashboard
+    {
+        path: '/dashboard',
+        element: <DashboardLayout />,
+        children: [
+            {
+                index: true,
+                element: <AdminMovie />
+
+            }
+        ]
+    }
 
 
 ])
