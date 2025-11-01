@@ -8,6 +8,8 @@ import popcorn from '../../assets/images/thumbnails/popcorn.png'
 import milk from '../../assets/images/thumbnails/milk.png'
 import coffe from '../../assets/images/icons/coffee.svg'
 import type { BonusType } from '../../types/types'
+import { useMatch } from 'react-router-dom'
+import ButtonDeleteTrash from '../ButtonDeleteTrash'
 
 
 
@@ -68,9 +70,19 @@ const CardBonus: FC<Props> = ({ code }) => {
         }
     }, [code])
 
+    // check admin with path
+    const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
+
 
     return (
-        <div className='w-[15rem] h-[6rem]  rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start'>
+        <div className='w-[15rem] h-[6rem]  rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start relative'>
+
+            {/* button delete */}
+            {
+                admin && (
+                    <ButtonDeleteTrash />
+                )
+            }
             {/* thumbnail */}
             <div className='flex-1  h-full rounded-2xl'>
                 <div className='w-full h-full rounded-2xl overflow-hidden'>

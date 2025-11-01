@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState, type FC, type RefObject } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 import { PiSidebarSimple } from "react-icons/pi";
 import SideBar from '../../fragments/SideBar';
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 
 const DashboardLayout: FC = () => {
+
+    // navigate 
+    const navigate = useNavigate();
 
     // state sidebar open
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -43,28 +47,48 @@ const DashboardLayout: FC = () => {
 
 
 
+
+    // cek pathname detail 
+    const pathDetail = useMatch('/dashboard/dashboard-movie-detail/:id');
+
+
+
+
+
+
+
     return (
         <div className='w-full flex flex-row justify-start items-start gap-2 relative'>
             {/* header top for mobile */}
-            <div className='fixed top-0 left-0 w-full h-16 bg-white/10 backdrop-blur-sm flex justify-between items-center md:hidden px-4    '>
-                {/* bars */}
-                <button type='button' onClick={handleSidebarToggle} className='group'>
-                    <PiSidebarSimple className='text-white text-3xl group-hover:scale-110 transition-transform duration-300 ease-in-out' />
-                </button>
+            <div className='fixed top-0 left-0 w-full h-13 bg-white/10 backdrop-blur-sm flex justify-between items-center md:hidden px-2 z-20'>
+
+                {/* bars & back*/}
+                {
+                    pathDetail ? (
+                        <button type='button' onClick={() => navigate('/dashboard')} className='flex flex-row justify-center items-center group'>
+                            <IoMdArrowRoundBack className='text-white text-3xl group-hover:scale-110 transition-transform duration-300 ease-in-out:' />
+                        </button>
+                    ) : (
+                        <button type='button' onClick={handleSidebarToggle} className='group'>
+                            <PiSidebarSimple className='text-white text-3xl group-hover:scale-110 transition-transform duration-300 ease-in-out' />
+                        </button>
+                    )
+                }
 
                 {/* title */}
-                <h2 className='text-white font-bold text-2xl'>
-                    Dashboard
+                <h2 className='text-white font-bold text-xl'>
+                    {pathDetail ? 'Movie Detail' : 'Dashboard'}
                 </h2>
             </div>
 
 
             {/* side bar */}
-            <SideBar ref={useRefSidebar as RefObject<HTMLDivElement>} sidebarOpen={sidebarOpen} />
+
+            <SideBar ref={useRefSidebar as RefObject<HTMLDivElement>} sidebarOpen={sidebarOpen} handleSidebarToggle={handleSidebarToggle} />
 
 
             {/* children */}
-            <div className='flex-1 min-h-[100vh] bg-black pt-16 '>
+            <div className='flex-1 w-full min-h-[100vh] bg-black'>
                 <Outlet />
             </div>
         </div>

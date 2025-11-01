@@ -1,12 +1,31 @@
 import { type FC } from 'react'
 import type { ReviewsType } from '../../types/types'
 import iconStar from '../../assets/images/icons/star.svg'
+import { useMatch } from 'react-router-dom';
+import ButtonDeleteTrash from '../ButtonDeleteTrash';
 
 
-type Props = ReviewsType;
-const CardReview: FC<Props> = ({ author, comments, rating }) => {
+type Props = {
+    ReviewsType: ReviewsType;
+};
+const CardReview: FC<Props> = ({ ReviewsType: { rating, comments, author } }) => {
+
+
+    // cek admin with path
+    const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
+
+
     return (
-        <div className='w-full rounded-3xl bg-white/10 flex flex-col justify-start items-start py-4 px-5 gap-3'>
+        <div className='w-full rounded-3xl bg-white/10 flex flex-col justify-start items-start py-4 px-5 gap-3 relative'>
+
+            {/* button delete */}
+            {
+                admin && (
+                    <ButtonDeleteTrash />
+                )
+            }
+
+
             {/* rating */}
             <div className='w-full flex flex-row justify-start items-start gap-1'>
                 {

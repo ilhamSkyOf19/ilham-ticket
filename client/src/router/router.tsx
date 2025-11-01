@@ -19,6 +19,7 @@ import MidtransPaymentPage from "../pages/MidtransPaymentPage";
 import TopupSuccessPage from "../pages/TopupSuccessPage";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import AdminMovie from "../pages/AdminMovie";
+import AdminMovieDetail from "../pages/AdminMovieDetail";
 
 // router 
 const router = createBrowserRouter([
@@ -112,8 +113,12 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <AdminMovie />
-
-            }
+            },
+            // detail movie admin
+            {
+                path: 'dashboard-movie-detail/:id',
+                element: <AdminMovieDetail />
+            },
         ]
     }
 
