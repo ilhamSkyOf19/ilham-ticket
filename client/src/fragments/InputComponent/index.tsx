@@ -14,12 +14,11 @@ type Props = {
     label: string;
     type: 'text' | 'email' | 'password';
     placeholder: string;
-    value?: string;
     register: UseFormRegisterReturn;
     error?: string;
 }
 
-const InputComponent: FC<Props> = ({ name, label, type, placeholder, value, register, error }) => {
+const InputComponent: FC<Props> = ({ name, label, type, placeholder, register, error }) => {
 
     // state eye 
     const [eye, setEye] = useState<boolean>(false);
@@ -46,7 +45,6 @@ const InputComponent: FC<Props> = ({ name, label, type, placeholder, value, regi
                     <div className="w-full h-full">
                         <Input
                             type={type === 'password' ? (eye ? 'text' : 'password') : type}
-                            value={value}
                             register={register}
                             placeholder={placeholder}
                             name={name}

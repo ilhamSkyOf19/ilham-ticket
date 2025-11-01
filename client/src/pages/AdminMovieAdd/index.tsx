@@ -1,18 +1,19 @@
 import { type FC } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import type { MovieCreateType } from '../../models/movie-model'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MovieValidation } from '../../validations/movie-validation'
 import { useMutation } from '@tanstack/react-query'
 import InputComponent from '../../fragments/InputComponent'
+import InputChoose from '../../components/InputChoose'
+import ChooseTheaters from '../../components/ChooseTheaters'
 
 const AdminMovieAdd: FC = () => {
 
 
 
-
     // use hook form
-    const { register, handleSubmit, formState: { errors } } = useForm<MovieCreateType>({
+    const { control, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm<MovieCreateType>({
         resolver: zodResolver(MovieValidation.CREATE)
     })
 
@@ -71,17 +72,62 @@ const AdminMovieAdd: FC = () => {
                     type='text'
                 />
 
-                {/* input about */}
+                {/* input location */}
                 <InputComponent
-                    label='Location'
-                    name='location'
-                    register={register('location')}
-                    placeholder='Enter movie location'
-                    error={errors.location?.message}
                     type='text'
+                    placeholder='Enter your email'
+                    register={register('location')}
+                    label='location'
+                    name='location'
+                    error={errors.location?.message}
                 />
 
-                {/* input rating */}
+                {/* choose genre */}
+                <Controller
+                    control={control}
+                    name='genre'
+                    render={({ field, fieldState }) => (
+                        <InputChoose
+                            name='genre'
+                            label='Genre'
+                            placeholder='Enter movie genre'
+                            fieldChoose={[
+                                {
+                                    id: 1,
+                                    name: 'Action'
+                                },
+                                {
+                                    id: 2,
+                                    name: 'Comedy'
+                                },
+                                {
+                                    id: 3,
+                                    name: 'Horror'
+                                },
+                                {
+                                    id: 4,
+                                    name: 'Wars'
+                                },
+                                {
+                                    id: 5,
+                                    name: 'Animation'
+                                },
+                                {
+                                    id: 6,
+                                    name: 'Romance'
+                                }
+                            ]}
+                            error={fieldState.error?.message}
+                            setValue={setValue}
+                            clearErrors={clearErrors}
+                            ref={field.ref}
+                        />
+                    )}
+
+                />
+
+
+                {/* input price */}
                 <InputComponent
                     label='Price'
                     name='price'
@@ -91,37 +137,9 @@ const AdminMovieAdd: FC = () => {
                     type='text'
                 />
 
+                {/* choose theater */}
+                <ChooseTheaters />
 
-                {/* input rating */}
-                <InputComponent
-                    label='Rating'
-                    name='rating'
-                    register={register('rating')}
-                    placeholder='Enter movie rating'
-                    error={errors.rating?.message}
-                    type='text'
-                />
-
-                {/* input location */}
-                <InputComponent
-                    label='Location'
-                    name='location'
-                    register={register('location')}
-                    placeholder='Enter movie location'
-                    error={errors.location?.message}
-                    type='text'
-                />
-
-
-                {/* input genre */}
-                <InputComponent
-                    label='Genre'
-                    name='genre'
-                    register={register('genre')}
-                    placeholder='Enter movie genre'
-                    error={errors.genre?.message}
-                    type='text'
-                />
 
 
 

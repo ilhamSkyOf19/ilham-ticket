@@ -10,7 +10,7 @@ const ErrorMessage: FC<Props> = ({ message }) => {
     return (
         <div className='w-full h-4 '>
             <p className={clsx(
-                'text-red-500 text-xs font-medium transition-all duration-300 ease-in-out capitalize italic',
+                'text-red-500 text-to-small font-medium transition-all duration-300 ease-in-out capitalize italic',
                 message ? 'visible' : 'invisible'
             )}>
                 {message}

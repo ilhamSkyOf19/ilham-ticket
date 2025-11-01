@@ -6,12 +6,11 @@ import { type UseFormRegisterReturn } from 'react-hook-form'
 type Props = {
     type?: 'text' | 'email' | 'password';
     placeholder?: string;
-    value?: string;
     register: UseFormRegisterReturn;
     name: string;
 }
 
-const Input: FC<Props> = ({ type, placeholder, value, register, name }) => {
+const Input: FC<Props> = ({ type, placeholder, register, name }) => {
     return (
         <input
             {...register}
@@ -19,7 +18,6 @@ const Input: FC<Props> = ({ type, placeholder, value, register, name }) => {
             name={name}
             type={type ?? 'text'}
             placeholder={placeholder ?? ''}
-            defaultValue={value ?? undefined}
             className='w-full bg-transparent outline-none border-none text-base placeholder:text-gray-400 placeholder:font-normal text-white font-semibold'
         />
     )
