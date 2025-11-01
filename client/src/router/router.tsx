@@ -20,6 +20,7 @@ import TopupSuccessPage from "../pages/TopupSuccessPage";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import AdminMovie from "../pages/AdminMovie";
 import AdminMovieDetail from "../pages/AdminMovieDetail";
+import AdminMovieAdd from "../pages/AdminMovieAdd";
 
 // router 
 const router = createBrowserRouter([
@@ -118,6 +119,11 @@ const router = createBrowserRouter([
             {
                 path: 'dashboard-movie-detail/:id',
                 element: <AdminMovieDetail />
+            },
+            // add movie admin
+            {
+                path: 'dashboard-movie-add',
+                element: <AdminMovieAdd />
             },
         ]
     }

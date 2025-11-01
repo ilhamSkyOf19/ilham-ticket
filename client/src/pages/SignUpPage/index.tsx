@@ -5,8 +5,8 @@ import type { SignUpType } from '../../models/auth-model'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AuthValidation } from '../../validations/auth-validation'
 import { useMutation } from '@tanstack/react-query'
-import InputSign from '../../components/InputSign'
 import ButtonSubmit from '../../components/ButtonSubmit'
+import InputComponent from '../../fragments/InputComponent'
 
 const SignUpPage: FC = () => {
 
@@ -50,7 +50,7 @@ const SignUpPage: FC = () => {
             {/* form */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start mt-6 gap-0.5'>
                 {/* input name */}
-                <InputSign
+                <InputComponent
                     name='name'
                     label='Name'
                     type='text'
@@ -60,7 +60,7 @@ const SignUpPage: FC = () => {
                 />
 
                 {/* input email */}
-                <InputSign
+                <InputComponent
                     name='email'
                     label='Email'
                     type='email'
@@ -70,7 +70,7 @@ const SignUpPage: FC = () => {
                 />
 
                 {/* input password */}
-                <InputSign
+                <InputComponent
                     name='password'
                     label='Password'
                     type='password'
@@ -80,7 +80,7 @@ const SignUpPage: FC = () => {
                 />
 
                 {/* input confirm password */}
-                <InputSign
+                <InputComponent
                     name='confirmPassword'
                     label='Confirm Password'
                     type='password'

@@ -3,12 +3,12 @@ import { type FC } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import SignLayout from '../../Layouts/SignLayout'
-import InputSign from '../../components/InputSign'
 import { useForm } from 'react-hook-form'
 import { AuthValidation } from '../../validations/auth-validation'
 import type { SignInType } from '../../models/auth-model'
 import ButtonSubmit from '../../components/ButtonSubmit'
 import { useMutation } from '@tanstack/react-query'
+import InputComponent from '../../fragments/InputComponent'
 
 const SignInPage: FC = () => {
 
@@ -21,6 +21,10 @@ const SignInPage: FC = () => {
 
     // mutation 
     const { isPending, mutateAsync } = useMutation({
+        /*************  ✨ Windsurf Command ⭐  *************/
+        /**
+
+/*******  bb9ed7c1-9928-4d4a-b623-1c1fdbcbc2cc  *******/
         mutationFn: async (data: SignInType) => {
             console.log(data);
         }
@@ -44,7 +48,7 @@ const SignInPage: FC = () => {
             {/* form */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start mt-6 gap-0.5'>
                 {/* input email */}
-                <InputSign
+                <InputComponent
                     type='email'
                     placeholder='Enter your email'
                     register={register('email')}
@@ -53,7 +57,7 @@ const SignInPage: FC = () => {
                     error={errors.email?.message}
                 />
 
-                <InputSign
+                <InputComponent
                     type='password'
                     placeholder='Enter your password'
                     register={register('password')}
