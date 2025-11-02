@@ -28,8 +28,29 @@ const AdminMovieAdd: FC = () => {
 
     // on submit
     const onSubmit = (data: MovieCreateType) => {
-        console.log(data);
+
+        // form data 
+        const formData = new FormData()
+        formData.append('thumbnail', data.thumbnail)
+        formData.append('title', data.title)
+        formData.append('about', data.about)
+        formData.append('rating', data.rating)
+        formData.append('location', data.location)
+        formData.append('price', data.price)
+        formData.append('genre', data.genre)
+        formData.append('theaters', JSON.stringify(data.theaters))
+
+
+
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+
+
     }
+
+
     return (
         <div className='w-full min-h-[100vh] py-16 flex flex-col justify-start items-start px-2 gap-4'>
 
@@ -41,6 +62,17 @@ const AdminMovieAdd: FC = () => {
 
             {/* form */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start px-2'>
+
+                {/* input thumbnail */}
+                <InputComponent
+                    label='Thumbnail'
+                    name='thumbnail'
+                    register={register('thumbnail')}
+                    placeholder='Enter movie thumbnail'
+                    error={errors.thumbnail?.message}
+                    type='text'
+                />
+
 
                 {/* input title */}
                 <InputComponent
@@ -81,6 +113,8 @@ const AdminMovieAdd: FC = () => {
                     name='location'
                     error={errors.location?.message}
                 />
+
+
 
                 {/* choose genre */}
                 <Controller
@@ -138,7 +172,19 @@ const AdminMovieAdd: FC = () => {
                 />
 
                 {/* choose theater */}
-                <ChooseTheaters />
+                <Controller
+                    control={control}
+                    name='theaters'
+                    render={({ fieldState }) => (
+                        <ChooseTheaters
+                            setValue={setValue}
+                            clearErrors={clearErrors}
+                            error={fieldState.error?.message}
+
+                        />
+                    )}
+
+                />
 
 
 
