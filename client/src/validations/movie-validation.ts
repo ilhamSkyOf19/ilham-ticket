@@ -29,11 +29,10 @@ export class MovieValidation {
                 .min(1, "Theater ID is required")
         ).min(1, "At least one theater is required"),
 
-        // bonus: z.array(
-        //     z.string()
-        //         .min(1, "Bonus ID is required")
-        //         .refine((val) => !isNaN(Number(val)), { message: "Bonus ID must be a number" })
-        // ).min(1, "At least one bonus is required"),
+        bonus: z.array(
+            z.number()
+                .min(1, "Bonus ID is required")
+        ).min(1, "At least one bonus is required"),
     })
         .strict() satisfies ZodType<MovieCreateType>;
 }

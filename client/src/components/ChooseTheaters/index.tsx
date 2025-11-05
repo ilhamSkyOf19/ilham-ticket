@@ -47,6 +47,9 @@ const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error }) => {
         } else {
             // add theater to selected
             setSelectedTheater([...selectedTheater, id]);
+
+            // clear error
+            clearErrors?.('theaters');
         }
     }
 
@@ -56,8 +59,7 @@ const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error }) => {
         // set value
         setValue('theaters', selectedTheater);
 
-        // clear error
-        clearErrors?.('theaters');
+
     }, [selectedTheater])
 
 

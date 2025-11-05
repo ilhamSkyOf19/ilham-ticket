@@ -11,7 +11,7 @@ export type MovieCreateType = {
     price: string;
     genre: string;
     theaters: number[];
-    // bonus: string[];
+    bonus: number[];
 
 }
 

@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import InputComponent from '../../fragments/InputComponent'
 import InputChoose from '../../components/InputChoose'
 import ChooseTheaters from '../../components/ChooseTheaters'
+import ChooseBonus from '../../components/ChooseBonus'
 
 const AdminMovieAdd: FC = () => {
 
@@ -171,6 +172,8 @@ const AdminMovieAdd: FC = () => {
                     type='text'
                 />
 
+
+
                 {/* choose theater */}
                 <Controller
                     control={control}
@@ -181,6 +184,37 @@ const AdminMovieAdd: FC = () => {
                             clearErrors={clearErrors}
                             error={fieldState.error?.message}
 
+                        />
+                    )}
+                />
+
+
+                {/* choose bonus */}
+                <Controller
+                    control={control}
+                    name='bonus'
+                    render={({ fieldState }) => (
+                        <ChooseBonus
+                            error={fieldState.error?.message}
+                            setValue={setValue}
+                            clearErrors={clearErrors}
+                            bonus={[
+                                {
+                                    id: 1,
+                                    name: 'Popcorn',
+                                    size: 'small'
+                                },
+                                {
+                                    id: 2,
+                                    name: 'Popcorn',
+                                    size: 'medium'
+                                },
+                                {
+                                    id: 3,
+                                    name: 'Popcorn',
+                                    size: 'large'
+                                }
+                            ]}
                         />
                     )}
 
