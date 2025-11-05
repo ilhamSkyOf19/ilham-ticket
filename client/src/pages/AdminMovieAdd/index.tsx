@@ -8,6 +8,7 @@ import InputComponent from '../../fragments/InputComponent'
 import InputChoose from '../../components/InputChoose'
 import ChooseTheaters from '../../components/ChooseTheaters'
 import ChooseBonus from '../../components/ChooseBonus'
+import InputThumbnail from '../../components/InputThumbnail'
 
 const AdminMovieAdd: FC = () => {
 
@@ -65,13 +66,17 @@ const AdminMovieAdd: FC = () => {
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start px-2'>
 
                 {/* input thumbnail */}
-                <InputComponent
-                    label='Thumbnail'
+                <Controller
+                    control={control}
                     name='thumbnail'
-                    register={register('thumbnail')}
-                    placeholder='Enter movie thumbnail'
-                    error={errors.thumbnail?.message}
-                    type='text'
+                    render={({ fieldState }) => (
+                        <InputThumbnail
+                            setValue={setValue}
+                            clearErrors={clearErrors}
+                            error={fieldState.error?.message}
+                        />
+                    )}
+
                 />
 
 

@@ -14,7 +14,9 @@ export class MovieValidation {
 
         location: z.string().min(1, "Location is required").trim(),
 
-        thumbnail: z.string().min(1, "Thumbnail is required").trim(),
+        thumbnail: z
+            .instanceof(File)
+            .refine((file) => file.size > 0, "Thumbnail is required"),
 
         price: z.string()
             .min(1, "Price is required")

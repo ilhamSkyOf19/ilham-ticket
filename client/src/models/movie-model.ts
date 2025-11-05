@@ -7,7 +7,7 @@ export type MovieCreateType = {
     about: string;
     rating: string;
     location: string;
-    thumbnail: string;
+    thumbnail: File;
     price: string;
     genre: string;
     theaters: number[];
