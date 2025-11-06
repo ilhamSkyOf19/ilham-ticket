@@ -9,6 +9,7 @@ import theaterRoute from "./routes/theater.route";
 import movieRoute from "./routes/movie.route";
 import path from "path";
 import userRoute from "./routes/user.route";
+import authRouter from "./routes/auth.route";
 
 // initialize express
 const app = express();
@@ -32,6 +33,9 @@ app.use("/uploads", express.static(path.join(publicPath, "uploads")));
 app.get("/", (_: Request, res: Response) => {
     res.send("Express berhasil diinstall 🚀");
 });
+
+// login 
+app.use('/api/auth', authRouter);
 
 // api genre
 app.use('/api/genre', genreRoute);
