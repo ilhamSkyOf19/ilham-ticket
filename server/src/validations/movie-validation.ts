@@ -22,10 +22,20 @@ export class MovieValidation {
         genreId: z.number({
             error: (val) => val.input === undefined ? "genreId harus diisi" : "genreId harus berupa number",
         }),
-        theaterId: z.number({
-            error: (val) => val.input === undefined ? "theaterId harus diisi" : "theaterId harus berupa number",
-        }),
-    }).strict() as ZodType<Omit<MovieCreateType, "thumbnail">>
+        theaterId: z.string()
+            .transform((val) => {
+                try {
+                    return JSON.parse(val);
+                } catch {
+                    throw new Error("theaterId harus berupa JSON array valid");
+                }
+            })
+            .refine(
+                (arr) => Array.isArray(arr) && arr.every((n) => typeof n === "number"),
+                "theaterId harus berupa array berisi number"
+            )
+
+    }).strict() satisfies ZodType<Omit<MovieCreateType, 'thumbnail' | 'theaterId'> & { theaterId: string }>
 
 
     // upadte 
@@ -48,9 +58,14 @@ export class MovieValidation {
         genreId: z.number({
             error: (val) => val.input === undefined ? "genreId harus diisi" : "genreId harus berupa number",
         }).optional(),
-        theaterId: z.number({
-            error: (val) => val.input === undefined ? "theaterId harus diisi" : "theaterId harus berupa number",
-        }).optional(),
+        theaterId: z.array(
+            z.number({
+                error: (val) =>
+                    val.input === undefined
+                        ? "theaterIds harus diisi"
+                        : "theaterIds harus berupa number",
+            })
+        ).min(1, "Minimal satu theater harus dipilih").optional(),
 
     }).strict() as ZodType<Omit<MovieUpdateType, "thumbnail">>
 

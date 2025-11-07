@@ -50,7 +50,7 @@ model Theater {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  movies Movie[]
+  movieTheaters MovieTheater[]
 }
 
 // movie 
@@ -64,12 +64,23 @@ model Movie {
   available     Boolean
   bonus         String
 
-  genreId   Int // foreign key
-  theaterId Int // foreign key
+  genreId Int // foreign key
 
   // realtion genre many to one
   genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
 
   // realtion theater many to one
+  movieTheaters MovieTheater[]
+}
+
+// movie theater 
+model MovieTheater {
+  id        Int      @id @default(autoincrement())
+  movieId   Int
+  theaterId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  movie   Movie   @relation(fields: [movieId], references: [id], onDelete: Cascade)
   theater Theater @relation(fields: [theaterId], references: [id], onDelete: Cascade)
 }

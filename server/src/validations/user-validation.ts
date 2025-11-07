@@ -14,7 +14,7 @@ export class UserValidation {
         role: z.enum(["admin", "customer"], {
             error: (val) => val.input === undefined ? "role harus diisi" : "role tidak valid",
         }),
-    }).strict() as ZodType<Omit<UserCreateType, "avatar">>
+    }).strict() satisfies ZodType<Omit<UserCreateType, "avatar">>
 
     // update
     static readonly UPDATE = z.object({

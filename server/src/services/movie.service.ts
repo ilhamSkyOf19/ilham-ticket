@@ -11,23 +11,44 @@ export class MovieService {
         // cek genre 
         await GenreService.readDetail(+req.genreId);
 
-        // cek theater 
-        await TheaterService.readDetail(+req.theaterId);
+        // cek tiap theater
+        for (const id of req.theaterId) {
+            await TheaterService.readDetail(id);
+        }
 
-        // create genre
+        // create movie
         const response = await prisma.movie.create({
             data: {
-                ...req,
-                price: (+req.price),
+                title: req.title,
+                description: req.description,
+                thumbnail: req.thumbnail,
+                url_thumbnail: req.url_thumbnail,
+                price: +req.price,
                 available: Boolean(req.available),
-                genreId: (+req.genreId),
-                theaterId: (+req.theaterId)
+                bonus: req.bonus,
+                genreId: +req.genreId,
 
-            }
+                // relasi many-to-many
+                movieTheaters: {
+                    createMany: {
+                        data: req.theaterId.map((id) => ({ theaterId: id })),
+                    },
+                },
+            },
+            include: {
+                movieTheaters: {
+                    select: {
+                        theaterId: true,
+                    },
+                },
+            },
         });
 
-        // return genre
-        return toMovieResponse(response);
+        // mapping ke bentuk yang diharapkan toMovieResponse()
+        return toMovieResponse({
+            ...response,
+            theaters: response.movieTheaters.map((mt) => ({ id: mt.theaterId })),
+        });
     }
 
 
@@ -43,9 +64,13 @@ export class MovieService {
                         name: true
                     }
                 },
-                theater: {
-                    select: {
-                        city: true
+                movieTheaters: {
+                    include: {
+                        theater: {
+                            select: {
+                                city: true
+                            }
+                        }
                     }
                 }
             }
@@ -53,7 +78,12 @@ export class MovieService {
 
 
         // return 
-        return response.map(toMovieResponseRead);
+        return response.map((movie) =>
+            toMovieResponseRead({
+                ...movie,
+                theater: movie.movieTheaters.map((mt) => mt.theater),
+            })
+        );
     }
 
 
@@ -69,9 +99,13 @@ export class MovieService {
                         name: true
                     }
                 },
-                theater: {
-                    select: {
-                        city: true
+                movieTheaters: {
+                    include: {
+                        theater: {
+                            select: {
+                                city: true
+                            }
+                        }
                     }
                 }
             }
@@ -79,64 +113,67 @@ export class MovieService {
 
 
         // return 
-        return toMovieResponseRead(response);
+        return toMovieResponseRead({
+            ...response,
+            theater: response.movieTheaters.map((mt) => mt.theater),
+        });
 
     }
 
 
     // update
-    static async update(id: number, req: MovieUpdateType & { url_thumbnail?: string }): Promise<MovieResponseType | null> {
+    // static async update(id: number, req: MovieUpdateType & { url_thumbnail?: string }): Promise<MovieResponseType | null> {
 
-        // cek genre jika ada 
-        if (req.genreId) {
-            await GenreService.readDetail(+req.genreId);
-        }
+    //     // cek genre jika ada 
+    //     if (req.genreId) {
+    //         await GenreService.readDetail(+req.genreId);
+    //     }
 
-        // cek theater jika ada 
-        if (req.theaterId) {
-            await TheaterService.readDetail(+req.theaterId);
-        }
-
-
-        // cek movie 
-        const movie = await this.readDetail(id);
+    //     // cek theater jika ada 
+    //     if (req.theaterId) {
+    //         await TheaterService.readDetail(+req.theaterId);
+    //     }
 
 
+    //     // cek movie 
+    //     const movie = await this.readDetail(id);
 
 
-        // update 
-        const response = await prisma.movie.update({
-            where: { id }, data: {
-                ...req,
-                thumbnail: req.thumbnail ? req.thumbnail : movie?.thumbnail,
-                url_thumbnail: req.thumbnail ? req.url_thumbnail : movie?.url_thumbnail
-            }
-        });
-
-        // delete thumbnail lama 
-        if (movie?.url_thumbnail) {
-            await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
-        }
 
 
-        // return 
-        return toMovieResponse(response);
-    }
+    //     // update 
+    //     const response = await prisma.movie.update({
+    //         where: { id }, data: {
+    //             ...req,
+    //             thumbnail: req.thumbnail ? req.thumbnail : movie?.thumbnail,
+    //             url_thumbnail: req.thumbnail ? req.url_thumbnail : movie?.url_thumbnail
+    //         }
+    //     });
+
+    //     // delete thumbnail lama 
+    //     if (movie?.url_thumbnail) {
+    //         await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
+    //     }
 
 
-    // delete
-    static async delete(id: number): Promise<MovieResponseType | null> {
+    //     // return 
+    //     return toMovieResponse(response);
+    // }
 
 
-        // delete movie
-        const response = await prisma.movie.delete({ where: { id } });
+    // // delete
+    // static async delete(id: number): Promise<MovieResponseType | null> {
 
-        // delete file 
-        if (response.thumbnail) {
-            await FileService.deleteFIleFormPath('thumbnails', response.thumbnail);
-        }
 
-        // return movie
-        return toMovieResponse(response);
-    }
+    //     // delete movie
+    //     const response = await prisma.movie.delete({ where: { id } });
+
+    //     // delete file 
+    //     if (response.thumbnail) {
+    //         await FileService.deleteFIleFormPath('thumbnails', response.thumbnail);
+    //     }
+
+    //     // return movie
+    //     return toMovieResponse(response);
+    // }
 }

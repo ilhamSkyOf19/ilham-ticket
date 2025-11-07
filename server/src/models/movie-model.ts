@@ -11,7 +11,7 @@ export type MovieCreateType = {
     available: boolean;
     bonus: string;
     genreId: number;
-    theaterId: number;
+    theaterId: number[];
 }
 
 
@@ -27,7 +27,9 @@ export type MovieResponseType = MovieCreateType & {
 
 
 // to response 
-export const toMovieResponse = (movie: Movie): MovieResponseType => {
+export const toMovieResponse = (movie: Movie & {
+    theaters: { id: number }[]
+}): MovieResponseType => {
     return {
         id: movie.id,
         title: movie.title,
@@ -37,7 +39,7 @@ export const toMovieResponse = (movie: Movie): MovieResponseType => {
         available: movie.available,
         bonus: movie.bonus,
         genreId: movie.genreId,
-        theaterId: movie.theaterId,
+        theaterId: movie.theaters.map((t) => t.id),
         url_thumbnail: movie.url_thumbnail
     }
 }
@@ -48,14 +50,14 @@ export type MovieResponseReadType = Omit<MovieCreateType, 'genreId' | 'theaterId
     id: number;
     url_thumbnail: string;
     genre: Omit<GenreResponseType, 'id'>;
-    theater: Omit<TheaterResponseType, 'id' | 'name'>;
+    theater: Omit<TheaterResponseType, 'id' | 'name'>[];
 }
 
 
 // to response 
 export const toMovieResponseRead = (movie: Omit<Movie, 'genreId' | 'theaterId'> & {
     genre: Omit<GenreResponseType, 'id'>,
-    theater: Omit<TheaterResponseType, 'id' | 'name'>
+    theater: Omit<TheaterResponseType, 'id' | 'name'>[]
 }): MovieResponseReadType => {
     return {
         id: movie.id,
@@ -69,8 +71,8 @@ export const toMovieResponseRead = (movie: Omit<Movie, 'genreId' | 'theaterId'> 
         genre: {
             name: movie.genre.name
         },
-        theater: {
-            city: movie.theater.city
-        }
+        theater: movie.theater.map((t: Omit<TheaterResponseType, 'id' | 'name'>) => ({
+            city: t.city,
+        }))
     }
 }

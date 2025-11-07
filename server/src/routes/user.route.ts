@@ -6,8 +6,6 @@ import { FileService } from "../services/file.service";
 // initialize router 
 const userRoute: Router = Router();
 
-// create 
-userRoute.post('/create', FileService.upload('avatars', 'avatar'), UserController.create);
 
 // read 
 userRoute.get('/read', UserController.read);

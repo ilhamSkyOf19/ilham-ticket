@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Payload } from "../types/payload";
 import { AuthRequest } from "../types/request-auth";
 import { ResponseType } from "../types/request-response-type";
@@ -6,8 +6,76 @@ import { AuthService } from "../services/auth.service";
 import { LoginRequest, toAuthResponse } from "../models/auth-model";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
+import { UserCreateType, UserResponseType } from "../models/user-model";
+import { generateUrl } from "../helpers/helper";
+import { UserService } from "../services/user.service";
 
 export class AuthController {
+
+    // register
+    static async create(req: Request<{}, {}, UserCreateType>, res: Response<ResponseType<UserResponseType | null>>, next: NextFunction) {
+        try {
+
+            // get body 
+            const body = req.body;
+
+            // base url 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+
+            // generate 
+            const url_avatar = generateUrl(baseUrl, 'avatars', 'default-avatar.png');
+
+
+            // hash password 
+            body.password = await bcrypt.hash(body.password, 10);
+
+
+            // get service 
+            const response = await UserService.create({
+                ...body,
+                avatar: req.file?.filename ?? '',
+                url_avatar
+            });
+
+
+            // create payload
+            const payload = {
+                id: response.id,
+                name: response.name,
+                email: response.email,
+                role: response.role
+            }
+
+
+            // generate token 
+            const token = jsonwebtoken.sign(
+                payload,
+                process.env.SECRET_KEY as string,
+                { expiresIn: '1h' });
+
+
+            // set cookie 
+            res.cookie('token', token, {
+                httpOnly: false,
+                secure: true,
+                sameSite: 'none'
+            })
+
+
+            // return 
+            return res.status(201).json({
+                status: "success",
+                message: "berhasil membuat user",
+                data: response
+            })
+
+        } catch (error) {
+
+            // next error
+            next(error)
+        }
+    }
     // login 
     static async login(req: AuthRequest<{}, {}, LoginRequest>, res: Response<ResponseType<Payload | null>>, next: NextFunction) {
         try {
@@ -51,7 +119,7 @@ export class AuthController {
                     role: user.role
                 },
                 process.env.SECRET_KEY as string,
-                { expiresIn: '1d' }
+                { expiresIn: '1h' }
             );
 
 
