@@ -21,6 +21,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import AdminMovie from "../pages/AdminMovie";
 import AdminMovieDetail from "../pages/AdminMovieDetail";
 import AdminMovieAdd from "../pages/AdminMovieAdd";
+import { CheckAuth } from "../hooks/useCheckAuth";
 
 // router 
 const router = createBrowserRouter([
@@ -109,6 +110,9 @@ const router = createBrowserRouter([
     // dashboard
     {
         path: '/dashboard',
+        loader: async () => {
+            await CheckAuth.useCheckAuth('customer');
+        },
         element: <DashboardLayout />,
         children: [
             {

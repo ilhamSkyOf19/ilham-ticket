@@ -10,7 +10,7 @@ export class AuthService {
         // fetch with API
         const response = await api.post('/auth/signup', {
             ...data,
-            role: 'customer'
+            role: 'admin'
         })
             .then(res => res.data)
 
@@ -18,6 +18,27 @@ export class AuthService {
         return response;
     }
 
-    // get user 
+    // cek auth admin
+    static async cekAuthAdmin(): Promise<ResponseType<SignUpResponseType | null>> {
+
+        // fetch with API
+        const response = await api.get('/auth/cek-auth-admin')
+            .then(res => res.data)
+
+        // return response data
+        return response;
+    }
+
+
+    // cek auth customer
+    static async cekAuthCustomer(): Promise<ResponseType<SignUpResponseType | null>> {
+
+        // fetch with API
+        const response = await api.get('/auth/cek-auth-customer')
+            .then(res => res.data)
+
+        // return response data
+        return response;
+    }
 
 }
