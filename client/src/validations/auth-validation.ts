@@ -15,6 +15,7 @@ export class AuthValidation {
     // sign up 
     static readonly SIGN_UP = z.object({
         name: z.string()
+            .regex(/^[a-zA-Z ]+$/, 'Name hanya boleh huruf dan spasi')
             .min(3, 'Name minimal 3 karakter')
             .max(50, 'Name maksimal 50 karakter')
             .nonempty('Name is required'),
@@ -24,9 +25,5 @@ export class AuthValidation {
             .nonempty('Password is required'),
         email: z.email('Email tidak valid')
             .nonempty('Email is required'),
-        confirmPassword: z.string()
-            .min(6, 'Confirm Password minimal 6 karakter')
-            .max(50, 'Confirm Password maksimal 50 karakter')
-            .nonempty('Confirm Password is required'),
     }).strict() satisfies ZodType<SignUpType>
 }

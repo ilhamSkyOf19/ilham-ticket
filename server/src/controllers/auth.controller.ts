@@ -12,6 +12,40 @@ import { UserService } from "../services/user.service";
 
 export class AuthController {
 
+
+    // cek auth 
+    static async checkAuth(req: AuthRequest, res: Response<ResponseType<Payload | null>>, next: NextFunction) {
+        try {
+
+            // get payload 
+            const payload = req.data as Payload;
+
+
+            // cek user with email
+            const user = await UserService.readWithIdAndEmail(payload.id, payload.email);
+
+            // cek user
+            if (!user) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'User not found',
+                    data: null
+                });
+            }
+
+            // return
+            return res.status(200).json({
+                status: 'success',
+                message: 'User found',
+                data: toAuthResponse(user)
+            })
+        } catch (error) {
+
+            // next error
+            next(error)
+        }
+    }
+
     // register
     static async create(req: Request<{}, {}, UserCreateType>, res: Response<ResponseType<UserResponseType | null>>, next: NextFunction) {
         try {

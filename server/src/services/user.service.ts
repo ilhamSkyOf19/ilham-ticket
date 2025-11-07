@@ -40,6 +40,18 @@ export class UserService {
         return toUserResponse(response);
     }
 
+    // read with id & email
+    static async readWithIdAndEmail(id: number, email: string): Promise<UserResponseType> {
+
+        // create user
+        const response = await prisma.user.findFirstOrThrow({ where: { id, email } });
+
+
+        // return 
+        return toUserResponse(response);
+    }
+
+
 
     // update 
     static async update(id: number, req: UserUpdateType & { url_avatar?: string }): Promise<UserResponseType> {

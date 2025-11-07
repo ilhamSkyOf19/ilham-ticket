@@ -2,6 +2,9 @@ import { prisma } from "../lib/prisma";
 import { AuthResponseType, toAuthResponse } from "../models/auth-model";
 
 export class AuthService {
+
+
+
     // cek user 
     static async checkUser(email: string): Promise<AuthResponseType & { password: string }> {
 
@@ -24,7 +27,5 @@ export class AuthService {
             password: user?.password || ''
         }
     }
-
-
 
 }

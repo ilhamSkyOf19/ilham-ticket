@@ -36,3 +36,11 @@ export type TimeType = {
     time: string;
     date: Date;
 }
+
+
+// type response form API
+export type ResponseType<T> = {
+    status: 'success' | 'error';
+    message: string;
+    data: T;
+}
