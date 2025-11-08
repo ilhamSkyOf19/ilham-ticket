@@ -7,7 +7,7 @@ export type SignUpType = {
 }
 
 // response sign up type
-export type SignUpResponseType = Omit<SignUpType, 'password'> & {
+export type SignResponseType = Omit<SignUpType, 'password'> & {
     id: string;
     role: 'customer' | 'admin';
 }

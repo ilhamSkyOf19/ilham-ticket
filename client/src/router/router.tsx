@@ -111,7 +111,8 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         loader: async () => {
-            await CheckAuth.useCheckAuth('customer');
+            return await CheckAuth.useCheckAuth('admin');
+
         },
         element: <DashboardLayout />,
         children: [
