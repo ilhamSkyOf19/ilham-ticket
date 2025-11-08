@@ -18,10 +18,14 @@ import TopUpPage from "../pages/TopUpPage";
 import MidtransPaymentPage from "../pages/MidtransPaymentPage";
 import TopupSuccessPage from "../pages/TopupSuccessPage";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import AdminMovie from "../pages/AdminMovie";
-import AdminMovieDetail from "../pages/AdminMovieDetail";
-import AdminMovieAdd from "../pages/AdminMovieAdd";
 import { CheckAuth } from "../hooks/useCheckAuth";
+import AdminMoviePage from "../pages/AdminMoviePage";
+import AdminMovieDetailPage from "../pages/AdminMovieDetailPage";
+import AdminMovieAddPage from "../pages/AdminMovieAddPage";
+import AdminGenreAddPage from "../pages/AdminGenreAddPage";
+import { useReadTheater } from "../hooks/useTheater";
+import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
+import AdminListTheaterPage from "../pages/AdminListTheaterPage";
 
 // router 
 const router = createBrowserRouter([
@@ -118,17 +122,39 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <AdminMovie />
+                element: <AdminMoviePage />
             },
             // detail movie admin
             {
                 path: 'dashboard-movie-detail/:id',
-                element: <AdminMovieDetail />
+                element: <AdminMovieDetailPage />
             },
             // add movie admin
             {
                 path: 'dashboard-movie-add',
-                element: <AdminMovieAdd />
+                element: <AdminMovieAddPage />
+            },
+
+            // list theater admin
+            {
+                path: 'dashboard-theater',
+                loader: async () => {
+                    return await useReadTheater();
+                },
+                element: <AdminListTheaterPage />
+            },
+
+            // add theater admin
+            {
+                path: 'dashboard-theater-add',
+                element: <AdminTheaterAddPage />
+            },
+
+
+            // add genre admin
+            {
+                path: 'dashboard-genre-add',
+                element: <AdminGenreAddPage />
             },
         ]
     }

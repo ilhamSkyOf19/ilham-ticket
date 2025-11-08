@@ -12,7 +12,7 @@ type Props = {
 const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
     return (
         <div ref={ref} className={clsx(
-            'w-[60%] h-[100vh] fixed flex flex-col justify-start bg-white/10 backdrop-blur-xl pt-3 transition-transform duration-300 ease-in-out z-30',
+            'w-[60%] h-[100vh] fixed flex flex-col justify-start bg-white/10 backdrop-blur-2xl pt-3 transition-transform duration-300 ease-in-out z-30',
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}>
             <div className='w-full flex flex-row justify-between items-center px-2'>
@@ -35,8 +35,18 @@ const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
             <div className='w-full flex flex-col justify-start items-start mt-6'>
 
                 {/* navigation */}
+                {/* dashboard home */}
                 <NavigationSidebar link='/dashboard' title='dashboard' handleSidebarToggle={handleSidebarToggle} />
+
+                {/* movie add */}
                 <NavigationSidebar link='/dashboard/dashboard-movie-add' title='movie add' handleSidebarToggle={handleSidebarToggle} />
+
+                {/* theater display */}
+                <NavigationSidebar link='/dashboard/dashboard-theater' title='list theater' handleSidebarToggle={handleSidebarToggle} />
+
+
+                {/* genre add */}
+                <NavigationSidebar link='/dashboard/dashboard-genre-add' title='genre add' handleSidebarToggle={handleSidebarToggle} />
 
             </div>
         </div>

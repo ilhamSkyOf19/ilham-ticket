@@ -7,10 +7,11 @@ import { useMutation } from '@tanstack/react-query'
 import InputComponent from '../../fragments/InputComponent'
 import InputChoose from '../../components/InputChoose'
 import ChooseTheaters from '../../components/ChooseTheaters'
-import ChooseBonus from '../../components/ChooseBonus'
+// import ChooseBonus from '../../components/ChooseBonus'
 import InputThumbnail from '../../components/InputThumbnail'
+import { MovieService } from '../../services/movie.service'
 
-const AdminMovieAdd: FC = () => {
+const AdminMovieAddPage: FC = () => {
 
 
 
@@ -21,43 +22,66 @@ const AdminMovieAdd: FC = () => {
 
 
     // mutation 
-    const { isPending } = useMutation({
-        mutationFn: async (data: MovieCreateType) => {
+    const { isPending, mutateAsync } = useMutation({
+        mutationFn: (formData: FormData) => {
+
+            // call service 
+            return MovieService.create(formData)
+        },
+
+        // error 
+        onError: (error) => {
+            console.log(error);
+        },
+
+        // success 
+        onSuccess: (data) => {
             console.log(data);
         }
     })
 
 
     // on submit
-    const onSubmit = (data: MovieCreateType) => {
+    const onSubmit = async (data: MovieCreateType) => {
 
-        // form data 
-        const formData = new FormData()
-        formData.append('thumbnail', data.thumbnail)
-        formData.append('title', data.title)
-        formData.append('about', data.about)
-        formData.append('rating', data.rating)
-        formData.append('location', data.location)
-        formData.append('price', data.price)
-        formData.append('genre', data.genre)
-        formData.append('theaters', JSON.stringify(data.theaters))
+        try {
+            // form data 
+            const formData = new FormData()
+            if (data.thumbnail) {
+                formData.append("thumbnail", data.thumbnail);
+            }
+            formData.append('title', data.title)
+            formData.append('about', data.about)
+            formData.append('rating', data.rating)
+            formData.append('location', data.location)
+            formData.append('price', data.price)
+            formData.append('genre', data.genre)
+            formData.append('theaters', JSON.stringify(data.theaters))
 
 
 
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
+
+
+            // for (const [key, value] of formData.entries()) {
+            //     console.log(key, value);
+            // }
+
+            //   mutation 
+            await mutateAsync(formData);
+
+
+        } catch (error) {
+            console.log(error);
         }
-
-
 
     }
 
 
     return (
-        <div className='w-full min-h-[100vh] py-16 flex flex-col justify-start items-start px-2 gap-4'>
+        <div className='w-full min-h-[100vh] py-18 flex flex-col justify-start items-start px-2 gap-4'>
 
             {/* header */}
-            <div className='w-full flex flex-row justify-start items-start'>
+            <div className='w-full flex flex-row justify-center items-start'>
                 <h2 className='text-white font-bold text-base'>Add New Movie</h2>
             </div>
 
@@ -195,7 +219,7 @@ const AdminMovieAdd: FC = () => {
 
 
                 {/* choose bonus */}
-                <Controller
+                {/* <Controller
                     control={control}
                     name='bonus'
                     render={({ fieldState }) => (
@@ -223,7 +247,7 @@ const AdminMovieAdd: FC = () => {
                         />
                     )}
 
-                />
+                /> */}
 
 
 
@@ -240,4 +264,4 @@ const AdminMovieAdd: FC = () => {
     )
 }
 
-export default AdminMovieAdd
+export default AdminMovieAddPage

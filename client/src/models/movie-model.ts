@@ -11,9 +11,9 @@ export type MovieCreateType = {
     price: string;
     genre: string;
     theaters: number[];
-    bonus: number[];
-
+    // bonus: number[];
 }
+
 
 
 export type MovieType = {
@@ -26,6 +26,10 @@ export type MovieType = {
     thumbnail: string;
     reviews: ReviewsType[];
     theaters: TheatersType[];
-    bonus: BonusType[];
+    // bonus: BonusType[];
     price: number;
 }
+
+
+// response 
+export type MovieResponseType = MovieType;

@@ -1,9 +1,8 @@
 import { type FC } from 'react'
 import CardMovie from '../../components/CardMovie'
-import { IoMdAdd } from 'react-icons/io'
-import { Link } from 'react-router-dom'
+import ButtonAddCircleGreen from '../../components/ButtonAddCircleGreen'
 
-const AdminMovie: FC = () => {
+const AdminMoviePage: FC = () => {
     return (
         <div className='w-full min-h-[100vh] flex flex-col justify-start items-start bg-black px-2 gap-4 relative pt-16'>
 
@@ -12,10 +11,7 @@ const AdminMovie: FC = () => {
 
 
             {/* button add */}
-            <Link to={'/dashboard/dashboard-movie-add'} className='w-13 h-13 bg-green-700 rounded-full fixed z-20 bottom-6 right-6 flex flex-col justify-center items-center'>
-                <IoMdAdd className='text-white text-4xl' />
-            </Link>
-
+            <ButtonAddCircleGreen link={'/dashboard/dashboard-movie-add'} />
 
             {/* movie */}
             <div className='w-full flex flex-col justify-start items-start'>
@@ -29,4 +25,4 @@ const AdminMovie: FC = () => {
     )
 }
 
-export default AdminMovie
+export default AdminMoviePage

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import type { MovieType } from '../../models/movie-model';
 import MovieDetail from '../../fragments/MovieDetail';
 
-const AdminMovieDetail: FC = () => {
+const AdminMovieDetailPage: FC = () => {
     // data 
     // const data = useLoaderData() as MovieType;
 
@@ -32,4 +32,4 @@ const AdminMovieDetail: FC = () => {
     )
 }
 
-export default AdminMovieDetail
+export default AdminMovieDetailPage
