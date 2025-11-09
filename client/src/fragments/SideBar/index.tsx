@@ -42,7 +42,7 @@ const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
                 <NavigationSidebar link='/dashboard/dashboard-movie-add' title='movie add' handleSidebarToggle={handleSidebarToggle} />
 
                 {/* theater display */}
-                <NavigationSidebar link='/dashboard/dashboard-theater' title='list theater' handleSidebarToggle={handleSidebarToggle} />
+                <NavigationSidebar link='/dashboard/theater' title='list theater' handleSidebarToggle={handleSidebarToggle} />
 
 
                 {/* genre add */}

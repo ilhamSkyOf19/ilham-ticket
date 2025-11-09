@@ -12,4 +12,15 @@ export class GenreService {
         // return response data
         return response;
     }
+
+    // read genre 
+    static async read(): Promise<GenreResponseType[] | null> {
+        // fetch with API
+        const response = await api.get('/genre/read')
+            .then(res => res.data)
+
+
+        // return response data
+        return response;
+    }
 }

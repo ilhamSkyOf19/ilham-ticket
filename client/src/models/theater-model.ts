@@ -4,6 +4,9 @@ export type TheaterCreateType = {
     city: string;
 }
 
+// update 
+export type TheaterUpdateType = Partial<TheaterCreateType>
+
 
 // response 
 export type TheaterResponseType = {

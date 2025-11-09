@@ -116,11 +116,19 @@ const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValu
                     modalChoose ? 'max-h-[12rem]' : 'max-h-0'
                 )}>
                     {
-                        fieldChoose.map((item: { id: number, name: string }, index) => (
-                            <button key={index} type='button' onClick={() => handleChoose(item)} className='w-full py-3 hover:bg-gray-400 hover:text-white text-left px-5 text-black font-semibold'>
-                                {item.name}
-                            </button>
-                        ))
+                        fieldChoose.length > 0 ? (
+                            fieldChoose.map((item: { id: number, name: string }, index) => (
+                                <button key={index} type='button' onClick={() => handleChoose(item)} className='w-full py-3 hover:bg-gray-400 hover:text-white text-left px-5 text-black font-semibold capitalize'>
+                                    {item.name}
+                                </button>
+                            ))
+                        ) : (
+                            <div className='w-full flex flex-row justify-center items-center'>
+                                <p className='text-white text-sm font-light'>
+                                    tidak ada pilihan
+                                </p>
+                            </div>
+                        )
                     }
                 </div>
             </div>

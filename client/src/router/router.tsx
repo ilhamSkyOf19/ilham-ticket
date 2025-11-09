@@ -23,9 +23,10 @@ import AdminMoviePage from "../pages/AdminMoviePage";
 import AdminMovieDetailPage from "../pages/AdminMovieDetailPage";
 import AdminMovieAddPage from "../pages/AdminMovieAddPage";
 import AdminGenreAddPage from "../pages/AdminGenreAddPage";
-import { useReadTheater } from "../hooks/useTheater";
+import { useReadTheater, useReadTheaterDetail } from "../hooks/useTheater";
 import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
 import AdminListTheaterPage from "../pages/AdminListTheaterPage";
+import { useReadGenre } from "../hooks/useGenre";
 
 // router 
 const router = createBrowserRouter([
@@ -132,12 +133,17 @@ const router = createBrowserRouter([
             // add movie admin
             {
                 path: 'dashboard-movie-add',
+                loader: async () => {
+                    const [theaters, genres] = await Promise.all([useReadTheater(), useReadGenre()]);
+
+                    return { theaters, genres };
+                },
                 element: <AdminMovieAddPage />
             },
 
             // list theater admin
             {
-                path: 'dashboard-theater',
+                path: 'theater',
                 loader: async () => {
                     return await useReadTheater();
                 },
@@ -147,6 +153,16 @@ const router = createBrowserRouter([
             // add theater admin
             {
                 path: 'dashboard-theater-add',
+                element: <AdminTheaterAddPage />
+            },
+
+
+            // update theater admin
+            {
+                path: 'dashboard-theater-update/:id',
+                loader: async ({ params }) => {
+                    return await useReadTheaterDetail(Number(params.id));
+                },
                 element: <AdminTheaterAddPage />
             },
 

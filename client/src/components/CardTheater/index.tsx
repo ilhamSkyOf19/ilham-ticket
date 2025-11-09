@@ -5,6 +5,7 @@ import { useMatch } from 'react-router-dom';
 import ButtonDeleteTrash from '../ButtonDeleteTrash';
 
 import theaterDumy from '../../assets/images/thumbnails/theater1.png'
+import ButtonEditPen from '../ButtonEditPen';
 
 
 type Props = Omit<TheatersType, 'thumbnail'> & {
@@ -12,15 +13,19 @@ type Props = Omit<TheatersType, 'thumbnail'> & {
     active?: number;
     selected?: (id: number) => void;
     warning?: boolean;
-    thumbnail?: string
+    thumbnail?: string;
+    id?: number;
+    handleModalActive?: (id: number) => void;
 };
-const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active, selected, warning }) => {
+const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active, selected, warning, handleModalActive }) => {
 
     // cek admin with path 
     const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
 
     // cek admin theaters
-    const adminTheaters = useMatch('/dashboard/dashboard-theater');
+    const adminTheaters = useMatch('/dashboard/theater');
+
+
 
 
     return (
@@ -28,7 +33,14 @@ const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active,
             {/* button trash */}
             {
                 (admin || adminTheaters) && (
-                    <ButtonDeleteTrash />
+                    <ButtonDeleteTrash handleDelete={() => handleModalActive && handleModalActive(id)} />
+                )
+            }
+
+            {/* button update */}
+            {
+                adminTheaters && (
+                    <ButtonEditPen link={`/dashboard/dashboard-theater-update/${id}`} />
                 )
             }
 

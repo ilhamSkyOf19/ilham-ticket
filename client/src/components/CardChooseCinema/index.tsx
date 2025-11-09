@@ -2,11 +2,12 @@ import { type FC } from 'react'
 import ComponentInfo from '../ComponentInfo';
 import iconLocation from '../../assets/images/icons/location.svg';
 import clsx from 'clsx';
+import type { TheaterResponseType } from '../../models/theater-model';
 
 
 type Props = {
     handleClickTheater: (id: number) => void;
-    theater: { id: number; title: string; location: string };
+    theater: TheaterResponseType
     active?: boolean;
     error?: string;
 }
@@ -22,13 +23,13 @@ const CardChooseCinema: FC<Props> = ({ handleClickTheater, theater, active, erro
 
             {/* title theater */}
             <h3 className='text-white text-xs font-medium text-left'>
-                {theater.title}
+                {theater.name}
             </h3>
 
             {/* location */}
             <ComponentInfo
                 icon={iconLocation}
-                label={theater.location}
+                label={theater.city}
             />
         </button>
     )

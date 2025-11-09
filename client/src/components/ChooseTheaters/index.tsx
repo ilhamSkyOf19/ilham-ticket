@@ -3,33 +3,17 @@ import CardChooseCinema from '../CardChooseCinema'
 import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
 import type { MovieCreateType } from '../../models/movie-model';
 import ErrorMessage from '../ErrorMessage';
+import type { TheaterResponseType } from '../../models/theater-model';
 
 
 type Props = {
     setValue: UseFormSetValue<MovieCreateType>;
     clearErrors?: UseFormClearErrors<MovieCreateType>;
     error?: string;
+    data: TheaterResponseType[];
 }
-const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error }) => {
+const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error, data }) => {
 
-    // data 
-    const data: { id: number; title: string; location: string }[] = [
-        {
-            id: 1,
-            title: 'Best Cinema MBK',
-            location: 'Bandung'
-        },
-        {
-            id: 2,
-            title: 'Cinema XXI',
-            location: 'Bandung'
-        },
-        {
-            id: 3,
-            title: 'HollyWood Cinema',
-            location: 'Bandung'
-        }
-    ]
 
     // state theater choose
     const [selectedTheater, setSelectedTheater] = useState<number[]>([]);
@@ -78,9 +62,17 @@ const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error }) => {
             {/* card theater for choose */}
             <div className='w-full flex flex-row justify-start items-start flex-wrap gap-2'>
                 {
-                    data.map((theater) => (
-                        <CardChooseCinema key={theater.id} handleClickTheater={handleClickTheater} theater={theater} active={selectedTheater.includes(theater.id)} error={error} />
-                    ))
+                    data.length > 0 ? (
+                        data.map((theater) => (
+                            <CardChooseCinema key={theater.id} handleClickTheater={handleClickTheater} theater={theater} active={selectedTheater.includes(theater.id)} error={error} />
+                        ))
+                    ) : (
+                        <div className='w-full flex flex-row justify-center items-center'>
+                            <p className='text-white text-sm font-light'>
+                                tidak ada pilihan theater
+                            </p>
+                        </div>
+                    )
                 }
             </div>
 

@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { useEffect, type FC } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { MovieCreateType } from '../../models/movie-model'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,8 +10,29 @@ import ChooseTheaters from '../../components/ChooseTheaters'
 // import ChooseBonus from '../../components/ChooseBonus'
 import InputThumbnail from '../../components/InputThumbnail'
 import { MovieService } from '../../services/movie.service'
+import { useLoaderData } from 'react-router-dom'
+import type { TheaterResponseType } from '../../models/theater-model'
+import type { GenreResponseType } from '../../models/genre-model'
+import type { ResponseType } from '../../types/types'
+
+
+// type loader 
+type LoaderData = {
+    theaters: ResponseType<TheaterResponseType[] | null>;
+    genres: ResponseType<GenreResponseType[] | null>;
+};
+
 
 const AdminMovieAddPage: FC = () => {
+
+    // loader 
+    const { theaters, genres } = useLoaderData() as LoaderData;
+
+
+    // cek data 
+    useEffect(() => {
+        console.log(theaters, genres);
+    }, [theaters, genres])
 
 
 
@@ -155,32 +176,9 @@ const AdminMovieAddPage: FC = () => {
                             name='genre'
                             label='Genre'
                             placeholder='Enter movie genre'
-                            fieldChoose={[
-                                {
-                                    id: 1,
-                                    name: 'Action'
-                                },
-                                {
-                                    id: 2,
-                                    name: 'Comedy'
-                                },
-                                {
-                                    id: 3,
-                                    name: 'Horror'
-                                },
-                                {
-                                    id: 4,
-                                    name: 'Wars'
-                                },
-                                {
-                                    id: 5,
-                                    name: 'Animation'
-                                },
-                                {
-                                    id: 6,
-                                    name: 'Romance'
-                                }
-                            ]}
+                            fieldChoose={
+                                genres?.data ? genres?.data : []
+                            }
                             error={fieldState.error?.message}
                             setValue={setValue}
                             clearErrors={clearErrors}
@@ -209,6 +207,7 @@ const AdminMovieAddPage: FC = () => {
                     name='theaters'
                     render={({ fieldState }) => (
                         <ChooseTheaters
+                            data={theaters?.data ? theaters?.data : []}
                             setValue={setValue}
                             clearErrors={clearErrors}
                             error={fieldState.error?.message}
