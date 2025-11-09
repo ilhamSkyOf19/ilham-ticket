@@ -25,7 +25,7 @@ export type TheatersType = {
     id: number;
     thumbnail: string;
     name: string;
-    location: string;
+    city: string;
 }
 
 

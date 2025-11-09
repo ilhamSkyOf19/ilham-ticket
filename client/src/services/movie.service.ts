@@ -1,5 +1,6 @@
 import api from "../lib/axios";
 import type { MovieResponseType } from "../models/movie-model";
+import type { ResponseType } from "../types/types";
 
 export class MovieService {
     // create 
@@ -14,5 +15,16 @@ export class MovieService {
 
         // return response data
         return response;
+    }
+
+
+    // read 
+    static async read(): Promise<ResponseType<MovieResponseType[] | null>> {
+        // fetch with API
+        const response = await api.get('/movie/read').then(res => res.data)
+
+
+        // return response data
+        return response as ResponseType<MovieResponseType[] | null>;
     }
 }

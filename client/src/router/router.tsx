@@ -27,6 +27,7 @@ import { useReadTheater, useReadTheaterDetail } from "../hooks/useTheater";
 import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
 import AdminListTheaterPage from "../pages/AdminListTheaterPage";
 import { useReadGenre } from "../hooks/useGenre";
+import { useReadMovie } from "../hooks/useMovie";
 
 // router 
 const router = createBrowserRouter([
@@ -123,6 +124,9 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
+                loader: async () => {
+                    return await useReadMovie();
+                },
                 element: <AdminMoviePage />
             },
             // detail movie admin

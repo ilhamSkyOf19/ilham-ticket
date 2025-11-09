@@ -33,7 +33,7 @@ const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error, data }) => {
             setSelectedTheater([...selectedTheater, id]);
 
             // clear error
-            clearErrors?.('theaters');
+            clearErrors?.('theaterId');
         }
     }
 
@@ -41,7 +41,7 @@ const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error, data }) => {
     // useEffect to set value of selected theater
     useEffect(() => {
         // set value
-        setValue('theaters', selectedTheater);
+        setValue('theaterId', selectedTheater);
 
 
     }, [selectedTheater])

@@ -8,13 +8,15 @@ import Rating from '../Rating'
 import { useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 import ButtonAction from '../ButtonAction'
+import type { MovieResponseType } from '../../models/movie-model'
 
 
 type Props = {
     disable?: boolean;
-    dashboard?: boolean
+    dashboard?: boolean;
+    movie: MovieResponseType;
 }
-const CardMovie: FC<Props> = ({ disable, dashboard }) => {
+const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
 
     // navigate 
     const navigate = useNavigate();
@@ -33,7 +35,7 @@ const CardMovie: FC<Props> = ({ disable, dashboard }) => {
                     )}>
                         {/* thumbnail */}
                         <div className='bg-white rounded-3xl w-[6.5rem] h-[7.5rem] overflow-hidden'>
-                            <img src={th2} alt="thumbnail" className='w-ful h-full object-cover' />
+                            <img src={movie.url_thumbnail} alt="thumbnail" className='w-ful h-full object-cover' />
                         </div>
 
                         <div className='flex-1 flex flex-col justify-start items-start gap-2.5'>
@@ -46,10 +48,10 @@ const CardMovie: FC<Props> = ({ disable, dashboard }) => {
                                     {/* name */}
                                     <h2 className='text-white font-semibold text-base text-left'>
                                         {
-                                            ('Avengers: Endgame').length > 15 ? (
-                                                ('Avengers: Endgame').slice(0, 15).concat('...')
+                                            (movie.title).length > 15 ? (
+                                                (movie.title).slice(0, 15).concat('...')
                                             ) : (
-                                                ('Avengers: Endgame')
+                                                (movie.title)
                                             )
                                         }
                                     </h2>
@@ -57,13 +59,13 @@ const CardMovie: FC<Props> = ({ disable, dashboard }) => {
                                     {/* genre */}
                                     <ComponentInfo
                                         icon={iconVideo}
-                                        label={'Action'}
+                                        label={movie.genre.name}
                                     />
 
                                     {/* location */}
                                     <ComponentInfo
                                         icon={iconLocation}
-                                        label={'Jakarta'}
+                                        label={movie?.theater?.[0]?.city}
                                     />
                                 </div>
                                 {/* rating */}

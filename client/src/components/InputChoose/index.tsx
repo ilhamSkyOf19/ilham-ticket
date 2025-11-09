@@ -60,10 +60,10 @@ const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValu
     // handle choose 
     const handleChoose = (choose: { id: number, name: string }) => {
         // set value
-        setValue('genre', choose.id.toString());
+        setValue('genreId', choose.id.toString());
 
         // clear error
-        clearErrors?.('genre');
+        clearErrors?.('genreId');
 
         // set choose
         setChoose(choose.name);

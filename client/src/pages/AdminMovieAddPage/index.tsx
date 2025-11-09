@@ -14,6 +14,7 @@ import { useLoaderData } from 'react-router-dom'
 import type { TheaterResponseType } from '../../models/theater-model'
 import type { GenreResponseType } from '../../models/genre-model'
 import type { ResponseType } from '../../types/types'
+import ButtonSubmit from '../../components/ButtonSubmit'
 
 
 // type loader 
@@ -72,20 +73,22 @@ const AdminMovieAddPage: FC = () => {
                 formData.append("thumbnail", data.thumbnail);
             }
             formData.append('title', data.title)
-            formData.append('about', data.about)
-            formData.append('rating', data.rating)
-            formData.append('location', data.location)
+            formData.append('description', data.description)
+            // formData.append('rating', data.rating)
             formData.append('price', data.price)
-            formData.append('genre', data.genre)
-            formData.append('theaters', JSON.stringify(data.theaters))
+            formData.append('genreId', data.genreId.toString())
+            formData.append('theaterId', JSON.stringify(data.theaterId))
+
+            // bonus 
+            formData.append('bonus', 'popcorn')
 
 
 
 
 
-            // for (const [key, value] of formData.entries()) {
-            //     console.log(key, value);
-            // }
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
 
             //   mutation 
             await mutateAsync(formData);
@@ -138,42 +141,33 @@ const AdminMovieAddPage: FC = () => {
                 {/* input about */}
                 <InputComponent
                     label='About'
-                    name='about'
-                    register={register('about')}
-                    placeholder='Enter movie about'
-                    error={errors.about?.message}
+                    name='description'
+                    register={register('description')}
+                    placeholder='Enter movie description'
+                    error={errors.description?.message}
                     type='text'
                 />
 
                 {/* input rating */}
-                <InputComponent
+                {/* <InputComponent
                     label='Rating'
                     name='rating'
                     register={register('rating')}
                     placeholder='Enter movie rating'
                     error={errors.rating?.message}
                     type='text'
-                />
+                /> */}
 
-                {/* input location */}
-                <InputComponent
-                    type='text'
-                    placeholder='Enter your email'
-                    register={register('location')}
-                    label='location'
-                    name='location'
-                    error={errors.location?.message}
-                />
 
 
 
                 {/* choose genre */}
                 <Controller
                     control={control}
-                    name='genre'
+                    name='genreId'
                     render={({ field, fieldState }) => (
                         <InputChoose
-                            name='genre'
+                            name='genreId'
                             label='Genre'
                             placeholder='Enter movie genre'
                             fieldChoose={
@@ -204,7 +198,7 @@ const AdminMovieAddPage: FC = () => {
                 {/* choose theater */}
                 <Controller
                     control={control}
-                    name='theaters'
+                    name='theaterId'
                     render={({ fieldState }) => (
                         <ChooseTheaters
                             data={theaters?.data ? theaters?.data : []}
@@ -255,9 +249,9 @@ const AdminMovieAddPage: FC = () => {
 
 
                 {/* button submit */}
-                <button type='submit' disabled={isPending} className='w-full flex flex-row justify-center items-center bg-white py-2.5 rounded-full text-black font-bold hover:scale-103 transition-all duration-300 ease-in-out mt-8'>
-                    Submit
-                </button>
+                <div className='w-full flex flex-row justify-center items-center mt-4'>
+                    <ButtonSubmit label='Submit' isPending={isPending} />
+                </div>
             </form>
         </div>
     )
