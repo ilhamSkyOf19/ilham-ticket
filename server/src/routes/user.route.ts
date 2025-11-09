@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { FileService } from "../services/file.service";
+import AuthMiddleware from "../middlewares/auth";
 
 
 // initialize router 
@@ -13,6 +14,9 @@ userRoute.get('/read', UserController.read);
 
 // read detail
 userRoute.get('/read-detail/:id', UserController.readDetail);
+
+// auth middleware 
+userRoute.use(AuthMiddleware('admin'));
 
 
 // update 

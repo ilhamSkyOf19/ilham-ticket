@@ -9,13 +9,21 @@ import { BonusValidation } from "../validations/bonus-validation";
 // initialize router 
 const bonusRoute: Router = Router();
 
-
-// create 
-bonusRoute.post('/create', AuthMiddleware('admin'), validation<BonusCreateType>(BonusValidation.CREATE), BonusController.create);
-
-
 // read
 bonusRoute.get('/read', BonusController.read);
+
+
+// auth middleware 
+bonusRoute.use(AuthMiddleware('admin'));
+
+
+// create 
+bonusRoute.post('/create', validation<BonusCreateType>(BonusValidation.CREATE), BonusController.create);
+
+
+// delete 
+bonusRoute.delete('/delete/:id', BonusController.delete);
+
 
 // export 
 export default bonusRoute;

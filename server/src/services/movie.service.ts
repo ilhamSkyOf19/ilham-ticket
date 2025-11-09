@@ -47,8 +47,13 @@ export class MovieService {
                             bonusId: id
                         })),
                     },
-                }
+                },
 
+                review: {
+                    createMany: {
+                        data: []
+                    }
+                }
 
             },
             include: {
@@ -79,6 +84,15 @@ export class MovieService {
                         id: true,
                         name: true
                     }
+                },
+                review: {
+                    select: {
+                        id: true,
+                        username: true,
+                        rating: true,
+                        comment: true
+
+                    }
                 }
             }
         });
@@ -88,7 +102,8 @@ export class MovieService {
             ...response,
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
-            genres: [response.genre]
+            genres: response.genre,
+            reviews: response.review
         });
     }
 
@@ -127,6 +142,14 @@ export class MovieService {
                         id: true,
                         name: true
                     }
+                },
+                review: {
+                    select: {
+                        id: true,
+                        username: true,
+                        rating: true,
+                        comment: true,
+                    }
                 }
             }
         })
@@ -138,7 +161,8 @@ export class MovieService {
                 ...movie,
                 theaters: movie.movieTheaters.map((mt) => mt.theater),
                 bonus: movie.movieBonus.map((mb) => mb.bonus),
-                genres: [movie.genre]
+                genres: movie.genre,
+                reviews: movie.review
             })
         );
     }
@@ -178,6 +202,14 @@ export class MovieService {
                         id: true,
                         name: true
                     }
+                },
+                review: {
+                    select: {
+                        id: true,
+                        username: true,
+                        rating: true,
+                        comment: true
+                    }
                 }
             }
         });
@@ -188,65 +220,195 @@ export class MovieService {
             ...response,
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
-            genres: [response.genre]
+            genres: response.genre,
+            reviews: response.review
         });
 
     }
 
 
     // update
-    // static async update(id: number, req: MovieUpdateType & { url_thumbnail?: string }): Promise<MovieResponseType | null> {
+    static async update(id: number, req: MovieUpdateType & { url_thumbnail?: string }): Promise<MovieResponseType | null> {
 
-    //     // cek genre jika ada 
-    //     if (req.genreId) {
-    //         await GenreService.readDetail(+req.genreId);
-    //     }
+        // cek genre jika ada 
+        if (req.genreId) {
+            await GenreService.readDetail(+req.genreId);
+        }
 
-    //     // cek theater jika ada 
-    //     if (req.theaterId) {
-    //         await TheaterService.readDetail(+req.theaterId);
-    //     }
-
-
-    //     // cek movie 
-    //     const movie = await this.readDetail(id);
+        // cek theater jika ada 
+        if (req.theaterId) {
+            for (const idTheater of req.theaterId) {
+                await TheaterService.readDetail(idTheater);
+            }
+        }
 
 
+        // cek tiap bonus 
+        if (req.bonus) {
+            for (const idBonus of req.bonus) {
+                await BonusService.readDetail(idBonus);
+            }
+        }
 
 
-    //     // update 
-    //     const response = await prisma.movie.update({
-    //         where: { id }, data: {
-    //             ...req,
-    //             thumbnail: req.thumbnail ? req.thumbnail : movie?.thumbnail,
-    //             url_thumbnail: req.thumbnail ? req.url_thumbnail : movie?.url_thumbnail
-    //         }
-    //     });
 
-    //     // delete thumbnail lama 
-    //     if (movie?.url_thumbnail) {
-    //         await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
-    //     }
+        // cek movie 
+        const movie = await this.readDetail(id);
 
 
-    //     // return 
-    //     return toMovieResponse(response);
-    // }
 
 
-    // // delete
-    // static async delete(id: number): Promise<MovieResponseType | null> {
+        // update 
+        const response = await prisma.movie.update({
+            where: { id },
+            data: {
+                title: req.title,
+                description: req.description,
+                price: req.price,
+                available: req.available ? req.available : movie?.available,
+                genreId: req.genreId,
+
+                thumbnail: req.thumbnail,
+                url_thumbnail: req.thumbnail,
 
 
-    //     // delete movie
-    //     const response = await prisma.movie.delete({ where: { id } });
+                // update movie
+                movieTheaters: req.theaterId ? {
+                    deleteMany: {},
+                    createMany: {
+                        data: req.theaterId.map((idTheater) => ({
+                            theaterId: idTheater
+                        }))
+                    }
+                } : undefined,
 
-    //     // delete file 
-    //     if (response.thumbnail) {
-    //         await FileService.deleteFIleFormPath('thumbnails', response.thumbnail);
-    //     }
 
-    //     // return movie
-    //     return toMovieResponse(response);
-    // }
+                // update bonus
+                movieBonus: req.bonus ? {
+                    deleteMany: {},
+                    createMany: {
+                        data: req.bonus.map((idBonus) => ({
+                            bonusId: idBonus
+                        }))
+                    }
+                } : undefined
+            },
+            include: {
+                movieTheaters: {
+                    include: {
+                        theater: {
+                            select: {
+                                id: true,
+                                name: true,
+                                city: true
+                            }
+                        }
+                    }
+                },
+                movieBonus: {
+                    include: {
+                        bonus: {
+                            select: {
+                                id: true,
+                                name: true,
+                                size: true
+                            }
+                        }
+                    }
+                },
+                genre: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                review: {
+                    select: {
+                        id: true,
+                        username: true,
+                        rating: true,
+                        comment: true
+                    }
+                }
+            }
+        });
+
+        // delete thumbnail lama 
+        if (movie?.url_thumbnail) {
+            await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
+        }
+
+
+        // return 
+        return toMovieResponse({
+            ...response,
+            theaters: response.movieTheaters.map((mt) => mt.theater),
+            bonus: response.movieBonus.map((mb) => mb.bonus),
+            genres: response.genre,
+            reviews: response.review
+        });
+    }
+
+
+    // delete
+    static async delete(id: number): Promise<MovieResponseType | null> {
+
+
+        // delete movie
+        const response = await prisma.movie.delete({
+            where: { id },
+            include: {
+                movieTheaters: {
+                    include: {
+                        theater: {
+                            select: {
+                                id: true,
+                                name: true,
+                                city: true
+                            }
+                        }
+                    }
+                },
+                movieBonus: {
+                    include: {
+                        bonus: {
+                            select: {
+                                id: true,
+                                name: true,
+                                size: true
+                            }
+                        }
+                    }
+                },
+                genre: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                review: {
+                    select: {
+                        id: true,
+                        username: true,
+                        rating: true,
+                        comment: true
+                    }
+                }
+            }
+        });
+
+        // delete file 
+        if (response.thumbnail) {
+            await FileService.deleteFIleFormPath('thumbnails', response.thumbnail);
+        }
+
+        // return movie
+        return toMovieResponse({
+            ...response,
+            theaters: response.movieTheaters.map((mt) => mt.theater),
+            bonus: response.movieBonus.map((mb) => mb.bonus),
+            genres: response.genre,
+            reviews: response.review
+        });
+    }
 }

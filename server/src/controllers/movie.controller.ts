@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { MovieCreateType, MovieResponseType } from "../models/movie-model";
+import { MovieCreateType, MovieResponseType, MovieUpdateType } from "../models/movie-model";
 import validationService from "../services/validation.service";
 import { MovieValidation } from "../validations/movie-validation";
-import { ZodError } from "zod";
 import { FileService } from "../services/file.service";
 import { generateUrl } from "../helpers/helper";
 import { MovieService } from "../services/movie.service";
@@ -10,7 +9,7 @@ import { ResponseType } from "../types/request-response-type";
 
 export class MovieController {
     // create
-    static async create(req: Request<{}, {}, Omit<MovieCreateType, 'theaterId'> & { theaterId: string }>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
+    static async create(req: Request<{}, {}, MovieCreateType>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
         try {
 
 
@@ -24,13 +23,16 @@ export class MovieController {
             }
 
             // get body & cek body 
-            const body = validationService<Omit<MovieCreateType, 'thumbnail' | 'theaterId'> & { theaterId: string }>(MovieValidation.CREATE, {
+            const body = validationService<Omit<MovieCreateType, 'thumbnail'>>(MovieValidation.CREATE, {
                 ...req.body,
                 price: Number(req.body.price),
                 available: Boolean(req.body.available),
                 genreId: Number(req.body.genreId),
-                theaterId: req.body.theaterId,
             });
+
+
+            // cek 
+            console.log(body)
 
 
             // base url 
@@ -46,7 +48,6 @@ export class MovieController {
                 ...body.data,
                 thumbnail: req.file?.filename ?? '',
                 url_thumbnail: url_thumbnail,
-                theaterId: JSON.parse(req.body.theaterId),
             })
 
 
@@ -75,7 +76,7 @@ export class MovieController {
 
 
     // read
-    static async read(_req: Request, res: Response<ResponseType<MovieResponseReadType[] | null>>, next: NextFunction) {
+    static async read(_req: Request, res: Response<ResponseType<MovieResponseType[] | null>>, next: NextFunction) {
         try {
             // get service 
             const response = await MovieService.read();
@@ -96,7 +97,7 @@ export class MovieController {
     }
 
     // read detail
-    static async readDetail(req: Request<{ id: string }>, res: Response<ResponseType<MovieResponseReadType | null>>, next: NextFunction) {
+    static async readDetail(req: Request<{ id: string }>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
         try {
 
             // get params id 
@@ -124,87 +125,86 @@ export class MovieController {
 
 
     // update
-    // static async update(req: Request<{ id: string }, {}, Omit<MovieUpdateType, 'theaterId'> & { theaterId: string }>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
-    //     try {
-    //         // get params 
-    //         const id = req.params.id;
+    static async update(req: Request<{ id: string }, {}, MovieUpdateType>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
+        try {
+            // get params 
+            const id = req.params.id;
 
 
-    //         // cek body 
-    //         const body = validationService<Omit<MovieUpdateType, 'thumbnail'>>(MovieValidation.UPDATE, {
-    //             ...req.body,
-    //             price: req.body.price ? Number(req.body.price) : undefined,
-    //             available: req.body.available ? Boolean(req.body.available) : undefined,
-    //             genreId: req.body.genreId ? Number(req.body.genreId) : undefined,
-    //             theaterId: req.body.theaterId ? JSON.parse(req.body.theaterId).map((id: number) => Number(id)) : undefined
-    //         });
-
-
-
-
-
-    //         // base url 
-    //         const baseUrl = `${req.protocol}://${req.get("host")}`;
-
-
-    //         // generate 
-    //         const url_thumbnail = req.file ? generateUrl(baseUrl, 'thumbnails', req.file?.filename) : undefined;
-
-
-    //         // get service 
-    //         const response = await MovieService.update(+id, {
-    //             ...body.data,
-    //             thumbnail: req.file?.filename,
-    //             url_thumbnail: url_thumbnail
-    //         });
+            // cek body 
+            const body = validationService<Omit<MovieUpdateType, 'thumbnail'>>(MovieValidation.UPDATE, {
+                ...req.body,
+                price: req.body.price ? Number(req.body.price) : undefined,
+                available: req.body.available ? Boolean(req.body.available) : undefined,
+                genreId: req.body.genreId ? Number(req.body.genreId) : undefined,
+            });
 
 
 
 
 
-    //         // return 
-    //         return res.status(200).json({
-    //             status: "success",
-    //             message: "berhasil update movie",
-    //             data: response
-    //         })
+            // base url 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
 
 
-    //     } catch (error) {
+            // generate 
+            const url_thumbnail = req.file ? generateUrl(baseUrl, 'thumbnails', req.file?.filename) : undefined;
 
-    //         // delete file request 
-    //         if (req.file) {
-    //             await FileService.deleteFileRequest(req.file.path)
-    //         }
 
-    //         // next error
-    //         next(error)
-    //     }
-    // }
+            // get service 
+            const response = await MovieService.update(+id, {
+                ...body.data,
+                thumbnail: req.file?.filename,
+                url_thumbnail: url_thumbnail
+            });
+
+
+
+
+
+            // return 
+            return res.status(200).json({
+                status: "success",
+                message: "berhasil update movie",
+                data: response
+            })
+
+
+        } catch (error) {
+
+            // delete file request 
+            if (req.file) {
+                await FileService.deleteFileRequest(req.file.path)
+            }
+
+            // next error
+            next(error)
+        }
+    }
 
 
 
     // // delete
-    // static async delete(req: Request<{ id: string }>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
-    //     try {
-    //         // get id 
-    //         const id = req.params.id;
+    static async delete(req: Request<{ id: string }>, res: Response<ResponseType<MovieResponseType | null>>, next: NextFunction) {
+        try {
+            // get id 
+            const id = req.params.id;
 
 
-    //         // get service 
-    //         const response = await MovieService.delete(+id);
+            // get service 
+            const response = await MovieService.delete(+id);
 
-    //         // return 
-    //         return res.status(200).json({
-    //             status: "success",
-    //             message: "berhasil menghapus movie",
-    //             data: response
-    //         })
+            // return 
+            return res.status(200).json({
+                status: "success",
+                message: "berhasil menghapus movie",
+                data: response
+            })
 
 
-    //     } catch (error) {
-    //         // next error
-    //         next(error)
-    //     }
-    // }
+        } catch (error) {
+            // next error
+            next(error)
+        }
+    }
 }

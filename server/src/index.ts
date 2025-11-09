@@ -39,6 +39,7 @@ app.get("/", (_: Request, res: Response) => {
 app.use('/api/auth', authRouter);
 
 
+
 // api genre
 app.use('/api/genre', genreRoute);
 

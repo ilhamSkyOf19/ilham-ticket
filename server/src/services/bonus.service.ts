@@ -30,4 +30,17 @@ export class BonusService {
         // return genre
         return toBonusResponse(response);
     }
+
+    // delete 
+    static async delete(id: number): Promise<BonusResponseType | null> {
+
+        // cek data 
+        await this.readDetail(id);
+
+        // delete genre 
+        const response = await prisma.bonus.delete({ where: { id } });
+
+        // return genre
+        return toBonusResponse(response);
+    }
 }

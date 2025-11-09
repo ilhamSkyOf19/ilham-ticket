@@ -118,7 +118,7 @@ model MovieBonus {
 model Review {
   id       Int    @id @default(autoincrement())
   username String
-  commet   String
+  comment  String
   rating   Int
   movieId  Int
 

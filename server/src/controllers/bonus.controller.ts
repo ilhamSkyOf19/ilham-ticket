@@ -54,4 +54,34 @@ export class BonusController {
             next(error)
         }
     }
+
+
+    // delete 
+    static async delete(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+
+        try {
+
+            // get id 
+            const id = req.params.id;
+
+
+
+
+            // get service 
+            await BonusService.delete(+id);
+
+
+            // return 
+            return res.status(200).json({
+                status: "success",
+                message: "berhasil menghapus bonus",
+                data: null
+            })
+
+        } catch (error) {
+
+            // next error
+            next(error)
+        }
+    }
 }
