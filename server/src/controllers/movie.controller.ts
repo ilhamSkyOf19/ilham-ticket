@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { MovieCreateType, MovieResponseReadType, MovieResponseType, MovieUpdateType } from "../models/movie-model";
+import { MovieCreateType, MovieResponseType } from "../models/movie-model";
 import validationService from "../services/validation.service";
 import { MovieValidation } from "../validations/movie-validation";
 import { ZodError } from "zod";

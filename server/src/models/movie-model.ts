@@ -1,4 +1,5 @@
 import { Movie } from "../../generated/prisma";
+import { BonusResponseType } from "./bonus-model";
 import { GenreResponseType } from "./genre-model";
 import { TheaterResponseType } from "./theater-model";
 
@@ -9,8 +10,8 @@ export type MovieCreateType = {
     thumbnail: string;
     price: number;
     available: boolean;
-    bonus: string;
     genreId: number;
+    bonus: number[];
     theaterId: number[];
 }
 
@@ -20,15 +21,20 @@ export type MovieUpdateType = Partial<MovieCreateType>
 
 
 // response 
-export type MovieResponseType = MovieCreateType & {
+export type MovieResponseType = Omit<MovieCreateType, 'genreId' | 'theaterId' | 'bonus'> & {
     id: number;
-    url_thumbnail: string
+    url_thumbnail: string;
+    genres: GenreResponseType[];
+    theaters: TheaterResponseType[];
+    bonus: BonusResponseType[];
 }
 
 
 // to response 
-export const toMovieResponse = (movie: Movie & {
-    theaters: { id: number }[]
+export const toMovieResponse = (movie: Omit<Movie, 'genreId'> & {
+    theaters: TheaterResponseType[];
+    genres: GenreResponseType[];
+    bonus: BonusResponseType[];
 }): MovieResponseType => {
     return {
         id: movie.id,
@@ -37,42 +43,22 @@ export const toMovieResponse = (movie: Movie & {
         thumbnail: movie.thumbnail,
         price: movie.price,
         available: movie.available,
-        bonus: movie.bonus,
-        genreId: movie.genreId,
-        theaterId: movie.theaters.map((t) => t.id),
+        genres: movie.genres.map((g) => ({
+            id: g.id,
+            name: g.name
+        })),
+        bonus: movie.bonus.map((b) => ({
+            id: b.id,
+            name: b.name,
+            size: b.size
+        })),
+        theaters: movie.theaters.map((t) => ({
+            id: t.id,
+            name: t.name,
+            city: t.city
+
+        })),
         url_thumbnail: movie.url_thumbnail
     }
 }
 
-
-// response read
-export type MovieResponseReadType = Omit<MovieCreateType, 'genreId' | 'theaterId'> & {
-    id: number;
-    url_thumbnail: string;
-    genre: Omit<GenreResponseType, 'id'>;
-    theater: Omit<TheaterResponseType, 'id' | 'name'>[];
-}
-
-
-// to response 
-export const toMovieResponseRead = (movie: Omit<Movie, 'genreId' | 'theaterId'> & {
-    genre: Omit<GenreResponseType, 'id'>,
-    theater: Omit<TheaterResponseType, 'id' | 'name'>[]
-}): MovieResponseReadType => {
-    return {
-        id: movie.id,
-        title: movie.title,
-        description: movie.description,
-        thumbnail: movie.thumbnail,
-        price: movie.price,
-        available: movie.available,
-        bonus: movie.bonus,
-        url_thumbnail: movie.url_thumbnail,
-        genre: {
-            name: movie.genre.name
-        },
-        theater: movie.theater.map((t: Omit<TheaterResponseType, 'id' | 'name'>) => ({
-            city: t.city,
-        }))
-    }
-}

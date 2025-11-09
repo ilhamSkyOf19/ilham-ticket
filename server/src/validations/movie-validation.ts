@@ -16,12 +16,21 @@ export class MovieValidation {
         available: z.boolean({
             error: (val) => val.input === undefined ? "available harus diisi" : "available harus berupa boolean",
         }),
-        bonus: z.string({
-            error: (val) => val.input === undefined ? "bonus harus diisi" : "bonus harus berupa string",
-        }),
         genreId: z.number({
             error: (val) => val.input === undefined ? "genreId harus diisi" : "genreId harus berupa number",
         }),
+        bonus: z.string()
+            .transform((val) => {
+                try {
+                    return JSON.parse(val);
+                } catch {
+                    throw new Error("bonus harus berupa JSON array valid");
+                }
+            })
+            .refine(
+                (arr) => Array.isArray(arr) && arr.every((n) => typeof n === "number"),
+                "bonus harus berupa array berisi number"
+            ),
         theaterId: z.string()
             .transform((val) => {
                 try {

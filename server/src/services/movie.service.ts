@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
-import { MovieCreateType, MovieResponseReadType, MovieResponseType, MovieUpdateType, toMovieResponse, toMovieResponseRead } from "../models/movie-model";
+import { MovieCreateType, MovieResponseType, MovieUpdateType, toMovieResponse } from "../models/movie-model";
+import { BonusService } from "./bonus.service";
 import { FileService } from "./file.service";
 import { GenreService } from "./genre.service";
 import { TheaterService } from "./thater.service";
@@ -16,6 +17,12 @@ export class MovieService {
             await TheaterService.readDetail(id);
         }
 
+
+        // cek tiap bonus 
+        for (const id of req.bonus) {
+            await BonusService.readDetail(id);
+        }
+
         // create movie
         const response = await prisma.movie.create({
             data: {
@@ -25,7 +32,6 @@ export class MovieService {
                 url_thumbnail: req.url_thumbnail,
                 price: +req.price,
                 available: Boolean(req.available),
-                bonus: req.bonus,
                 genreId: +req.genreId,
 
                 // relasi many-to-many
@@ -34,43 +40,92 @@ export class MovieService {
                         data: req.theaterId.map((id) => ({ theaterId: id })),
                     },
                 },
+
+                movieBonus: {
+                    createMany: {
+                        data: req.bonus.map((id) => ({
+                            bonusId: id
+                        })),
+                    },
+                }
+
+
             },
             include: {
                 movieTheaters: {
-                    select: {
-                        theaterId: true,
-                    },
+                    include: {
+                        theater: {
+                            select: {
+                                id: true,
+                                name: true,
+                                city: true
+                            }
+                        }
+                    }
                 },
-            },
+                movieBonus: {
+                    include: {
+                        bonus: {
+                            select: {
+                                id: true,
+                                name: true,
+                                size: true
+                            }
+                        }
+                    }
+                },
+                genre: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                }
+            }
         });
 
         // mapping ke bentuk yang diharapkan toMovieResponse()
         return toMovieResponse({
             ...response,
-            theaters: response.movieTheaters.map((mt) => ({ id: mt.theaterId })),
+            theaters: response.movieTheaters.map((mt) => mt.theater),
+            bonus: response.movieBonus.map((mb) => mb.bonus),
+            genres: [response.genre]
         });
     }
 
 
     // read
-    static async read(): Promise<MovieResponseReadType[] | null> {
+    static async read(): Promise<MovieResponseType[] | null> {
 
 
         // get genre 
         const response = await prisma.movie.findMany({
             include: {
-                genre: {
-                    select: {
-                        name: true
-                    }
-                },
                 movieTheaters: {
                     include: {
                         theater: {
                             select: {
+                                id: true,
+                                name: true,
                                 city: true
                             }
                         }
+                    }
+                },
+                movieBonus: {
+                    include: {
+                        bonus: {
+                            select: {
+                                id: true,
+                                name: true,
+                                size: true
+                            }
+                        }
+                    }
+                },
+                genre: {
+                    select: {
+                        id: true,
+                        name: true
                     }
                 }
             }
@@ -79,33 +134,49 @@ export class MovieService {
 
         // return 
         return response.map((movie) =>
-            toMovieResponseRead({
+            toMovieResponse({
                 ...movie,
-                theater: movie.movieTheaters.map((mt) => mt.theater),
+                theaters: movie.movieTheaters.map((mt) => mt.theater),
+                bonus: movie.movieBonus.map((mb) => mb.bonus),
+                genres: [movie.genre]
             })
         );
     }
 
 
     // read detail
-    static async readDetail(id: number): Promise<MovieResponseReadType | null> {
+    static async readDetail(id: number): Promise<MovieResponseType | null> {
 
         // get genre 
         const response = await prisma.movie.findFirstOrThrow({
             where: { id },
             include: {
-                genre: {
-                    select: {
-                        name: true
-                    }
-                },
                 movieTheaters: {
                     include: {
                         theater: {
                             select: {
+                                id: true,
+                                name: true,
                                 city: true
                             }
                         }
+                    }
+                },
+                movieBonus: {
+                    include: {
+                        bonus: {
+                            select: {
+                                id: true,
+                                name: true,
+                                size: true
+                            }
+                        }
+                    }
+                },
+                genre: {
+                    select: {
+                        id: true,
+                        name: true
                     }
                 }
             }
@@ -113,9 +184,11 @@ export class MovieService {
 
 
         // return 
-        return toMovieResponseRead({
+        return toMovieResponse({
             ...response,
-            theater: response.movieTheaters.map((mt) => mt.theater),
+            theaters: response.movieTheaters.map((mt) => mt.theater),
+            bonus: response.movieBonus.map((mb) => mb.bonus),
+            genres: [response.genre]
         });
 
     }

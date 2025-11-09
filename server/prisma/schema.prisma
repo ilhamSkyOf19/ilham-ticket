@@ -62,15 +62,19 @@ model Movie {
   url_thumbnail String
   price         Int
   available     Boolean
-  bonus         String
+
+  review Review[]
 
   genreId Int // foreign key
 
   // realtion genre many to one
   genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
 
-  // realtion theater many to one
+  // realation theater many to many
   movieTheaters MovieTheater[]
+
+  // relation bonus many to many
+  movieBonus MovieBonus[]
 }
 
 // movie theater 
@@ -83,4 +87,44 @@ model MovieTheater {
 
   movie   Movie   @relation(fields: [movieId], references: [id], onDelete: Cascade)
   theater Theater @relation(fields: [theaterId], references: [id], onDelete: Cascade)
+}
+
+// bonus 
+model Bonus {
+  id        Int      @id @default(autoincrement())
+  name      String
+  size      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation 
+  movieBonus MovieBonus[]
+}
+
+// movie bonus
+model MovieBonus {
+  id      Int @id @default(autoincrement())
+  movieId Int
+  bonusId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bonus Bonus @relation(fields: [bonusId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+}
+
+// review 
+model Review {
+  id       Int    @id @default(autoincrement())
+  username String
+  commet   String
+  rating   Int
+  movieId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation movie
+  movie Movie @relation(fields: [movieId], references: [id])
 }

@@ -10,6 +10,7 @@ import movieRoute from "./routes/movie.route";
 import path from "path";
 import userRoute from "./routes/user.route";
 import authRouter from "./routes/auth.route";
+import bonusRoute from "./routes/bonus.route";
 
 // initialize express
 const app = express();
@@ -52,6 +53,10 @@ app.use('/api/movie', movieRoute);
 
 // api user 
 app.use('/api/user', userRoute);
+
+
+// bonus 
+app.use('/api/bonus', bonusRoute);
 
 // next handler error 
 app.use(errorHandler);
