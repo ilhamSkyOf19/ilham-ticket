@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { BonusCreateType, BonusResponseType } from "../models/bonus-model";
+import { BonusCreateType, BonusResponseType, BonusUpdateType } from "../models/bonus-model";
 import { ResponseType } from "../types/request-response-type";
 import { BonusService } from "../services/bonus.service";
 
@@ -54,6 +54,67 @@ export class BonusController {
             next(error)
         }
     }
+
+
+    // read detail 
+    static async readDetail(req: Request<{ id: string }>, res: Response<ResponseType<BonusResponseType | null>>, next: NextFunction) {
+        try {
+            // get id 
+            const id = req.params.id;
+
+
+            // get service 
+            const response = await BonusService.readDetail(+id);
+
+
+
+            // return 
+            return res.status(200).json({
+                status: "success",
+                message: "berhasil membaca bonus",
+                data: response
+            })
+
+
+        } catch (error) {
+
+            // next error
+            next(error)
+        }
+    }
+
+
+    // update 
+    static async update(req: Request<{ id: string }, {}, BonusUpdateType>, res: Response<ResponseType<BonusResponseType | null>>, next: NextFunction) {
+        try {
+            // get body 
+            const body = req.body;
+
+
+
+            // get id 
+            const id = req.params.id;
+
+            // get service 
+            const response = await BonusService.update(+id, body);
+
+
+
+            // return 
+            return res.status(200).json({
+                status: "success",
+                message: "berhasil memperbarui bonus",
+                data: response
+            })
+
+
+        } catch (error) {
+
+            // next error
+            next(error)
+        }
+    }
+
 
 
     // delete 

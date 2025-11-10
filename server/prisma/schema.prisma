@@ -21,15 +21,18 @@ enum Role {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   name       String
-  email      String   @unique
+  email      String @unique
   password   String
   avatar     String
   url_avatar String
-  role       Role     @default(customer)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  role       Role   @default(customer)
+
+  review Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // genre
@@ -61,6 +64,7 @@ model Movie {
   thumbnail     String
   url_thumbnail String
   price         Int
+  rating        Int
   available     Boolean
 
   review Review[]
@@ -116,15 +120,19 @@ model MovieBonus {
 
 // review 
 model Review {
-  id       Int    @id @default(autoincrement())
-  username String
-  comment  String
-  rating   Int
-  movieId  Int
+  id      Int    @id @default(autoincrement())
+  comment String
+  rating  Int
+  idUser  Int
+  movieId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // relation user 
+  user User @relation(fields: [userId], references: [id])
+
   // relation movie
-  movie Movie @relation(fields: [movieId], references: [id])
+  movie  Movie @relation(fields: [movieId], references: [id])
+  userId Int
 }

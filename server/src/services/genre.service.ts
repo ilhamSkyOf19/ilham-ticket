@@ -39,8 +39,7 @@ export class GenreService {
 
     // update 
     static async update(id: number, req: GenreUpdateType): Promise<GenreResponseType | null> {
-        //  cek genre 
-        await this.readDetail(id);
+
 
         // update genre 
         const response = await prisma.genre.update({ where: { id }, data: req });

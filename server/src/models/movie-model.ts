@@ -18,13 +18,16 @@ export type MovieCreateType = {
 
 
 // update
-export type MovieUpdateType = Partial<MovieCreateType>
+export type MovieUpdateType = Partial<MovieCreateType> & {
+    rating?: number
+}
 
 
 // response 
 export type MovieResponseType = Omit<MovieCreateType, 'genreId' | 'theaterId' | 'bonus'> & {
     id: number;
     url_thumbnail: string;
+    rating: number;
     genres: GenreResponseType;
     theaters: TheaterResponseType[];
     bonus: BonusResponseType[];
@@ -45,6 +48,7 @@ export const toMovieResponse = (movie: Omit<Movie, 'genreId'> & {
         description: movie.description,
         thumbnail: movie.thumbnail,
         price: movie.price,
+        rating: movie.rating,
         available: movie.available,
         genres: {
             id: movie.genres.id,

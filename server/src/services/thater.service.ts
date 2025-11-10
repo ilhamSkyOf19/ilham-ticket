@@ -33,8 +33,6 @@ export class TheaterService {
 
     // update
     static async update(id: number, req: TheaterUpdateType): Promise<TheaterResponseType | null> {
-        //  cek genre 
-        await this.readDetail(id);
 
         // update genre 
         const response = await prisma.theater.update({ where: { id }, data: req });

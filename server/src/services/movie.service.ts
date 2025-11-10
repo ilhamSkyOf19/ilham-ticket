@@ -33,6 +33,7 @@ export class MovieService {
                 price: +req.price,
                 available: Boolean(req.available),
                 genreId: +req.genreId,
+                rating: 0,
 
                 // relasi many-to-many
                 movieTheaters: {
@@ -88,11 +89,15 @@ export class MovieService {
                 review: {
                     select: {
                         id: true,
-                        username: true,
                         rating: true,
-                        comment: true
-
+                        comment: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
+
                 }
             }
         });
@@ -103,7 +108,12 @@ export class MovieService {
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
             genres: response.genre,
-            reviews: response.review
+            reviews: response.review.map((r) => ({
+                id: r.id,
+                username: r.user.name,
+                rating: r.rating,
+                comment: r.comment
+            }))
         });
     }
 
@@ -146,10 +156,15 @@ export class MovieService {
                 review: {
                     select: {
                         id: true,
-                        username: true,
                         rating: true,
                         comment: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
+
                 }
             }
         })
@@ -162,7 +177,12 @@ export class MovieService {
                 theaters: movie.movieTheaters.map((mt) => mt.theater),
                 bonus: movie.movieBonus.map((mb) => mb.bonus),
                 genres: movie.genre,
-                reviews: movie.review
+                reviews: movie.review.map((r) => ({
+                    id: r.id,
+                    username: r.user.name,
+                    rating: r.rating,
+                    comment: r.comment
+                }))
             })
         );
     }
@@ -206,10 +226,15 @@ export class MovieService {
                 review: {
                     select: {
                         id: true,
-                        username: true,
                         rating: true,
-                        comment: true
+                        comment: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
+
                 }
             }
         });
@@ -221,7 +246,12 @@ export class MovieService {
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
             genres: response.genre,
-            reviews: response.review
+            reviews: response.review.map((r) => ({
+                id: r.id,
+                username: r.user.name,
+                rating: r.rating,
+                comment: r.comment
+            }))
         });
 
     }
@@ -267,6 +297,7 @@ export class MovieService {
                 price: req.price,
                 available: req.available ? req.available : movie?.available,
                 genreId: req.genreId,
+                rating: req.rating,
 
                 thumbnail: req.thumbnail,
                 url_thumbnail: req.thumbnail,
@@ -325,10 +356,15 @@ export class MovieService {
                 review: {
                     select: {
                         id: true,
-                        username: true,
                         rating: true,
-                        comment: true
+                        comment: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
+
                 }
             }
         });
@@ -345,7 +381,12 @@ export class MovieService {
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
             genres: response.genre,
-            reviews: response.review
+            reviews: response.review.map((r) => ({
+                id: r.id,
+                username: r.user.name,
+                rating: r.rating,
+                comment: r.comment
+            }))
         });
     }
 
@@ -389,10 +430,15 @@ export class MovieService {
                 review: {
                     select: {
                         id: true,
-                        username: true,
                         rating: true,
-                        comment: true
+                        comment: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
                     }
+
                 }
             }
         });
@@ -408,7 +454,12 @@ export class MovieService {
             theaters: response.movieTheaters.map((mt) => mt.theater),
             bonus: response.movieBonus.map((mb) => mb.bonus),
             genres: response.genre,
-            reviews: response.review
+            reviews: response.review.map((r) => ({
+                id: r.id,
+                username: r.user.name,
+                rating: r.rating,
+                comment: r.comment
+            }))
         });
     }
 }

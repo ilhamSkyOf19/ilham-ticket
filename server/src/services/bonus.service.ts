@@ -1,5 +1,7 @@
 import { prisma } from "../lib/prisma";
-import { BonusCreateType, BonusResponseType, toBonusResponse } from "../models/bonus-model";
+import { BonusCreateType, BonusResponseType, BonusUpdateType, toBonusResponse } from "../models/bonus-model";
+import { toReviewResponse } from "../models/review-model";
+import { ResponseType } from "../types/request-response-type";
 
 export class BonusService {
     // create 
@@ -28,6 +30,18 @@ export class BonusService {
         const response = await prisma.bonus.findFirstOrThrow({ where: { id } });
 
         // return genre
+        return toBonusResponse(response);
+    }
+
+
+    // update 
+    static async update(id: number, data: BonusUpdateType): Promise<BonusResponseType | null> {
+
+        // update genre 
+        const response = await prisma.bonus.update({ where: { id }, data: data });
+
+
+        // return response
         return toBonusResponse(response);
     }
 

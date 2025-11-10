@@ -2,29 +2,31 @@ import { Review } from "../../generated/prisma";
 
 // create
 export type ReviewCreateType = {
-    username: string,
     comment: string
-    rating: number,
+    rating: number
+    movieId: number
 }
 
 
 // response
-export type ReviewResponseType = ReviewCreateType & {
+export type ReviewResponseType = Omit<ReviewCreateType, 'movieId'> & {
     id: number;
-    movies: number[];
+    username: string
+    movies: number
 };
 
 
 
 // to response 
-export const toReviewResponse = (review: Omit<Review, 'createdAt' | 'updatedAt' | 'movieId'> & {
-    movieId: number[]
+export const toReviewResponse = (review: Omit<Review, 'createdAt' | 'updatedAt' | 'movieId' | 'idUser'> & {
+    movieId: number,
+    username: string
 }): ReviewResponseType => {
     return {
         id: review.id,
         username: review.username,
         comment: review.comment,
         rating: review.rating,
-        movies: review.movieId.map((movieId) => movieId)
+        movies: review.movieId
     }
 }
