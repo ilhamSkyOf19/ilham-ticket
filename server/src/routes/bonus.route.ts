@@ -4,6 +4,7 @@ import { BonusController } from "../controllers/bonus.controller";
 import validation from "../middlewares/validation";
 import { BonusCreateType, BonusUpdateType } from "../models/bonus-model";
 import { BonusValidation } from "../validations/bonus-validation";
+import { FileService } from "../services/file.service";
 
 
 // initialize router 
@@ -21,11 +22,11 @@ bonusRoute.use(AuthMiddleware('admin'));
 
 
 // create 
-bonusRoute.post('/create', validation<BonusCreateType>(BonusValidation.CREATE), BonusController.create);
+bonusRoute.post('/create', FileService.upload('bonus', 'img'), BonusController.create);
 
 
 // update 
-bonusRoute.patch('/update/:id', validation<BonusUpdateType>(BonusValidation.UPDATE), BonusController.update);
+bonusRoute.patch('/update/:id', FileService.upload('bonus', 'img'), BonusController.update);
 
 
 // delete 

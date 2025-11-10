@@ -75,7 +75,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                size: true
+                                size: true,
+                                img: true,
+                                url_img: true,
                             }
                         }
                     }
@@ -142,7 +144,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                size: true
+                                size: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -212,7 +216,10 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                size: true
+                                size: true,
+                                img: true,
+                                url_img: true
+
                             }
                         }
                     }
@@ -342,7 +349,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                size: true
+                                size: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -416,7 +425,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                size: true
+                                size: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }

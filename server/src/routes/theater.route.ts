@@ -4,6 +4,7 @@ import { TheaterCreateType, TheaterUpdateType } from '../models/theater-model';
 import { TheaterValidation } from '../validations/theater-validation';
 import { TheaterController } from '../controllers/theater.controller';
 import AuthMiddleware from '../middlewares/auth';
+import { FileService } from '../services/file.service';
 
 
 // initialize router 
@@ -24,11 +25,11 @@ theaterRoute.get('/read-detail/:id', TheaterController.readDetail);
 theaterRoute.use(AuthMiddleware('admin'));
 
 // create 
-theaterRoute.post('/create', validation<TheaterCreateType>(TheaterValidation.CREATE), TheaterController.create);
+theaterRoute.post('/create', FileService.upload('theaters', 'img'), TheaterController.create);
 
 
 // update 
-theaterRoute.patch('/update/:id', validation<TheaterUpdateType>(TheaterValidation.UPDATE), TheaterController.update);
+theaterRoute.patch('/update/:id', FileService.upload('theaters', 'img'), TheaterController.update);
 
 
 // delete 

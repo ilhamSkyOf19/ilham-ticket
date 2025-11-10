@@ -3,7 +3,7 @@ import { TheaterCreateType, TheaterResponseType, TheaterUpdateType, toTheaterRes
 
 export class TheaterService {
     // create
-    static async create(req: TheaterCreateType): Promise<TheaterResponseType | null> {
+    static async create(req: TheaterCreateType & { img: string, url_img: string }): Promise<TheaterResponseType | null> {
         // create genre 
         const response = await prisma.theater.create({ data: req });
 
@@ -32,7 +32,7 @@ export class TheaterService {
 
 
     // update
-    static async update(id: number, req: TheaterUpdateType): Promise<TheaterResponseType | null> {
+    static async update(id: number, req: TheaterUpdateType & { img?: string, url_img?: string }): Promise<TheaterResponseType | null> {
 
         // update genre 
         const response = await prisma.theater.update({ where: { id }, data: req });

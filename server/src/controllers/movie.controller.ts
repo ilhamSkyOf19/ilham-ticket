@@ -31,8 +31,6 @@ export class MovieController {
             });
 
 
-            // cek 
-            console.log(body)
 
 
             // base url 

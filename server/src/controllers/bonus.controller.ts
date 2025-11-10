@@ -2,19 +2,48 @@ import { NextFunction, Request, Response } from "express";
 import { BonusCreateType, BonusResponseType, BonusUpdateType } from "../models/bonus-model";
 import { ResponseType } from "../types/request-response-type";
 import { BonusService } from "../services/bonus.service";
+import { BonusValidation } from "../validations/bonus-validation";
+import { FileService } from "../services/file.service";
+import { generateUrl } from "../helpers/helper";
+import validationService from "../services/validation.service";
 
 export class BonusController {
     // create 
-    static async create(req: Request<{}, {}, BonusCreateType>, res: Response<ResponseType<BonusResponseType | null>>, next: NextFunction) {
+    static async create(req: Request<{}, {}, Omit<BonusCreateType, 'img'>>, res: Response<ResponseType<BonusResponseType | null>>, next: NextFunction) {
 
         try {
 
+            // cek file 
+            if (!req.file) {
+                return res.status(400).json({
+                    status: "failed",
+                    message: "file not found",
+                    data: null
+                })
+            }
+
             // get body 
-            const body = req.body;
+            const body = validationService<Omit<BonusCreateType, 'img'>>(BonusValidation.CREATE, req.body);
+
+
+            // generate url img 
+            // base url 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+
+            // generate 
+            const url_img = generateUrl(baseUrl, 'bonus', req.file?.filename);
+
+
+
 
 
             // get service 
-            const response = await BonusService.create(body);
+            const response = await BonusService.create({
+                ...body.data,
+                img: req.file?.filename,
+                url_img
+            });
 
 
             // return 
@@ -25,6 +54,11 @@ export class BonusController {
             })
 
         } catch (error) {
+
+            // delete file service 
+            if (req.file) {
+                await FileService.deleteFileRequest(req.file.path);
+            }
 
             // next error
             next(error)
@@ -87,16 +121,42 @@ export class BonusController {
     // update 
     static async update(req: Request<{ id: string }, {}, BonusUpdateType>, res: Response<ResponseType<BonusResponseType | null>>, next: NextFunction) {
         try {
+
+
             // get body 
-            const body = req.body;
+            const body = validationService<Omit<BonusUpdateType, 'img'>>(BonusValidation.UPDATE, req.body);
 
 
 
             // get id 
             const id = req.params.id;
 
+            // get bonus 
+            const bonus = await BonusService.readDetail(+id);
+
+            // cek file 
+            if (req.file) {
+                // delete file 
+                await FileService.deleteFIleFormPath('bonus', bonus?.img || '');
+            }
+
+
+            // generate url img 
+            // base url 
+            const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+
+            // generate 
+            const url_img = generateUrl(baseUrl, 'bonus', req.file?.filename);
+
+
+
             // get service 
-            const response = await BonusService.update(+id, body);
+            const response = await BonusService.update(+id, {
+                ...body.data,
+                img: req.file?.filename,
+                url_img: req.file ? url_img : undefined
+            });
 
 
 
@@ -109,6 +169,11 @@ export class BonusController {
 
 
         } catch (error) {
+
+            // delete file if error 
+            if (req.file) {
+                await FileService.deleteFileRequest(req.file.path);
+            }
 
             // next error
             next(error)
@@ -129,7 +194,11 @@ export class BonusController {
 
 
             // get service 
-            await BonusService.delete(+id);
+            const response = await BonusService.delete(+id);
+
+
+            // delete file 
+            await FileService.deleteFIleFormPath('bonus', response?.img || '');
 
 
             // return 

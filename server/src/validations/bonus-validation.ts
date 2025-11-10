@@ -10,7 +10,7 @@ export class BonusValidation {
         size: z.string({
             error: (val) => val.input === undefined ? "size harus diisi" : "size harus berupa string",
         }),
-    }).strict() as ZodType<BonusCreateType>
+    }).strict() as ZodType<Omit<BonusCreateType, 'img'>>
 
 
     // update
@@ -21,5 +21,5 @@ export class BonusValidation {
         size: z.string({
             error: (val) => val.input === undefined ? "size harus diisi" : "size harus berupa string",
         }).min(3, "size minimal 1 karakter").optional(),
-    }).strict() as ZodType<BonusUpdateType>
+    }).strict() as ZodType<Omit<BonusUpdateType, 'img'>>
 }

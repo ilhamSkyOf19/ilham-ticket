@@ -4,6 +4,7 @@ import AuthMiddleware from "../middlewares/auth";
 import validation from "../middlewares/validation";
 import { ReviewCreateType } from "../models/review-model";
 import { ReviewValidation } from "../validations/review-validation";
+import { FileService } from "../services/file.service";
 
 // initialize router 
 const reviewRoute: Router = Router();
@@ -17,7 +18,7 @@ reviewRoute.use(AuthMiddleware('admin'));
 
 
 // create review 
-reviewRoute.post('/create', validation<Omit<ReviewCreateType, 'username'>>(ReviewValidation.CREATE), ReviewController.create);
+reviewRoute.post('/create', FileService.upload('theaters', 'img'), ReviewController.create);
 
 
 // delete 

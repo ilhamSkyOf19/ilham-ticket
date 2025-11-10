@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `review` MODIFY `img` VARCHAR(191) NOT NULL,
+    MODIFY `url_img` VARCHAR(191) NOT NULL;

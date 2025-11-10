@@ -1,13 +1,13 @@
 import { prisma } from "../lib/prisma";
 import { BonusCreateType, BonusResponseType, BonusUpdateType, toBonusResponse } from "../models/bonus-model";
-import { toReviewResponse } from "../models/review-model";
-import { ResponseType } from "../types/request-response-type";
 
 export class BonusService {
     // create 
-    static async create(req: BonusCreateType): Promise<BonusResponseType | null> {
+    static async create(req: BonusCreateType & { url_img: string }): Promise<BonusResponseType | null> {
         // create genre 
-        const response = await prisma.bonus.create({ data: req });
+        const response = await prisma.bonus.create({
+            data: req,
+        });
 
         // return genre
         return toBonusResponse(response);
@@ -35,7 +35,7 @@ export class BonusService {
 
 
     // update 
-    static async update(id: number, data: BonusUpdateType): Promise<BonusResponseType | null> {
+    static async update(id: number, data: BonusUpdateType & { url_img?: string }): Promise<BonusResponseType | null> {
 
         // update genre 
         const response = await prisma.bonus.update({ where: { id }, data: data });
