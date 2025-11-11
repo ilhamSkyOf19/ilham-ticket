@@ -1,92 +1,48 @@
-import { useEffect, useState, type FC } from 'react'
+import { type FC } from 'react'
 
 
 
 
 // thumbnail 
 import popcorn from '../../assets/images/thumbnails/popcorn.png'
-import milk from '../../assets/images/thumbnails/milk.png'
 import coffe from '../../assets/images/icons/coffee.svg'
-import type { BonusType } from '../../types/types'
 import { useMatch } from 'react-router-dom'
 import ButtonDeleteTrash from '../ButtonDeleteTrash'
+import type { BonusResponseType } from '../../models/bonus-model'
+import clsx from 'clsx'
 
 
 
 // Props
-type Props = {
-    code: BonusType;
-}
+type Props = BonusResponseType
 
 
 
-// type data 
-type Data = {
-    name: string;
-    thumbnail: string;
-    category: 'snacks' | 'drink';
-}
 
 
-const CardBonus: FC<Props> = ({ code }) => {
-    // state thumbnail 
-    const [data, setData] = useState<Data | null>(null);
-
-
-    // set thumbnail
-    useEffect(() => {
-        switch (code) {
-            case 'PS1':
-                setData({
-                    name: 'popcorn S',
-                    thumbnail: popcorn,
-                    category: 'snacks'
-                })
-                break;
-            case 'PS2':
-                setData({
-                    name: 'popcorn M',
-                    thumbnail: popcorn,
-                    category: 'snacks'
-                })
-                break;
-            case 'PS3':
-                setData({
-                    name: 'popcorn L',
-                    thumbnail: popcorn,
-                    category: 'snacks'
-                })
-                break;
-            case 'M1':
-                setData({
-                    name: 'fresh milk',
-                    thumbnail: milk,
-                    category: 'drink'
-                })
-                break;
-            default:
-                setData(null)
-                break;
-        }
-    }, [code])
+const CardBonus: FC<Props> = ({ id, name, size, url_img }) => {
 
     // check admin with path
     const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
+    const adminListBonus = useMatch('/dashboard/bonus');
 
 
     return (
-        <div className='w-[15rem] h-[6rem]  rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start relative'>
+        <div className={clsx(
+            '  rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start relative',
+            adminListBonus ? 'w-full h-[8rem]' : 'w-[15rem] h-[6rem]'
+        )}>
 
             {/* button delete */}
             {
-                admin && (
-                    <ButtonDeleteTrash />
+                (admin || adminListBonus) && (
+                    <ButtonDeleteTrash handleDelete={() => { }} />
                 )
             }
             {/* thumbnail */}
             <div className='flex-1  h-full rounded-2xl'>
                 <div className='w-full h-full rounded-2xl overflow-hidden'>
-                    <img src={data?.thumbnail ?? popcorn} alt="thumbnail" className='w-full h-full object-cover' />
+                    <img src={url_img ?? popcorn} alt="thumbnail" className='w-full h-full object-cover' />
                 </div>
             </div>
 
@@ -94,7 +50,7 @@ const CardBonus: FC<Props> = ({ code }) => {
             <div className='flex-2 flex flex-col justify-center items-start h-full gap-1'>
                 {/* name */}
                 <h2 className='text-white capitalize font-semibold text-base'>
-                    {data?.name ?? 'popcorn'}
+                    {name ?? 'bonus'}
                 </h2>
                 {/* category */}
                 <div className='w-full flex flex-row justify-start items-center gap-2'>
@@ -103,7 +59,7 @@ const CardBonus: FC<Props> = ({ code }) => {
 
                     {/* label */}
                     <p className='text-slate-400 text-sm capitalize'>
-                        {data?.category ?? 'snacks'}
+                        {size ?? 'bonus'}
                     </p>
                 </div>
             </div>

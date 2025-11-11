@@ -28,6 +28,7 @@ import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
 import AdminListTheaterPage from "../pages/AdminListTheaterPage";
 import { useReadGenre } from "../hooks/useGenre";
 import { useReadMovie } from "../hooks/useMovie";
+import AdminListBonusPage from "../pages/AdminListBonusPage";
 
 // router 
 const router = createBrowserRouter([
@@ -170,6 +171,15 @@ const router = createBrowserRouter([
                 element: <AdminTheaterAddPage />
             },
 
+
+            // list bonus admin 
+            {
+                path: 'bonus',
+                loader: async () => {
+                    return await useReadMovie();
+                },
+                element: <AdminListBonusPage />
+            },
 
             // add genre admin
             {
