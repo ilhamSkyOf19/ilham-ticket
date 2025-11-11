@@ -1,4 +1,3 @@
-import type { BonusType, Genre, ReviewsType, TheatersType } from "../types/types";
 import type { GenreResponseType } from "./genre-model";
 import type { TheaterResponseType } from "./theater-model";
 

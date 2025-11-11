@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react'
 import InputComponent from '../../fragments/InputComponent'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import type { TheaterCreateType, TheaterResponseType, TheaterUpdateType } from '../../models/theater-model'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TheaterValidation } from '../../validations/theater-validation'
@@ -11,6 +11,7 @@ import { AxiosError } from 'axios'
 import ModalErrorUp from '../../components/ModalErrorUp'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import type { ResponseType } from '../../types/types'
+import InputImgSmall from '../../components/InputImgSmall'
 
 const AdminTheaterAddPage: FC = () => {
 
@@ -30,7 +31,7 @@ const AdminTheaterAddPage: FC = () => {
 
 
     // use form 
-    const { register, handleSubmit, formState: { errors } } = useForm<TheaterCreateType | TheaterUpdateType>({
+    const { register, handleSubmit, formState: { errors }, control, setValue, clearErrors } = useForm<TheaterCreateType | TheaterUpdateType>({
 
         // default values 
         defaultValues: {
@@ -74,6 +75,20 @@ const AdminTheaterAddPage: FC = () => {
             // cek data 
             if (!data) return;
 
+            // form data 
+            const formData = new FormData();
+
+            // append data 
+            formData.append('name', data.name || '');
+            formData.append('city', data.city || '');
+
+
+            // file img
+            if (data.img) {
+                formData.append('img', data.img);
+            }
+
+
 
             // mutation 
             await mutateAsync(data);
@@ -91,6 +106,21 @@ const AdminTheaterAddPage: FC = () => {
 
             {/* form */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start mt-4'>
+                {/* input img */}
+                <Controller
+                    name='img'
+                    control={control}
+                    render={({ fieldState }) => (
+                        <InputImgSmall
+                            setValuesTheater={setValue}
+                            clearErrorsTheater={clearErrors}
+                            error={fieldState.error?.message}
+                            type='theater'
+                            previewUpdate={theater?.data?.url_img}
+                        />
+                    )}
+                />
+
                 {/* input name */}
                 <InputComponent
                     name='name'

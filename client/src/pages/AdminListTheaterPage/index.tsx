@@ -104,7 +104,7 @@ const AdminListTheaterPage: FC = () => {
                 {
                     theaters.status === 'success' && theaters?.data && theaters?.data?.length > 0 ? (
                         theaters.data.map((theater: TheaterResponseType, index: number) => (
-                            <CardTheater key={index} id={theater.id} thumbnail={undefined} name={theater.name} location={theater.city} handleModalActive={handleModalActive} />
+                            <CardTheater key={index} id={theater.id} name={theater.name} city={theater.city} handleModalActive={handleModalActive} url_img={theater.url_img} />
                         ))
                     ) : (
                         <div className='w-full flex flex-row justify-center items-center'>

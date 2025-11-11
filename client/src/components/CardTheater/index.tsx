@@ -1,23 +1,22 @@
 import { type FC } from 'react'
-import type { TheatersType } from '../../types/types'
 import clsx from 'clsx';
 import { useMatch } from 'react-router-dom';
 import ButtonDeleteTrash from '../ButtonDeleteTrash';
 
 import theaterDumy from '../../assets/images/thumbnails/theater1.png'
 import ButtonEditPen from '../ButtonEditPen';
+import type { TheaterResponseType } from '../../models/theater-model';
 
 
-type Props = Omit<TheatersType, 'thumbnail'> & {
+type Props = Omit<TheaterResponseType, 'img'> & {
     choose?: boolean;
     active?: number;
     selected?: (id: number) => void;
     warning?: boolean;
-    thumbnail?: string;
     id?: number;
     handleModalActive?: (id: number) => void;
 };
-const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active, selected, warning, handleModalActive }) => {
+const CardTheater: FC<Props> = ({ id, name, city, choose, active, selected, warning, handleModalActive, url_img }) => {
 
     // cek admin with path 
     const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
@@ -58,7 +57,7 @@ const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active,
 
                 {/* thumbnail */}
                 <div className='flex-1 h-full rounded-2xl overflow-hidden'>
-                    <img src={thumbnail ?? theaterDumy} alt="thumbnail" className='w-full h-full object-cover' loading='lazy' />
+                    <img src={url_img ?? theaterDumy} alt="thumbnail" className='w-full h-full object-cover' loading='lazy' />
                 </div>
 
                 {/* description */}
@@ -70,7 +69,7 @@ const CardTheater: FC<Props> = ({ id, thumbnail, name, location, choose, active,
 
                     {/* location */}
                     <p className='text-slate-300 text-sm'>
-                        {location}
+                        {city}
                     </p>
                 </div>
             </button>

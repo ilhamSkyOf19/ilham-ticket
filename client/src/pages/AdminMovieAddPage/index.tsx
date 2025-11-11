@@ -122,6 +122,7 @@ const AdminMovieAddPage: FC = () => {
                             setValue={setValue}
                             clearErrors={clearErrors}
                             error={fieldState.error?.message}
+                            type='movie'
                         />
                     )}
 

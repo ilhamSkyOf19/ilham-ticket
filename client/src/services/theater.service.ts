@@ -29,7 +29,11 @@ export class TheaterService {
     static async create(data: TheaterCreateType): Promise<ResponseType<TheaterResponseType[] | null>> {
 
         // call api 
-        const response = await api.post('/theater/create', data).then(res => res.data);
+        const response = await api.post('/theater/create', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => res.data);
 
         // return response data
         return response
@@ -40,7 +44,11 @@ export class TheaterService {
     static async update(id: number, data: TheaterUpdateType): Promise<ResponseType<TheaterResponseType[] | null>> {
 
         // call api 
-        const response = await api.patch(`/theater/update/${id}`, data)
+        const response = await api.patch(`/theater/update/${id}`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then(res => res.data);
 
         // return response data

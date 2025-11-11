@@ -21,12 +21,12 @@ export type ReviewsType = {
 
 
 // type Theaters
-export type TheatersType = {
-    id: number;
-    thumbnail: string;
-    name: string;
-    city: string;
-}
+// export type TheatersType = {
+//     id: number;
+//     thumbnail: string;
+//     name: string;
+//     city: string;
+// }
 
 
 // type time 

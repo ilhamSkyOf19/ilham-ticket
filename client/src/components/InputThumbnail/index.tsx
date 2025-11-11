@@ -11,10 +11,11 @@ type Props = {
     setValue: UseFormSetValue<MovieCreateType>;
     clearErrors?: UseFormClearErrors<MovieCreateType>;
     error?: string;
+    type: string;
 }
 
 
-const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error }) => {
+const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error, type }) => {
 
     // state highlight 
     const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -32,12 +33,12 @@ const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error }) => {
             setPreview(URL.createObjectURL(file));
 
 
-            // set value 
-            setValue('thumbnail', file);
-
-
-            // clear error
-            clearErrors?.('thumbnail');
+            if (type === 'movie') {
+                // set value 
+                setValue('thumbnail', file);
+                // clear error
+                clearErrors?.('thumbnail');
+            }
         }
     }
 
@@ -79,7 +80,7 @@ const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error }) => {
 
             {/* highlight */}
             <div className={clsx(
-                'w-full h-40 bg-white/10 flex flex-col justify-center items-center rounded-2xl relative overflow-hidden',
+                'w-full h-40 bg-white/10 flex flex-col justify-center items-center rounded-2xl relative overflow-hidden transition-all duration-200 ease-in-out',
                 error ? 'border-2 border-red-500' : 'border-2 border-transparent'
             )}>
                 <button type='button' onClick={handleClick} className='w-full h-full flex flex-col justify-center items-center'>
