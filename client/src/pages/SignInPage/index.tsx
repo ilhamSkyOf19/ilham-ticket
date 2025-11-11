@@ -53,14 +53,18 @@ const SignInPage: FC = () => {
 
                     // set error password
                     setError('password', { message: error.response?.data?.message });
+
+                } else {
+                    // set error message
+                    setModalActive(true);
+
+                    // set another error message
+                    setMessageModal(error.message);
                 }
             }
 
-            // set error message
-            setModalActive(true);
 
-            // set another error message
-            setMessageModal(error.message);
+
 
 
         },

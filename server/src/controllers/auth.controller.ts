@@ -121,7 +121,7 @@ export class AuthController {
 
             // cek user 
             if (!user) {
-                return res.status(404).json({
+                return res.status(401).json({
                     status: "failed",
                     message: "Email or password invalid",
                     data: null

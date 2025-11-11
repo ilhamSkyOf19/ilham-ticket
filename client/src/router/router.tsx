@@ -29,6 +29,8 @@ import AdminListTheaterPage from "../pages/AdminListTheaterPage";
 import { useReadGenre } from "../hooks/useGenre";
 import { useReadMovie } from "../hooks/useMovie";
 import AdminListBonusPage from "../pages/AdminListBonusPage";
+import { useReadBonus, useReadBonusDetail } from "../hooks/useBonus";
+import AdminBonusAddPage from "../pages/AdminBonusAddPage";
 
 // router 
 const router = createBrowserRouter([
@@ -176,9 +178,25 @@ const router = createBrowserRouter([
             {
                 path: 'bonus',
                 loader: async () => {
-                    return await useReadMovie();
+                    return await useReadBonus();
                 },
                 element: <AdminListBonusPage />
+            },
+
+            // add bonus admin
+            {
+                path: 'dashboard-bonus-add',
+                element: <AdminBonusAddPage />
+            },
+
+
+            // add bonus admin
+            {
+                path: 'dashboard-bonus-update/:id',
+                loader: async ({ params }) => {
+                    return await useReadBonusDetail(Number(params.id));
+                },
+                element: <AdminBonusAddPage />
             },
 
             // add genre admin

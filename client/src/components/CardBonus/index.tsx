@@ -10,17 +10,20 @@ import { useMatch } from 'react-router-dom'
 import ButtonDeleteTrash from '../ButtonDeleteTrash'
 import type { BonusResponseType } from '../../models/bonus-model'
 import clsx from 'clsx'
+import ButtonEditPen from '../ButtonEditPen'
 
 
 
 // Props
-type Props = BonusResponseType
+type Props = Omit<BonusResponseType, 'img'> & {
+    handleDelete?: (id: number) => void
+}
 
 
 
 
 
-const CardBonus: FC<Props> = ({ id, name, size, url_img }) => {
+const CardBonus: FC<Props> = ({ id, name, size, url_img, handleDelete }) => {
 
     // check admin with path
     const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
@@ -29,14 +32,21 @@ const CardBonus: FC<Props> = ({ id, name, size, url_img }) => {
 
     return (
         <div className={clsx(
-            '  rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start relative',
-            adminListBonus ? 'w-full h-[8rem]' : 'w-[15rem] h-[6rem]'
+            'rounded-2xl flex flex-row justify-start items-center gap-3 overflow-hidden p-2 bg-white/10 shrink-0 snap-start relative',
+            adminListBonus ? 'w-full h-32' : 'w-60 h-24'
         )}>
 
             {/* button delete */}
             {
                 (admin || adminListBonus) && (
-                    <ButtonDeleteTrash handleDelete={() => { }} />
+                    <ButtonDeleteTrash handleDelete={() => handleDelete && handleDelete(id)} />
+                )
+            }
+
+            {/* button update */}
+            {
+                adminListBonus && (
+                    <ButtonEditPen link={`/dashboard/dashboard-bonus-update/${id}`} />
                 )
             }
             {/* thumbnail */}

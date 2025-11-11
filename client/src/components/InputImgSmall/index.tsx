@@ -4,17 +4,20 @@ import type { TheaterCreateType, TheaterUpdateType } from '../../models/theater-
 import ErrorMessage from '../ErrorMessage'
 import { MdAddPhotoAlternate } from 'react-icons/md'
 import clsx from 'clsx'
+import type { BonusCreateType, BonusUpdateType } from '../../models/bonus-model'
 
 // Props 
 type Props = {
     setValuesTheater?: UseFormSetValue<TheaterCreateType | TheaterUpdateType>
     clearErrorsTheater?: UseFormClearErrors<TheaterCreateType | TheaterUpdateType>
+    setValuesBonus?: UseFormSetValue<BonusCreateType | BonusUpdateType>
+    clearErrorsBonus?: UseFormClearErrors<BonusCreateType | BonusUpdateType>
     error?: string;
     type: 'theater' | 'bonus'
     previewUpdate?: string
 }
 
-const InputImgSmall: FC<Props> = ({ setValuesTheater, clearErrorsTheater, error, type, previewUpdate }) => {
+const InputImgSmall: FC<Props> = ({ setValuesTheater, clearErrorsTheater, setValuesBonus, clearErrorsBonus, error, type, previewUpdate }) => {
 
     // state preview
     const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -40,6 +43,12 @@ const InputImgSmall: FC<Props> = ({ setValuesTheater, clearErrorsTheater, error,
 
                 // clear error
                 clearErrorsTheater?.('img');
+            } else {
+                // set value
+                setValuesBonus?.('img', file);
+
+                // clear error
+                clearErrorsBonus?.('img');
             }
         }
     }
@@ -61,8 +70,8 @@ const InputImgSmall: FC<Props> = ({ setValuesTheater, clearErrorsTheater, error,
     return (
         <div className='w-full flex flex-col justify-start items-start gap-2'>
             {/* label */}
-            <h3 className='text-white text-base font-medium'>
-                Image Theater
+            <h3 className='text-white text-base font-medium capitalize'>
+                Image {type === 'theater' ? 'Theater' : 'Bonus'}
             </h3>
 
 

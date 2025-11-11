@@ -1,24 +1,25 @@
 import { useState, type FC } from 'react'
 import InputComponent from '../../fragments/InputComponent'
 import { Controller, useForm } from 'react-hook-form'
-import type { TheaterCreateType, TheaterResponseType, TheaterUpdateType } from '../../models/theater-model'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TheaterValidation } from '../../validations/theater-validation'
 import { useMutation } from '@tanstack/react-query'
-import { TheaterService } from '../../services/theater.service'
 import ButtonSubmit from '../../components/ButtonSubmit'
 import { AxiosError } from 'axios'
 import ModalErrorUp from '../../components/ModalErrorUp'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import type { ResponseType } from '../../types/types'
 import InputImgSmall from '../../components/InputImgSmall'
+import type { BonusCreateType, BonusResponseType, BonusUpdateType } from '../../models/bonus-model'
+import { BonusValidation } from '../../validations/bonus-validation'
+import { BonusService } from '../../services/bonus.service'
 import HeaderDashboardData from '../../components/HeaderDashboardData'
 
-const AdminTheaterAddPage: FC = () => {
+
+const AdminBonusAddPage: FC = () => {
 
 
     // use loaoder 
-    const theater = useLoaderData() as ResponseType<TheaterResponseType | null>;
+    const bonus = useLoaderData() as ResponseType<BonusResponseType | null>;
 
     // navigate 
     const navigate = useNavigate();
@@ -32,21 +33,21 @@ const AdminTheaterAddPage: FC = () => {
 
 
     // use form 
-    const { register, handleSubmit, formState: { errors }, control, setValue, clearErrors } = useForm<TheaterCreateType | TheaterUpdateType>({
+    const { register, handleSubmit, formState: { errors }, control, setValue, clearErrors } = useForm<BonusCreateType | BonusUpdateType>({
 
         // default values 
         defaultValues: {
-            name: theater?.data?.name || '',
-            city: theater?.data?.city || ''
+            name: bonus?.data?.name || '',
+            size: bonus?.data?.size || ''
         },
-        resolver: zodResolver(theater ? TheaterValidation.UPDATE : TheaterValidation.CREATE)
+        resolver: zodResolver(bonus ? BonusValidation.UPDATE : BonusValidation.CREATE)
     })
 
 
     // mutation
     const { isPending, mutateAsync } = useMutation({
-        mutationFn: async (data: TheaterCreateType | TheaterUpdateType) => {
-            theater ? await TheaterService.update(theater.data?.id || 0, data as TheaterUpdateType) : await TheaterService.create(data as TheaterCreateType);
+        mutationFn: async (data: BonusCreateType | BonusUpdateType) => {
+            bonus ? await BonusService.update(bonus.data?.id || 0, data as BonusUpdateType) : await BonusService.create(data as BonusCreateType);
         },
         onError: (error) => {
             // cek error form axios 
@@ -65,13 +66,13 @@ const AdminTheaterAddPage: FC = () => {
 
 
             // navigate
-            navigate('/dashboard/theater');
+            navigate('/dashboard/bonus');
         }
     })
 
 
     // on submit
-    const onSubmit = async (data: TheaterCreateType | TheaterUpdateType) => {
+    const onSubmit = async (data: BonusCreateType | BonusUpdateType) => {
         try {
             // cek data 
             if (!data) return;
@@ -81,7 +82,7 @@ const AdminTheaterAddPage: FC = () => {
 
             // append data 
             formData.append('name', data.name || '');
-            formData.append('city', data.city || '');
+            formData.append('size', data.size || '');
 
 
             // file img
@@ -99,8 +100,9 @@ const AdminTheaterAddPage: FC = () => {
     }
     return (
         <div className='w-full flex flex-col justify-start items-start py-18 px-2'>
+
             {/* header */}
-            <HeaderDashboardData title={theater ? 'Update Data Theater' : 'Add Data Theater'} />
+            <HeaderDashboardData title={bonus ? 'Update Data Bonus' : 'Add Data Bonus'} />
 
 
             {/* form */}
@@ -111,11 +113,11 @@ const AdminTheaterAddPage: FC = () => {
                     control={control}
                     render={({ fieldState }) => (
                         <InputImgSmall
-                            setValuesTheater={setValue}
-                            clearErrorsTheater={clearErrors}
+                            setValuesBonus={setValue}
+                            clearErrorsBonus={clearErrors}
                             error={fieldState.error?.message}
-                            type='theater'
-                            previewUpdate={theater?.data?.url_img}
+                            type='bonus'
+                            previewUpdate={bonus?.data?.url_img}
                         />
                     )}
                 />
@@ -123,21 +125,21 @@ const AdminTheaterAddPage: FC = () => {
                 {/* input name */}
                 <InputComponent
                     name='name'
-                    label='Name Theater'
+                    label='Name Bonus'
                     type='text'
-                    placeholder='Enter name theater'
+                    placeholder='Enter name bonus'
                     register={register('name')}
                     error={errors.name?.message}
                 />
 
                 {/* city */}
                 <InputComponent
-                    name='city'
-                    label='City'
+                    name='size'
+                    label='Size'
                     type='text'
-                    placeholder='Enter city'
-                    register={register('city')}
-                    error={errors.city?.message}
+                    placeholder='Enter size'
+                    register={register('size')}
+                    error={errors.size?.message}
                 />
 
                 {/* button */}
@@ -154,4 +156,4 @@ const AdminTheaterAddPage: FC = () => {
     )
 }
 
-export default AdminTheaterAddPage
+export default AdminBonusAddPage
