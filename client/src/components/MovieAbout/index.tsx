@@ -9,8 +9,10 @@ import Rating from '../Rating';
 type Props = {
     content: string;
     rating: number;
+    genre: string;
+    city: string;
 }
-const About: FC<Props> = ({ content, rating }) => {
+const About: FC<Props> = ({ content, rating, genre, city }) => {
     return (
         <div className='w-full flex flex-col justify-start items-start gap-2'>
             {/* title */}
@@ -28,10 +30,10 @@ const About: FC<Props> = ({ content, rating }) => {
             {/* info */}
             <div className='w-full flex flex-row justify-start items-center gap-4'>
                 {/* genre */}
-                <ComponentInfo icon={iconVideo} label={'Action'} background={true} />
+                <ComponentInfo icon={iconVideo} label={genre} background={true} />
 
                 {/* location */}
-                <ComponentInfo icon={iconLocation} label={'Jakarta'} background={true} />
+                <ComponentInfo icon={iconLocation} label={city} background={true} />
 
                 {/* rating */}
                 <div className='w-18'>

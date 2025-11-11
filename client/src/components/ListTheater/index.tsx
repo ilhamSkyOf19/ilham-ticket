@@ -1,13 +1,13 @@
 import type { FC } from "react";
-import type { TheatersType } from "../../types/types";
 import CardTheater from "../CardTheater";
 import { useMatch } from "react-router-dom";
 import clsx from "clsx";
 import ButtonAddCircle from "../ButtonAddCircle";
+import type { TheaterResponseType } from "../../models/theater-model";
 
 // Theater
 type PropsTheater = {
-    theaters: TheatersType[];
+    theaters: TheaterResponseType[];
     choose?: boolean;
     active?: number;
     selected?: (id: number) => void
@@ -52,8 +52,8 @@ const ListTheater: FC<PropsTheater> = ({ theaters, choose, active, selected, war
                 {/* card theater */}
                 {
                     theaters.length > 0 && (
-                        theaters.map((item: TheatersType, index: number) => (
-                            <CardTheater key={index} id={item.id} thumbnail={item.thumbnail} name={item.name} location={item.location} choose={choose} active={active} selected={() => selected && selected(item.id)} warning={warning} />
+                        theaters.map((item: TheaterResponseType, index: number) => (
+                            <CardTheater key={index} id={item.id} name={item.name} city={item.city} url_img={item.url_img} choose={choose} active={active} selected={() => selected && selected(item.id)} warning={warning} />
                         )
                         ))
                 }

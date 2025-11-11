@@ -7,12 +7,6 @@ export class MovieValidation {
 
         description: z.string().min(1, "Description is required").trim(),
 
-        // rating: z.string()
-        //     .min(1, "Rating is required")
-        //     .refine((val) => !isNaN(Number(val)), { message: "Rating must be a number" })
-        //     .refine((val) => Number(val) >= 0 && Number(val) <= 5, { message: "Rating must be between 0 and 5" }),
-
-
         thumbnail: z
             .instanceof(File)
             .refine((file) => file.size > 0, "Thumbnail is required"),
@@ -30,10 +24,10 @@ export class MovieValidation {
                 .min(1, "Theater ID is required")
         ).min(1, "At least one theater is required"),
 
-        // bonus: z.array(
-        //     z.number()
-        //         .min(1, "Bonus ID is required")
-        // ).min(1, "At least one bonus is required"),
+        bonus: z.array(
+            z.number()
+                .min(1, "Bonus ID is required")
+        ).min(1, "At least one bonus is required"),
     })
-        .strict() satisfies ZodType<MovieCreateType>;
+        .strict() satisfies ZodType<Omit<MovieCreateType, "available">>;
 }

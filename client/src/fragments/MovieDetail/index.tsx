@@ -1,12 +1,11 @@
 import { useState, type FC } from 'react'
-import { useLoaderData, useMatch, useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import ButtonBack from '../../components/ButtonBack';
-import theaterDumy from '../../assets/images/thumbnails/theater1.png'
 import heart from '../../assets/images/icons/heart.svg'
 import iconVideoPlay from '../../assets/images/icons/video-circle.svg'
 import clsx from 'clsx';
 import Bonus from '../../components/Bonus';
-import type { MovieType } from '../../models/movie-model';
+import type { MovieResponseType } from '../../models/movie-model';
 import ListTheater from '../../components/ListTheater';
 import bgDummy from '../../assets/images/thumbnails/th2.png'
 import About from '../../components/MovieAbout';
@@ -15,15 +14,12 @@ import Review from '../../components/MovieReview';
 
 
 // props 
-// type Props = {
-//     data?: string;
+type Props = {
+    movie: MovieResponseType
+};
 
-// }
-
-const MovieDetail: FC = () => {
-    // data 
-    const data = useLoaderData() as MovieType;
-
+const MovieDetail: FC<Props> = ({ movie }) => {
+    // dat
     // state section 
     const [sectionState, setSectionState] = useState<string>('about');
 
@@ -43,7 +39,7 @@ const MovieDetail: FC = () => {
         <>
             {/* thumbnail */}
             <div className='w-full fixed'>
-                <img src={data?.thumbnail ?? bgDummy} alt="background" className='w-full h-[55vh] object-cover' />
+                <img src={movie.url_thumbnail ?? bgDummy} alt="background" className='w-full h-[55vh] object-cover' />
             </div>
 
 
@@ -51,8 +47,8 @@ const MovieDetail: FC = () => {
 
                 {/* shadow */}
                 <div className='w-full h-[55vh] bg-transparent flex flex-col justify-end items-center relative'>
-                    <div className='w-full bg-gradient-to-b from-black to-transparent z-10 h-[30%] fixed top-0' />
-                    <div className='w-full bg-gradient-to-t from-black to-transparent z-10 h-[40%] bottom-0' />
+                    <div className='w-full bg-linear-to-b from-black to-transparent z-10 h-[30%] fixed top-0' />
+                    <div className='w-full bg-linear-to-t from-black to-transparent z-10 h-[40%] bottom-0' />
                 </div>
 
 
@@ -88,7 +84,7 @@ const MovieDetail: FC = () => {
                         <div className='w-full flex flex-row justify-between items-center'>
                             {/* title */}
                             <h2 className='flex-3/5 text-white font-bold text-3xl'>
-                                {data?.title ?? 'Start Wars 3'}
+                                {movie.title ?? 'Start Wars 3'}
                             </h2>
 
                             {/* icon play */}
@@ -115,39 +111,10 @@ const MovieDetail: FC = () => {
                         </div>
                         {
                             sectionState === 'about' ?
-                                <About content={data?.about} rating={data?.rating ?? 8.5} /> : sectionState === 'review' ?
-                                    <Review reviews={data?.reviews ?? [
-                                        {
-                                            author: 'John Doe',
-                                            rating: 5,
-                                            comments: 'Keren banget film nya recomended'
-                                        },
-                                        {
-                                            author: 'Robert Doe',
-                                            rating: 4,
-                                            comments: 'Memang filmnya keren tapi gak keren banget'
-                                        },
-                                        {
-                                            author: 'Justina Doe',
-                                            rating: 5,
-                                            comments: 'this is the best movie ever'
-                                        },
-                                    ]} /> : sectionState === 'theaters' ?
-                                        <ListTheater theaters={data?.theaters ?? [
-                                            {
-                                                id: 1,
-                                                thumbnail: theaterDumy,
-                                                name: 'Cinema 1',
-                                                location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
-                                            },
-                                            {
-                                                id: 1,
-                                                thumbnail: theaterDumy,
-                                                name: 'Cinema 1',
-                                                location: 'Jln Soekarno Hatta, Jakarta Selatan, Cinema lantai 2'
-                                            }
-                                        ]} /> : (sectionState === 'bonus' && admin) ? (
-                                            <Bonus bonus={data?.bonus ?? ['M1', 'PS1', 'PS3']} />
+                                <About content={movie.description} rating={movie.rating ?? 8.5} genre={movie.genres.name} city={movie.theaters?.[0]?.city} /> : sectionState === 'review' ?
+                                    <Review reviews={movie.reviews ?? []} /> : sectionState === 'theaters' ?
+                                        <ListTheater theaters={movie.theaters ?? []} /> : (sectionState === 'bonus' && admin) ? (
+                                            <Bonus bonus={movie.bonus ?? null} />
                                         ) : null
                         }
                     </div>
@@ -158,7 +125,7 @@ const MovieDetail: FC = () => {
                         !admin && (
                             <div className='w-full'>
                                 {/* bonus */}
-                                <Bonus bonus={data?.bonus ?? ['M1', 'PS1', 'PS3']} />
+                                <Bonus bonus={movie.bonus ?? null} />
                             </div>
                         )
                     }

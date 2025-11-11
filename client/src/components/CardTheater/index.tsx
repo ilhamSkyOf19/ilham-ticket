@@ -28,7 +28,7 @@ const CardTheater: FC<Props> = ({ id, name, city, choose, active, selected, warn
 
 
     return (
-        <div className='w-full h-[8.5rem] relative'>
+        <div className='w-full h-34 relative'>
             {/* button trash */}
             {
                 (admin || adminTheaters) && (

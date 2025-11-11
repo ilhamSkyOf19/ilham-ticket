@@ -19,3 +19,25 @@ export const useReadMovie = async () => {
         return []
     }
 }
+
+
+// read detail 
+export const useReadMovieDetail = async (id: number) => {
+    try {
+
+        // get service 
+        const movie = await MovieService.readDetail(id);
+
+        // cek movie 
+        if (!movie) {
+            return null;
+        }
+
+        // return movie
+        return movie
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}

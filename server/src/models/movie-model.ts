@@ -64,8 +64,9 @@ export const toMovieResponse = (movie: Omit<Movie, 'genreId'> & {
         theaters: movie.theaters.map((t) => ({
             id: t.id,
             name: t.name,
-            city: t.city
-
+            city: t.city,
+            img: t.img,
+            url_img: t.url_img
         })),
         reviews: movie.reviews.map((r) => ({
             id: r.id,

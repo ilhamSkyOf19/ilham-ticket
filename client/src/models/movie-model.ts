@@ -1,3 +1,5 @@
+import type { ReviewsType } from "../types/types";
+import type { BonusResponseType } from "./bonus-model";
 import type { GenreResponseType } from "./genre-model";
 import type { TheaterResponseType } from "./theater-model";
 
@@ -6,12 +8,11 @@ import type { TheaterResponseType } from "./theater-model";
 export type MovieCreateType = {
     title: string;
     description: string;
-    // rating: string;
     thumbnail: File;
     price: string;
     genreId: string;
+    bonus: number[];
     theaterId: number[];
-    // bonus: number[];
 }
 
 
@@ -22,12 +23,12 @@ export type MovieResponseType = {
     id: number;
     title: string;
     description: string;
-    // rating: number;
-    genre: GenreResponseType;
+    rating: number;
+    genres: GenreResponseType;
     thumbnail: string;
     url_thumbnail: string;
-    // reviews: ReviewsType[];
-    theater: TheaterResponseType[];
-    // bonus: BonusType[];
+    reviews: ReviewsType[];
+    theaters: TheaterResponseType[];
+    bonus: BonusResponseType[];
     price: number;
 };

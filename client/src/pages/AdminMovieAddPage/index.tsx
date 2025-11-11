@@ -1,4 +1,4 @@
-import { useEffect, type FC } from 'react'
+import { useState, type FC } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { MovieCreateType } from '../../models/movie-model'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,33 +7,44 @@ import { useMutation } from '@tanstack/react-query'
 import InputComponent from '../../fragments/InputComponent'
 import InputChoose from '../../components/InputChoose'
 import ChooseTheaters from '../../components/ChooseTheaters'
-// import ChooseBonus from '../../components/ChooseBonus'
 import InputThumbnail from '../../components/InputThumbnail'
 import { MovieService } from '../../services/movie.service'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import type { TheaterResponseType } from '../../models/theater-model'
 import type { GenreResponseType } from '../../models/genre-model'
 import type { ResponseType } from '../../types/types'
 import ButtonSubmit from '../../components/ButtonSubmit'
+import type { BonusResponseType } from '../../models/bonus-model'
+import ChooseBonus from '../../components/ChooseBonus'
+import HeaderDashboardData from '../../components/HeaderDashboardData'
+import ModalErrorUp from '../../components/ModalErrorUp'
+import { AxiosError } from 'axios'
 
 
 // type loader 
 type LoaderData = {
     theaters: ResponseType<TheaterResponseType[] | null>;
     genres: ResponseType<GenreResponseType[] | null>;
+    bonus: ResponseType<BonusResponseType[] | null>
 };
 
 
 const AdminMovieAddPage: FC = () => {
 
+    // naviagate
+    const navigate = useNavigate();
+
     // loader 
-    const { theaters, genres } = useLoaderData() as LoaderData;
+    const { theaters, genres, bonus } = useLoaderData() as LoaderData;
+
+    // state modal error 
+    const [modalError, setModalError] = useState<boolean>(false);
 
 
-    // cek data 
-    useEffect(() => {
-        console.log(theaters, genres);
-    }, [theaters, genres])
+    // state message error 
+    const [messageError, setMessageError] = useState<string>('');
+
+
 
 
 
@@ -53,12 +64,31 @@ const AdminMovieAddPage: FC = () => {
 
         // error 
         onError: (error) => {
-            console.log(error);
+            // cek error axios 
+            if (error instanceof AxiosError) {
+
+                // cek status 
+                if (error.status === 400) {
+                    // set message error
+                    setMessageError(error.response?.data?.message);
+
+                    // set modal error 
+                    setModalError(true);
+                } else if (error.status === 401) {
+                    // navigate
+                    navigate('/signin');
+                } else {
+                    console.log(error)
+                }
+            }
         },
 
         // success 
         onSuccess: (data) => {
             console.log(data);
+
+            // back 
+            navigate('/dashboard');
         }
     })
 
@@ -74,21 +104,18 @@ const AdminMovieAddPage: FC = () => {
             }
             formData.append('title', data.title)
             formData.append('description', data.description)
-            // formData.append('rating', data.rating)
-            formData.append('price', data.price)
+            formData.append('price', String(data.price))
             formData.append('genreId', data.genreId.toString())
             formData.append('theaterId', JSON.stringify(data.theaterId))
-
-            // bonus 
-            formData.append('bonus', 'popcorn')
+            formData.append('bonus', JSON.stringify(data.bonus))
 
 
 
 
 
-            for (const [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
+            // for (const [key, value] of formData.entries()) {
+            //     console.log(key, value);
+            // }
 
             //   mutation 
             await mutateAsync(formData);
@@ -102,12 +129,10 @@ const AdminMovieAddPage: FC = () => {
 
 
     return (
-        <div className='w-full min-h-[100vh] py-18 flex flex-col justify-start items-start px-2 gap-4'>
+        <div className='w-full min-h-screen py-18 flex flex-col justify-start items-start px-2 gap-4'>
 
             {/* header */}
-            <div className='w-full flex flex-row justify-center items-start'>
-                <h2 className='text-white font-bold text-base'>Add New Movie</h2>
-            </div>
+            <HeaderDashboardData title='Add Data Movie' />
 
 
             {/* form */}
@@ -148,19 +173,6 @@ const AdminMovieAddPage: FC = () => {
                     error={errors.description?.message}
                     type='text'
                 />
-
-                {/* input rating */}
-                {/* <InputComponent
-                    label='Rating'
-                    name='rating'
-                    register={register('rating')}
-                    placeholder='Enter movie rating'
-                    error={errors.rating?.message}
-                    type='text'
-                /> */}
-
-
-
 
                 {/* choose genre */}
                 <Controller
@@ -213,7 +225,7 @@ const AdminMovieAddPage: FC = () => {
 
 
                 {/* choose bonus */}
-                {/* <Controller
+                <Controller
                     control={control}
                     name='bonus'
                     render={({ fieldState }) => (
@@ -221,39 +233,24 @@ const AdminMovieAddPage: FC = () => {
                             error={fieldState.error?.message}
                             setValue={setValue}
                             clearErrors={clearErrors}
-                            bonus={[
-                                {
-                                    id: 1,
-                                    name: 'Popcorn',
-                                    size: 'small'
-                                },
-                                {
-                                    id: 2,
-                                    name: 'Popcorn',
-                                    size: 'medium'
-                                },
-                                {
-                                    id: 3,
-                                    name: 'Popcorn',
-                                    size: 'large'
-                                }
-                            ]}
+                            bonus={bonus?.data}
                         />
                     )}
 
-                /> */}
-
-
-
-
+                />
 
 
 
                 {/* button submit */}
-                <div className='w-full flex flex-row justify-center items-center mt-4'>
-                    <ButtonSubmit label='Submit' isPending={isPending} />
-                </div>
+                <ButtonSubmit label='Submit' isPending={isPending} />
             </form>
+
+            {/* modal error */}
+            <ModalErrorUp
+                handleClose={() => setModalError(false)}
+                active={modalError}
+                message={messageError}
+            />
         </div>
     )
 }

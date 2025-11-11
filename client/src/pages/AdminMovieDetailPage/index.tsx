@@ -1,11 +1,21 @@
 import { useEffect, type FC } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 // import type { MovieType } from '../../models/movie-model';
 import MovieDetail from '../../fragments/MovieDetail';
+import type { ResponseType } from '../../types/types';
+import type { MovieResponseType } from '../../models/movie-model';
 
 const AdminMovieDetailPage: FC = () => {
     // data 
-    // const data = useLoaderData() as MovieType;
+    const movie = useLoaderData() as ResponseType<MovieResponseType | null>;
+
+
+    // cek data 
+    useEffect(() => {
+        if (movie) {
+            console.log(movie)
+        }
+    }, [movie])
 
 
 
@@ -16,9 +26,9 @@ const AdminMovieDetailPage: FC = () => {
 
 
     return (
-        <div className='w-full min-h-[100vh] flex flex-col justify-start items-center relative'>
+        <div className='w-full min-h-screen flex flex-col justify-start items-center relative'>
             {/* detail */}
-            <MovieDetail />
+            <MovieDetail movie={movie?.data as MovieResponseType} />
 
 
             {/* button update */}

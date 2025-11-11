@@ -1,13 +1,13 @@
 import { type FC } from 'react'
-import type { BonusType } from '../../types/types';
 import clsx from 'clsx';
 import CardBonus from '../CardBonus';
 import { useMatch } from 'react-router-dom';
 import ButtonAddCircle from '../ButtonAddCircle';
+import type { BonusResponseType } from '../../models/bonus-model';
 
 
 type Props = {
-    bonus: BonusType[];
+    bonus: BonusResponseType[] | null;
 }
 const Bonus: FC<Props> = ({ bonus }) => {
 
@@ -39,11 +39,11 @@ const Bonus: FC<Props> = ({ bonus }) => {
             {/* bonus */}
             <div className={clsx(
                 'w-full flex flex-row items-center',
-                bonus.length > 0 ? ' justify-start ' : 'justify-center'
+                bonus && bonus.length > 0 ? ' justify-start ' : 'justify-center'
             )}>
 
                 {
-                    bonus.length > 0 ? (
+                    bonus && bonus.length > 0 ? (
                         <div className='w-full flex flex-row justify-start items-start overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory'>
                             {/* card bonus */}
 
@@ -53,8 +53,8 @@ const Bonus: FC<Props> = ({ bonus }) => {
                             }
 
                             {
-                                bonus.map((item: BonusType, index: number) => (
-                                    <CardBonus key={index} code={item} />
+                                bonus.map((item: BonusResponseType, index: number) => (
+                                    <CardBonus key={index} id={item.id} name={item.name} size={item.size} url_img={item.url_img} />
                                 ))
                             }
 

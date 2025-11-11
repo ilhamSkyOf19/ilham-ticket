@@ -3,12 +3,13 @@ import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
 import type { MovieCreateType } from '../../models/movie-model';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
+import type { BonusResponseType } from '../../models/bonus-model';
 
 type Props = {
     setValue: UseFormSetValue<MovieCreateType>;
     clearErrors?: UseFormClearErrors<MovieCreateType>;
     error?: string;
-    bonus: { id: number, name: string, size: string }[];
+    bonus: BonusResponseType[] | null;
 }
 
 
@@ -59,7 +60,7 @@ const ChooseBonus: FC<Props> = ({ setValue, clearErrors, bonus, error }) => {
 
                 {
                     bonus && bonus.length > 0 ? (
-                        bonus.map((item: { id: number, name: string, size: string }, index: number) => (
+                        bonus.map((item: BonusResponseType, index: number) => (
                             <button key={index} type='button' onClick={() => handleChoose(item.id)} className={clsx(
                                 'w-auto h-14 flex flex-col justify-between items-start rounded-2xl bg-white/10 px-4 py-2 border-2 transition-all duration-200 ease-in-out hover:bg-white/20',
                                 choose.includes(item.id) ? 'border-blue-500' : error ? 'border-red-500' : 'border-transparent'
@@ -67,12 +68,12 @@ const ChooseBonus: FC<Props> = ({ setValue, clearErrors, bonus, error }) => {
 
                                 {/* name */}
                                 <p className='text-white text-xs font-light'>
-                                    {(`Popcond Original`).concat(' - ')}
+                                    {(item.name).concat(' - ')}
                                 </p>
 
                                 {/* size */}
                                 <p className='text-white text-xs font-light'>
-                                    {`Medium`}
+                                    {item.size}
                                 </p>
                             </button>
                         ))

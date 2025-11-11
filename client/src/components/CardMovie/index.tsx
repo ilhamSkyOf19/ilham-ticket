@@ -15,8 +15,9 @@ type Props = {
     disable?: boolean;
     dashboard?: boolean;
     movie: MovieResponseType;
+    handleModalActive?: (id: number) => void
 }
-const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
+const CardMovie: FC<Props> = ({ disable, dashboard, movie, handleModalActive }) => {
 
     // navigate 
     const navigate = useNavigate();
@@ -34,8 +35,8 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
                         dashboard ? 'items-start' : 'items-center'
                     )}>
                         {/* thumbnail */}
-                        <div className='bg-white rounded-3xl w-[6.5rem] h-[7.5rem] overflow-hidden'>
-                            <img src={movie.url_thumbnail} alt="thumbnail" className='w-ful h-full object-cover' />
+                        <div className='bg-white rounded-3xl w-28 h-32 flex flex-col justify-center items-center overflow-hidden'>
+                            <img src={movie.url_thumbnail} alt="thumbnail" className='w-full h-full object-cover' />
                         </div>
 
                         <div className='flex-1 flex flex-col justify-start items-start gap-2.5'>
@@ -59,18 +60,18 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
                                     {/* genre */}
                                     <ComponentInfo
                                         icon={iconVideo}
-                                        label={movie.genre.name}
+                                        label={movie.genres.name}
                                     />
 
                                     {/* location */}
                                     <ComponentInfo
                                         icon={iconLocation}
-                                        label={movie?.theater?.[0]?.city}
+                                        label={movie?.theaters?.[0]?.city}
                                     />
                                 </div>
                                 {/* rating */}
                                 <div className='h-full flex-1 flex flex-col justify-center items-end'>
-                                    <Rating rating={8.5} />
+                                    <Rating rating={movie.rating} />
                                 </div>
                             </div>
                             <div className='w-full flex flex-row justify-start items-center gap-2 flex-wrap'>
@@ -78,7 +79,7 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
                                 <ButtonAction
                                     color='bg-white/30'
                                     label={'Detail'}
-                                    handleClick={() => navigate('dashboard-movie-detail/1')}
+                                    handleClick={() => navigate(`/dashboard/dashboard-movie-detail/${movie.id}`)}
                                 />
 
                                 {/* update */}
@@ -92,7 +93,7 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
                                 <ButtonAction
                                     color='bg-red-600'
                                     label={'Delete'}
-                                    handleClick={() => { }}
+                                    handleClick={() => { handleModalActive && handleModalActive(movie.id) }}
                                 />
 
                             </div>
@@ -110,7 +111,7 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie }) => {
                         dashboard ? 'items-start' : 'items-center'
                     )}>
                         {/* thumbnail */}
-                        <div className='bg-white rounded-3xl w-[6.5rem] h-[7.5rem] overflow-hidden'>
+                        <div className='bg-white rounded-3xl w-26 h-30 overflow-hidden'>
                             <img src={th2} alt="thumbnail" className='w-ful h-full object-cover' />
                         </div>
 

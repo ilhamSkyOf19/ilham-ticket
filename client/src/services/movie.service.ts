@@ -27,4 +27,25 @@ export class MovieService {
         // return response data
         return response as ResponseType<MovieResponseType[] | null>;
     }
+
+
+    // read detail 
+    static async readDetail(id: number): Promise<ResponseType<MovieResponseType | null>> {
+
+        // call api 
+        const response = await api.get(`/movie/read-detail/${id}`).then(res => res.data);
+
+        // return response data
+        return response
+    }
+
+
+    // delete 
+    static async delete(id: number): Promise<ResponseType<MovieResponseType[] | null>> {
+        // call api 
+        const response = await api.delete(`/movie/delete/${id}`).then(res => res.data);
+
+        // return response data
+        return response
+    }
 }
