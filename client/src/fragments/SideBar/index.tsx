@@ -12,7 +12,7 @@ type Props = {
 const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
     return (
         <div ref={ref} className={clsx(
-            'w-[60%] h-[100vh] fixed flex flex-col justify-start bg-white/10 backdrop-blur-2xl pt-3 transition-transform duration-300 ease-in-out z-30',
+            'w-[60%] h-screen fixed flex flex-col justify-start bg-white/10 backdrop-blur-2xl pt-3 transition-transform duration-300 ease-in-out z-30',
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}>
             <div className='w-full flex flex-row justify-between items-center px-2'>
@@ -49,7 +49,7 @@ const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
 
 
                 {/* genre add */}
-                <NavigationSidebar link='/dashboard/dashboard-genre-add' title='genre add' handleSidebarToggle={handleSidebarToggle} />
+                <NavigationSidebar link='/dashboard/genre' title='list genre' handleSidebarToggle={handleSidebarToggle} />
 
             </div>
         </div>

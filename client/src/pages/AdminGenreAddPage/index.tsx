@@ -10,6 +10,7 @@ import ButtonSubmit from '../../components/ButtonSubmit'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import ModalErrorUp from '../../components/ModalErrorUp'
+import HeaderDashboardData from '../../components/HeaderDashboardData'
 
 const AdminGenreAddPage: FC = () => {
 
@@ -56,7 +57,7 @@ const AdminGenreAddPage: FC = () => {
         // success
         onSuccess: () => {
             // navigate 
-            navigate('/dashboard');
+            navigate('/dashboard/genre');
         }
     })
 
@@ -81,9 +82,7 @@ const AdminGenreAddPage: FC = () => {
     return (
         <div className='w-full flex flex-col justify-start items-start py-18 px-2'>
             {/* header */}
-            <div className='w-full flex flex-row justify-center items-start'>
-                <h2 className='text-white font-bold text-base'>Add New Movie</h2>
-            </div>
+            <HeaderDashboardData title='Add New Movie' />
 
             {/* form */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col justify-start items-start gap-2 mt-4'>

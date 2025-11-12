@@ -22,7 +22,6 @@ import { CheckAuth } from "../hooks/useCheckAuth";
 import AdminMoviePage from "../pages/AdminMoviePage";
 import AdminMovieDetailPage from "../pages/AdminMovieDetailPage";
 import AdminMovieAddPage from "../pages/AdminMovieAddPage";
-import AdminGenreAddPage from "../pages/AdminGenreAddPage";
 import { useReadTheater, useReadTheaterDetail } from "../hooks/useTheater";
 import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
 import AdminListTheaterPage from "../pages/AdminListTheaterPage";
@@ -31,6 +30,8 @@ import { useReadMovie, useReadMovieDetail } from "../hooks/useMovie";
 import AdminListBonusPage from "../pages/AdminListBonusPage";
 import { useReadBonus, useReadBonusDetail } from "../hooks/useBonus";
 import AdminBonusAddPage from "../pages/AdminBonusAddPage";
+import AdminListGenrePage from "../pages/AdminListGenrePage";
+import AdminGenreAddPage from "../pages/AdminGenreAddPage";
 
 // router 
 const router = createBrowserRouter([
@@ -201,6 +202,16 @@ const router = createBrowserRouter([
                 },
                 element: <AdminBonusAddPage />
             },
+
+            // list genre admin
+            {
+                path: 'genre',
+                loader: async () => {
+                    return await useReadGenre();
+                },
+                element: <AdminListGenrePage />
+            },
+
 
             // add genre admin
             {
