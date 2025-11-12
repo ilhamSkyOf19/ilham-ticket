@@ -48,7 +48,7 @@ const SignUpPage: FC = () => {
 
 
             // redirect to sign in
-            navigate('/dashboard');
+            navigate('/');
         },
         onError: (error) => {
             // cek error form axios 

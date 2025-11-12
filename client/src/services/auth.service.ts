@@ -10,7 +10,7 @@ export class AuthService {
         // fetch with API
         const response = await api.post('/auth/signup', {
             ...data,
-            role: 'admin'
+            role: 'customer'
         })
             .then(res => res.data)
 

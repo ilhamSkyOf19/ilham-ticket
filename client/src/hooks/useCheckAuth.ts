@@ -1,5 +1,7 @@
 import { redirect } from "react-router-dom";
 import { AuthService } from "../services/auth.service";
+import type { ResponseType } from "../types/types";
+import type { SignResponseType } from "../models/auth-model";
 
 export class CheckAuth {
 
@@ -15,7 +17,10 @@ export class CheckAuth {
 
 
             // check if auth is null
-            if (!auth.data) {
+            if (role === 'admin' && auth?.data?.role !== 'admin') {
+                // redirect to login
+                return redirect('/signin');
+            } else if (role === 'customer' && auth?.data?.role !== 'customer') {
                 // redirect to login
                 return redirect('/signin');
             }
@@ -29,5 +34,17 @@ export class CheckAuth {
             console.log(error);
             return redirect('/signin');
         }
+    }
+
+
+    // read 
+    static async useCustomer(): Promise<ResponseType<SignResponseType | null>> {
+
+        // get data 
+        const data = await AuthService.cekAuthCustomer();
+
+
+        // return data 
+        return data
     }
 }
