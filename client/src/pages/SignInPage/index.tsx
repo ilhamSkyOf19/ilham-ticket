@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import SignLayout from '../../Layouts/SignLayout'
 import { useForm } from 'react-hook-form'
 import { AuthValidation } from '../../validations/auth-validation'
-import type { SignInType } from '../../models/auth-model'
+import type { SignInType, SignResponseType } from '../../models/auth-model'
 import ButtonSubmit from '../../components/ButtonSubmit'
 import { useMutation } from '@tanstack/react-query'
 import InputComponent from '../../fragments/InputComponent'
@@ -70,9 +70,14 @@ const SignInPage: FC = () => {
         },
 
         // on success 
-        onSuccess: () => {
-            // redirect to dashboard
-            navigate('/dashboard');
+        onSuccess: (data) => {
+
+            // cek data 
+            console.log(data);
+
+            // cek data 
+
+
         }
     })
 

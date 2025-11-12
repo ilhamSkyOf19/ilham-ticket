@@ -49,6 +49,7 @@ const router = createBrowserRouter([
     // layout client 
     {
         path: "/",
+        loader: async () => await CheckAuth.useCheckAuth('customer'),
         children: [
             {
                 path: '/',
