@@ -1,22 +1,31 @@
 import { useEffect, useState, type FC } from 'react'
 import CardChooseCinema from '../CardChooseCinema'
 import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
-import type { MovieCreateType } from '../../models/movie-model';
+import type { MovieCreateType, MovieUpdateType } from '../../models/movie-model';
 import ErrorMessage from '../ErrorMessage';
 import type { TheaterResponseType } from '../../models/theater-model';
 
 
 type Props = {
-    setValue: UseFormSetValue<MovieCreateType>;
-    clearErrors?: UseFormClearErrors<MovieCreateType>;
+    setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
+    clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
     error?: string;
     data: TheaterResponseType[];
+    defaultValue?: TheaterResponseType[]
 }
-const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error, data }) => {
+const ChooseTheaters: FC<Props> = ({ setValue, clearErrors, error, data, defaultValue }) => {
 
 
     // state theater choose
     const [selectedTheater, setSelectedTheater] = useState<number[]>([]);
+
+
+    // useEffect to set default value
+    useEffect(() => {
+        if (defaultValue) {
+            setSelectedTheater(defaultValue.map(theater => theater.id));
+        }
+    }, [defaultValue])
 
 
     // handle click theater

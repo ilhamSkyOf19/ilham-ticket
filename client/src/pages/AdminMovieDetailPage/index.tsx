@@ -34,7 +34,7 @@ const AdminMovieDetailPage: FC = () => {
             {/* button update */}
             <div className='fixed w-full bottom-0 flex flex-col justify-start items-center z-30 py-4'>
                 {/* button */}
-                <Link to={`/dashboard/dashboard-movie-detail/${1}/update`} className=' rounded-full text-center w-[90%] py-3.5 font-bold text-white bg-white/10 backdrop-blur-sm hover:scale-105 transition-transform duration-100 ease-in-out'>
+                <Link to={`/dashboard/dashboard-movie-detail/${movie?.data?.id}/update`} className=' rounded-full text-center w-[90%] py-3.5 font-bold text-white bg-white/10 backdrop-blur-sm hover:scale-105 transition-transform duration-100 ease-in-out'>
                     Update Movie
                 </Link>
             </div>

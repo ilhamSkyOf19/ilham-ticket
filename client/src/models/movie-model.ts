@@ -16,6 +16,10 @@ export type MovieCreateType = {
 }
 
 
+// update 
+export type MovieUpdateType = Partial<MovieCreateType>;
+
+
 
 
 // response 

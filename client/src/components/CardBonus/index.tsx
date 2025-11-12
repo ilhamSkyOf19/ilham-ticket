@@ -26,7 +26,6 @@ type Props = Omit<BonusResponseType, 'img'> & {
 const CardBonus: FC<Props> = ({ id, name, size, url_img, handleDelete }) => {
 
     // check admin with path
-    const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
     const adminListBonus = useMatch('/dashboard/bonus');
 
 
@@ -38,17 +37,14 @@ const CardBonus: FC<Props> = ({ id, name, size, url_img, handleDelete }) => {
 
             {/* button delete */}
             {
-                (admin || adminListBonus) && (
-                    <ButtonDeleteTrash handleDelete={() => handleDelete && handleDelete(id)} />
+                adminListBonus && (
+                    <>
+                        <ButtonDeleteTrash handleDelete={() => handleDelete && handleDelete(id)} />
+                        <ButtonEditPen link={`/dashboard/dashboard-bonus-update/${id}`} />
+                    </>
                 )
             }
 
-            {/* button update */}
-            {
-                adminListBonus && (
-                    <ButtonEditPen link={`/dashboard/dashboard-bonus-update/${id}`} />
-                )
-            }
             {/* thumbnail */}
             <div className='flex-1  h-full rounded-2xl'>
                 <div className='w-full h-full rounded-2xl overflow-hidden'>

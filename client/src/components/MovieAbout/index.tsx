@@ -7,12 +7,12 @@ import Rating from '../Rating';
 
 // component about 
 type Props = {
-    content: string;
+    description: string;
     rating: number;
     genre: string;
     city: string;
 }
-const About: FC<Props> = ({ content, rating, genre, city }) => {
+const About: FC<Props> = ({ description, rating, genre, city }) => {
     return (
         <div className='w-full flex flex-col justify-start items-start gap-2'>
             {/* title */}
@@ -20,10 +20,10 @@ const About: FC<Props> = ({ content, rating, genre, city }) => {
                 About
             </h3>
 
-            {/* content */}
+            {/* description */}
             <p className='text-base text-white font-light text-left mb-4'>
                 {
-                    content ?? 'Legendary sci-fi film series set in a galaxy far, far away, blending epic space battles, mystical powers, and iconic characters the original film, released in 1977 and later on.'
+                    description ?? 'Legendary sci-fi film series set in a galaxy far, far away, blending epic space battles, mystical powers, and iconic characters the original film, released in 1977 and later on.'
                 }
             </p>
 

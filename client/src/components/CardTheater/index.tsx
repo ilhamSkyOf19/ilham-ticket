@@ -18,9 +18,6 @@ type Props = Omit<TheaterResponseType, 'img'> & {
 };
 const CardTheater: FC<Props> = ({ id, name, city, choose, active, selected, warning, handleModalActive, url_img }) => {
 
-    // cek admin with path 
-    const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
-
     // cek admin theaters
     const adminTheaters = useMatch('/dashboard/theater');
 
@@ -29,19 +26,16 @@ const CardTheater: FC<Props> = ({ id, name, city, choose, active, selected, warn
 
     return (
         <div className='w-full h-34 relative'>
-            {/* button trash */}
+            {/* button trash & update */}
             {
-                (admin || adminTheaters) && (
-                    <ButtonDeleteTrash handleDelete={() => handleModalActive && handleModalActive(id)} />
+                adminTheaters && (
+                    <>
+                        <ButtonDeleteTrash handleDelete={() => handleModalActive && handleModalActive(id)} />
+                        <ButtonEditPen link={`/dashboard/dashboard-theater-update/${id}`} />
+                    </>
                 )
             }
 
-            {/* button update */}
-            {
-                adminTheaters && (
-                    <ButtonEditPen link={`/dashboard/dashboard-theater-update/${id}`} />
-                )
-            }
 
 
             <button type='submit' disabled={!choose} className={clsx(

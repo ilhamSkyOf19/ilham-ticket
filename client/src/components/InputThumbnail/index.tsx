@@ -1,6 +1,6 @@
-import { useRef, useState, type ChangeEvent, type FC } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FC } from 'react'
 import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
-import type { MovieCreateType } from '../../models/movie-model';
+import type { MovieCreateType, MovieUpdateType } from '../../models/movie-model';
 import ErrorMessage from '../ErrorMessage';
 import { LuTrash } from "react-icons/lu";
 import { MdAddPhotoAlternate } from "react-icons/md";
@@ -8,17 +8,25 @@ import clsx from 'clsx';
 
 
 type Props = {
-    setValue: UseFormSetValue<MovieCreateType>;
-    clearErrors?: UseFormClearErrors<MovieCreateType>;
+    setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
+    clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
     error?: string;
-    type: string;
+    defaultValue?: string
 }
 
 
-const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error, type }) => {
+const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error, defaultValue }) => {
 
     // state highlight 
     const [preview, setPreview] = useState<string | undefined>(undefined);
+
+
+    // state preview 
+    useEffect(() => {
+        if (defaultValue) {
+            setPreview(defaultValue);
+        }
+    }, [defaultValue]);
 
 
     // ref input 
@@ -33,12 +41,10 @@ const InputThumbnail: FC<Props> = ({ setValue, clearErrors, error, type }) => {
             setPreview(URL.createObjectURL(file));
 
 
-            if (type === 'movie') {
-                // set value 
-                setValue('thumbnail', file);
-                // clear error
-                clearErrors?.('thumbnail');
-            }
+            // set value 
+            setValue('thumbnail', file);
+            // clear error
+            clearErrors?.('thumbnail');
         }
     }
 

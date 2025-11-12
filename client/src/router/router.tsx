@@ -151,6 +151,15 @@ const router = createBrowserRouter([
                 },
                 element: <AdminMovieAddPage />
             },
+            {
+                path: 'dashboard-movie-detail/:id/update',
+                loader: async ({ params }) => {
+                    const [theaters, genres, bonus, movie] = await Promise.all([useReadTheater(), useReadGenre(), useReadBonus(), useReadMovieDetail(Number(params.id))]);
+
+                    return { theaters, genres, bonus, movie };
+                },
+                element: <AdminMovieAddPage />
+            },
 
             // list theater admin
             {

@@ -4,7 +4,7 @@ import type { ResponseType } from "../types/types";
 
 export class MovieService {
     // create 
-    static async create(data: FormData): Promise<MovieResponseType | null> {
+    static async create(data: FormData): Promise<ResponseType<MovieResponseType | null>> {
         // fetch with API
         const response = await api.post('/movie/create', data, {
             headers: {
@@ -34,6 +34,20 @@ export class MovieService {
 
         // call api 
         const response = await api.get(`/movie/read-detail/${id}`).then(res => res.data);
+
+        // return response data
+        return response
+    }
+
+
+    // update 
+    static async update(id: number, data: FormData): Promise<ResponseType<MovieResponseType | null>> {
+        // call api 
+        const response = await api.patch(`/movie/update/${id}`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => res.data);
 
         // return response data
         return response

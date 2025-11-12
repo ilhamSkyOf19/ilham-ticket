@@ -1,23 +1,32 @@
 import { useEffect, useState, type FC } from 'react'
 import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
-import type { MovieCreateType } from '../../models/movie-model';
+import type { MovieCreateType, MovieUpdateType } from '../../models/movie-model';
 import clsx from 'clsx';
 import ErrorMessage from '../ErrorMessage';
 import type { BonusResponseType } from '../../models/bonus-model';
 
 type Props = {
-    setValue: UseFormSetValue<MovieCreateType>;
-    clearErrors?: UseFormClearErrors<MovieCreateType>;
+    setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
+    clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
     error?: string;
     bonus: BonusResponseType[] | null;
+    defaultValue?: BonusResponseType[]
 }
 
 
-const ChooseBonus: FC<Props> = ({ setValue, clearErrors, bonus, error }) => {
+const ChooseBonus: FC<Props> = ({ setValue, clearErrors, bonus, error, defaultValue }) => {
 
 
     // state choose 
     const [choose, setChoose] = useState<number[]>([]);
+
+
+    // useEffect to set default value
+    useEffect(() => {
+        if (defaultValue) {
+            setChoose(defaultValue.map(bonus => bonus.id));
+        }
+    }, [defaultValue])
 
 
     // handle choose 

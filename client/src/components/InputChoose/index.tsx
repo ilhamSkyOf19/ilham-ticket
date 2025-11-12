@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type FC, type RefCallback } from 'react'
 import ErrorMessage from '../ErrorMessage';
 import { IoIosArrowDown } from "react-icons/io";
 import { type UseFormClearErrors, type UseFormSetValue } from 'react-hook-form';
-import type { MovieCreateType } from '../../models/movie-model';
+import type { MovieCreateType, MovieUpdateType } from '../../models/movie-model';
 
 
 type Props = {
@@ -11,14 +11,15 @@ type Props = {
     label: string;
     placeholder: string;
     fieldChoose: { id: number, name: string }[];
-    setValue: UseFormSetValue<MovieCreateType>;
-    clearErrors?: UseFormClearErrors<MovieCreateType>;
+    setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
+    clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
     error?: string;
     ref: RefCallback<HTMLInputElement>;
+    defaultValue?: string
 }
 
 
-const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValue, error, clearErrors, ref }) => {
+const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValue, error, clearErrors, ref, defaultValue }) => {
     // state modal choose 
     const [modalChoose, SetModalChoose] = useState<boolean>(false);
 
@@ -72,6 +73,13 @@ const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValu
         SetModalChoose(false);
     }
 
+    // cek defaultValue 
+    useEffect(() => {
+        if (defaultValue) {
+            setChoose(defaultValue);
+        }
+    }, [defaultValue])
+
 
 
     return (
@@ -113,7 +121,7 @@ const InputChoose: FC<Props> = ({ name, label, placeholder, fieldChoose, setValu
                 {/* modal choose */}
                 <div ref={refModalChoose} className={clsx(
                     'w-full flex flex-col justify-start items-start bg-white absolute top-13 left-0 overflow-hidden transition-all duration-300 ease-in-out rounded-lg overflow-y-scroll',
-                    modalChoose ? 'max-h-[12rem]' : 'max-h-0'
+                    modalChoose ? 'max-h-48' : 'max-h-0'
                 )}>
                     {
                         fieldChoose.length > 0 ? (

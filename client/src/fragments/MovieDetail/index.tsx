@@ -111,7 +111,7 @@ const MovieDetail: FC<Props> = ({ movie }) => {
                         </div>
                         {
                             sectionState === 'about' ?
-                                <About content={movie.description} rating={movie.rating ?? 8.5} genre={movie.genres.name} city={movie.theaters?.[0]?.city} /> : sectionState === 'review' ?
+                                <About description={movie.description} rating={movie.rating ?? 8.5} genre={movie.genres.name} city={movie.theaters?.[0]?.city} /> : sectionState === 'review' ?
                                     <Review reviews={movie.reviews ?? []} /> : sectionState === 'theaters' ?
                                         <ListTheater theaters={movie.theaters ?? []} /> : (sectionState === 'bonus' && admin) ? (
                                             <Bonus bonus={movie.bonus ?? null} />

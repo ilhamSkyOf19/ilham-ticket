@@ -64,7 +64,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                city: true
+                                city: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -133,7 +135,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                city: true
+                                city: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -205,7 +209,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                city: true
+                                city: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -292,6 +298,12 @@ export class MovieService {
         // cek movie 
         const movie = await this.readDetail(id);
 
+        // delete thumbnail lama 
+        if (req.thumbnail && movie?.thumbnail && movie.thumbnail !== req.thumbnail) {
+            await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
+        }
+
+
 
 
 
@@ -307,7 +319,7 @@ export class MovieService {
                 rating: req.rating,
 
                 thumbnail: req.thumbnail,
-                url_thumbnail: req.thumbnail,
+                url_thumbnail: req.url_thumbnail,
 
 
                 // update movie
@@ -338,7 +350,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                city: true
+                                city: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }
@@ -378,10 +392,7 @@ export class MovieService {
             }
         });
 
-        // delete thumbnail lama 
-        if (movie?.url_thumbnail) {
-            await FileService.deleteFIleFormPath('thumbnails', movie.thumbnail);
-        }
+
 
 
         // return 
@@ -414,7 +425,9 @@ export class MovieService {
                             select: {
                                 id: true,
                                 name: true,
-                                city: true
+                                city: true,
+                                img: true,
+                                url_img: true
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import type { MovieCreateType } from '../../models/movie-model'
+import type { MovieCreateType, MovieResponseType, MovieUpdateType } from '../../models/movie-model'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MovieValidation } from '../../validations/movie-validation'
 import { useMutation } from '@tanstack/react-query'
@@ -19,13 +19,15 @@ import ChooseBonus from '../../components/ChooseBonus'
 import HeaderDashboardData from '../../components/HeaderDashboardData'
 import ModalErrorUp from '../../components/ModalErrorUp'
 import { AxiosError } from 'axios'
+import InputTextArea from '../../components/InputTextArea'
 
 
 // type loader 
 type LoaderData = {
     theaters: ResponseType<TheaterResponseType[] | null>;
     genres: ResponseType<GenreResponseType[] | null>;
-    bonus: ResponseType<BonusResponseType[] | null>
+    bonus: ResponseType<BonusResponseType[] | null>;
+    movie: ResponseType<MovieResponseType | null>;
 };
 
 
@@ -35,7 +37,7 @@ const AdminMovieAddPage: FC = () => {
     const navigate = useNavigate();
 
     // loader 
-    const { theaters, genres, bonus } = useLoaderData() as LoaderData;
+    const { theaters, genres, bonus, movie } = useLoaderData() as LoaderData;
 
     // state modal error 
     const [modalError, setModalError] = useState<boolean>(false);
@@ -49,8 +51,17 @@ const AdminMovieAddPage: FC = () => {
 
 
     // use hook form
-    const { control, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm<MovieCreateType>({
-        resolver: zodResolver(MovieValidation.CREATE)
+    const { control, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm<MovieCreateType | MovieUpdateType>({
+        defaultValues: {
+            title: movie?.data?.title || '',
+            description: movie?.data?.description || '',
+            price: String(movie?.data?.price ?? '') || '',
+            genreId: String(movie?.data?.genres.id) || '',
+            theaterId: movie?.data?.theaters.map(theater => theater.id) || [],
+            bonus: movie?.data?.bonus.map(bonus => bonus.id) || [],
+
+        },
+        resolver: zodResolver(movie ? MovieValidation.UPDATE : MovieValidation.CREATE)
     })
 
 
@@ -59,7 +70,11 @@ const AdminMovieAddPage: FC = () => {
         mutationFn: (formData: FormData) => {
 
             // call service 
-            return MovieService.create(formData)
+            if (movie) {
+                return MovieService.update(movie?.data?.id || 0, formData);
+            } else {
+                return MovieService.create(formData);
+            }
         },
 
         // error 
@@ -94,7 +109,7 @@ const AdminMovieAddPage: FC = () => {
 
 
     // on submit
-    const onSubmit = async (data: MovieCreateType) => {
+    const onSubmit = async (data: MovieCreateType | MovieUpdateType) => {
 
         try {
             // form data 
@@ -102,10 +117,10 @@ const AdminMovieAddPage: FC = () => {
             if (data.thumbnail) {
                 formData.append("thumbnail", data.thumbnail);
             }
-            formData.append('title', data.title)
-            formData.append('description', data.description)
-            formData.append('price', String(data.price))
-            formData.append('genreId', data.genreId.toString())
+            formData.append('title', data.title || '')
+            formData.append('description', data.description || '')
+            formData.append('price', String(data.price) || '')
+            formData.append('genreId', String(data.genreId))
             formData.append('theaterId', JSON.stringify(data.theaterId))
             formData.append('bonus', JSON.stringify(data.bonus))
 
@@ -147,7 +162,7 @@ const AdminMovieAddPage: FC = () => {
                             setValue={setValue}
                             clearErrors={clearErrors}
                             error={fieldState.error?.message}
-                            type='movie'
+                            defaultValue={movie?.data?.url_thumbnail}
                         />
                     )}
 
@@ -165,13 +180,12 @@ const AdminMovieAddPage: FC = () => {
                 />
 
                 {/* input about */}
-                <InputComponent
+                <InputTextArea
                     label='About'
                     name='description'
                     register={register('description')}
                     placeholder='Enter movie description'
                     error={errors.description?.message}
-                    type='text'
                 />
 
                 {/* choose genre */}
@@ -190,6 +204,7 @@ const AdminMovieAddPage: FC = () => {
                             setValue={setValue}
                             clearErrors={clearErrors}
                             ref={field.ref}
+                            defaultValue={movie?.data?.genres.name}
                         />
                     )}
 
@@ -218,7 +233,7 @@ const AdminMovieAddPage: FC = () => {
                             setValue={setValue}
                             clearErrors={clearErrors}
                             error={fieldState.error?.message}
-
+                            defaultValue={movie?.data?.theaters}
                         />
                     )}
                 />
@@ -234,6 +249,7 @@ const AdminMovieAddPage: FC = () => {
                             setValue={setValue}
                             clearErrors={clearErrors}
                             bonus={bonus?.data}
+                            defaultValue={movie?.data?.bonus}
                         />
                     )}
 

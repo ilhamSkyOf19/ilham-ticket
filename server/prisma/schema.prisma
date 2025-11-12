@@ -62,7 +62,7 @@ model Theater {
 model Movie {
   id            Int     @id @default(autoincrement())
   title         String
-  description   String
+  description   String  @db.Text
   thumbnail     String
   url_thumbnail String
   price         Int

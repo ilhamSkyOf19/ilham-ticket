@@ -86,7 +86,7 @@ const CardMovie: FC<Props> = ({ disable, dashboard, movie, handleModalActive }) 
                                 <ButtonAction
                                     color='bg-blue-600'
                                     label={'Update'}
-                                    handleClick={() => { }}
+                                    handleClick={() => navigate(`/dashboard/dashboard-movie-detail/${movie.id}/update`)}
                                 />
 
                                 {/* delete */}

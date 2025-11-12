@@ -1,8 +1,6 @@
 import type { FC } from "react";
 import CardTheater from "../CardTheater";
-import { useMatch } from "react-router-dom";
 import clsx from "clsx";
-import ButtonAddCircle from "../ButtonAddCircle";
 import type { TheaterResponseType } from "../../models/theater-model";
 
 // Theater
@@ -17,32 +15,22 @@ const ListTheater: FC<PropsTheater> = ({ theaters, choose, active, selected, war
 
 
 
-    // check admin with path
-    const admin = useMatch('/dashboard/dashboard-movie-detail/:id');
 
     return (
         <div className='w-full flex flex-col justify-start items-start gap-5'>
             <div className={clsx(
-                'w-full flex flex-row  items-center gap-4',
-                !admin ? 'justify-start' : 'justify-between'
+                'w-full flex flex-row  items-center gap-4 justify-start',
+
             )}>
                 {/* title */}
                 <h3 className='text-white text-base font-semibold'>
                     Available in Theaters
                 </h3>
 
-                {
-                    admin ? (
-                        <ButtonAddCircle link={'/dashboard/theater-movie-add'} />
-                    ) : (
-                        <>
-                            {/* warning */}
-                            <p className="text-red-500 text-xs font-light transition-all duration-300 ease-in-out">
-                                {warning && !active ? 'Please choose theater' : ''}
-                            </p>
-                        </>
-                    )
-                }
+                {/* warning */}
+                <p className="text-red-500 text-xs font-light transition-all duration-300 ease-in-out">
+                    {warning && !active ? 'Please choose theater' : ''}
+                </p>
 
             </div>
 

@@ -2,7 +2,6 @@ import { type FC } from 'react'
 import clsx from 'clsx';
 import CardBonus from '../CardBonus';
 import { useMatch } from 'react-router-dom';
-import ButtonAddCircle from '../ButtonAddCircle';
 import type { BonusResponseType } from '../../models/bonus-model';
 
 
@@ -22,18 +21,11 @@ const Bonus: FC<Props> = ({ bonus }) => {
             <div className='w-full flex flex-row justify-between items-center'>
                 {/* title */}
                 <h2 className={clsx(
-                    'text-white font-semibold text-lg capitalize',
-                    !admin && 'px-4'
+                    'text-white font-semibold text-lg capitalize px-4',
                 )}>
                     Bonus Ticket
                 </h2>
 
-                {/* button add */}
-                {
-                    admin && (
-                        <ButtonAddCircle link={'/dashboard/bonus-movie-add'} />
-                    )
-                }
             </div>
 
             {/* bonus */}
