@@ -69,7 +69,7 @@ const SignInPage: FC = () => {
       console.log(data);
 
       // redirect to home
-      navigate("/");
+      navigate("/dashboard");
     },
   });
 

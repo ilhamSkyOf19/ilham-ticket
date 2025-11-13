@@ -13,6 +13,8 @@ export type MovieCreateType = {
     genreId: string;
     bonus: number[];
     theaterId: number[];
+    times: string[];
+    seats: string;
 }
 
 
@@ -35,4 +37,7 @@ export type MovieResponseType = {
     theaters: TheaterResponseType[];
     bonus: BonusResponseType[];
     price: number;
+    times: string[];
+    seats: number;
+    seatsBooked: number;
 };
