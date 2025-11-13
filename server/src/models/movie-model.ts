@@ -14,7 +14,7 @@ export type MovieCreateType = {
   genreId: number;
   bonus: number[];
   theaterId: number[];
-  times: string;
+  times: string[];
   seats: number;
 };
 
@@ -37,7 +37,7 @@ export type MovieResponseType = Omit<
   reviews: Omit<ReviewResponseType, "movies">[];
   times: string[];
   seats: number;
-  seatsBooked: string[];
+  seatsBooked: number[];
 };
 
 // to response
@@ -47,7 +47,7 @@ export const toMovieResponse = (
     genres: GenreResponseType;
     bonus: BonusResponseType[];
     reviews: Omit<ReviewResponseType, "movies">[];
-    seatsBooked: string[];
+    seatsBooked: number[];
     times: string[];
   }
 ): MovieResponseType => {

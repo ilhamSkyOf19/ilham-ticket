@@ -69,8 +69,8 @@ model Movie {
   rating        Int
   available     Boolean
   seats         Int
-  seatsBooked   String
-  times String
+
+  booked Booked[]
 
   review Review[]
 
@@ -142,4 +142,16 @@ model Review {
   // relation movie
   movie  Movie @relation(fields: [movieId], references: [id])
   userId Int
+}
+
+// booked 
+model Booked {
+  id          Int    @id @default(autoincrement())
+  times       String
+  seatsBooked String
+  movieId     Int
+
+  movie Movie @relation(fields: [movieId], references: [id])
+
+  @@unique([movieId, times])
 }

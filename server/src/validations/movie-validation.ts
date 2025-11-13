@@ -1,5 +1,6 @@
 import z, { ZodType } from "zod";
 import { MovieCreateType, MovieUpdateType } from "../models/movie-model";
+import { BookedCreateType } from "../models/booked-model";
 
 export class MovieValidation {
   // create
@@ -191,4 +192,15 @@ export class MovieValidation {
         .optional(),
     })
     .strict() as ZodType<Omit<MovieUpdateType, "thumbnail">>;
+
+  // seats booked
+  static readonly SEATS_BOOKED = z
+    .object({
+      seatsBooked: z
+        .array(z.number().min(1, "Seats Booked is required"))
+        .min(1, "At least one seat is required"),
+      times: z.string("Times Harus di isi"),
+    })
+
+    .strict() satisfies ZodType<Omit<BookedCreateType, "movieId">>;
 }

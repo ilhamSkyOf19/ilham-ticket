@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma";
+import { BookedResponseType, toBookedResponse } from "../models/booked-model";
 import {
   MovieCreateType,
   MovieResponseType,
@@ -40,9 +41,16 @@ export class MovieService {
         genreId: +req.genreId,
         rating: 0,
         seats: +req.seats,
-        times: JSON.stringify(req.times),
-        seatsBooked: "[]",
 
+        // relasi seats
+        booked: {
+          createMany: {
+            data: req.times.map((time) => ({
+              times: time,
+              seatsBooked: JSON.stringify([]),
+            })),
+          },
+        },
         // relasi many-to-many
         movieTheaters: {
           createMany: {
@@ -50,6 +58,7 @@ export class MovieService {
           },
         },
 
+        // relasi bonus
         movieBonus: {
           createMany: {
             data: req.bonus.map((id) => ({
@@ -109,6 +118,12 @@ export class MovieService {
             },
           },
         },
+        booked: {
+          select: {
+            times: true,
+            seatsBooked: true,
+          },
+        },
       },
     });
 
@@ -124,8 +139,8 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: JSON.parse(response.times),
-      seatsBooked: JSON.parse(response.seatsBooked),
+      times: response.booked.map((b) => b.times),
+      seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
     });
   }
 
@@ -178,6 +193,12 @@ export class MovieService {
             },
           },
         },
+        booked: {
+          select: {
+            times: true,
+            seatsBooked: true,
+          },
+        },
       },
     });
 
@@ -185,8 +206,8 @@ export class MovieService {
     return response.map((movie) =>
       toMovieResponse({
         ...movie,
-        times: JSON.parse(movie.times),
-        seatsBooked: JSON.parse(movie.seatsBooked),
+        times: movie.booked.map((b) => b.times),
+        seatsBooked: movie.booked.map((b) => JSON.parse(b.seatsBooked)),
         theaters: movie.movieTheaters.map((mt) => mt.theater),
         bonus: movie.movieBonus.map((mb) => mb.bonus),
         genres: movie.genre,
@@ -250,6 +271,12 @@ export class MovieService {
             },
           },
         },
+        booked: {
+          select: {
+            times: true,
+            seatsBooked: true,
+          },
+        },
       },
     });
 
@@ -265,8 +292,8 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: JSON.parse(response.times),
-      seatsBooked: JSON.parse(response.seatsBooked),
+      times: response.booked.map((b) => b.times),
+      seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
     });
   }
 
@@ -316,10 +343,23 @@ export class MovieService {
         available: req.available ? req.available : movie?.available,
         genreId: req.genreId,
         rating: req.rating,
+        seats: req.seats,
 
         thumbnail: req.thumbnail,
         url_thumbnail: req.url_thumbnail,
 
+        // update times
+        booked: req.times
+          ? {
+              deleteMany: {},
+              createMany: {
+                data: req.times.map((time) => ({
+                  times: JSON.stringify(time),
+                  seatsBooked: JSON.stringify([]),
+                })),
+              },
+            }
+          : undefined,
         // update movie
         movieTheaters: req.theaterId
           ? {
@@ -389,6 +429,12 @@ export class MovieService {
             },
           },
         },
+        booked: {
+          select: {
+            times: true,
+            seatsBooked: true,
+          },
+        },
       },
     });
 
@@ -404,8 +450,8 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: JSON.parse(response.times),
-      seatsBooked: JSON.parse(response.seatsBooked),
+      times: response.booked.map((b) => JSON.parse(b.times)),
+      seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
     });
   }
 
@@ -459,6 +505,12 @@ export class MovieService {
             },
           },
         },
+        booked: {
+          select: {
+            times: true,
+            seatsBooked: true,
+          },
+        },
       },
     });
 
@@ -479,7 +531,147 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: JSON.parse(response.times),
+      times: response.booked.map((b) => JSON.parse(b.times)),
+      seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
+    });
+  }
+
+  // seats booked
+  static async seatBooked(
+    movieId: number,
+    data: { times: string; seatsBooked: number[] }
+  ): Promise<MovieResponseType | null> {
+    // update
+    const response = await prisma.booked.update({
+      where: {
+        movieId_times: {
+          movieId,
+          times: data.times,
+        },
+      },
+      data: {
+        seatsBooked: JSON.stringify(data.seatsBooked),
+      },
+      include: {
+        movie: {
+          include: {
+            movieTheaters: {
+              include: {
+                theater: {
+                  select: {
+                    id: true,
+                    name: true,
+                    city: true,
+                    img: true,
+                    url_img: true,
+                  },
+                },
+              },
+            },
+            movieBonus: {
+              include: {
+                bonus: {
+                  select: {
+                    id: true,
+                    name: true,
+                    size: true,
+                    img: true,
+                    url_img: true,
+                  },
+                },
+              },
+            },
+            genre: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            review: {
+              select: {
+                id: true,
+                rating: true,
+                comment: true,
+                user: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+            booked: {
+              select: {
+                times: true,
+                seatsBooked: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // jika tidak ditemukan
+    if (!response) return null;
+
+    // ubah hasilnya ke MovieResponseType
+    return toMovieResponse({
+      ...response.movie,
+      theaters: response.movie.movieTheaters.map((mt) => mt.theater),
+      bonus: response.movie.movieBonus.map((mb) => mb.bonus),
+      genres: response.movie.genre,
+      reviews: response.movie.review.map((r) => ({
+        id: r.id,
+        username: r.user.name,
+        rating: r.rating,
+        comment: r.comment,
+      })),
+      times: response.movie.booked.map((b) => b.times),
+      seatsBooked: response.movie.booked.map((b) => JSON.parse(b.seatsBooked)),
+    });
+  }
+
+  // cek booked
+  static async checkBooked(): Promise<BookedResponseType[] | null> {
+    // get response
+    const response = await prisma.booked.findMany({
+      select: {
+        id: true,
+        movieId: true,
+        times: true,
+        seatsBooked: true,
+      },
+    });
+    // return response
+    return response.map((b) => ({
+      ...b,
+      seatsBooked: JSON.parse(b.seatsBooked),
+    }));
+  }
+
+  // check booked with movie id & times
+  static async checkBookedWithMovieId(
+    movieId: number,
+    times: string
+  ): Promise<BookedResponseType | null> {
+    // get response
+    const response = await prisma.booked.findUnique({
+      where: {
+        movieId_times: {
+          movieId,
+          times,
+        },
+      },
+      select: {
+        id: true,
+        movieId: true,
+        times: true,
+        seatsBooked: true,
+      },
+    });
+    // return response
+    if (!response) return null;
+    return toBookedResponse({
+      ...response,
       seatsBooked: JSON.parse(response.seatsBooked),
     });
   }

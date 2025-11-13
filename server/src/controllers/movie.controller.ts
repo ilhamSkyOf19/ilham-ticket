@@ -10,6 +10,7 @@ import { FileService } from "../services/file.service";
 import { generateUrl } from "../helpers/helper";
 import { MovieService } from "../services/movie.service";
 import { ResponseType } from "../types/request-response-type";
+import { BookedResponseType } from "../models/booked-model";
 
 export class MovieController {
   // create
@@ -172,6 +173,117 @@ export class MovieController {
         await FileService.deleteFileRequest(req.file.path);
       }
 
+      // next error
+      next(error);
+    }
+  }
+
+  // update seats booked
+  static async updateSeatsBooked(
+    req: Request<{ id: string }, {}, { seatsBooked: number[]; times: string }>,
+    res: Response<ResponseType<MovieResponseType | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get request
+      const seatsBooked = req.body.seatsBooked;
+
+      // get booked
+      const booked = await MovieService.checkBookedWithMovieId(
+        +req.params.id,
+        req.body.times
+      );
+
+      // get movie
+      const movie = await MovieService.readDetail(+req.params.id);
+
+      // cek movie
+      if (!movie) {
+        return res.status(404).json({
+          status: "failed",
+          message: "movie not found",
+          data: null,
+        });
+      }
+
+      // cek booked
+      if (!booked) {
+        return res.status(404).json({
+          status: "failed",
+          message: "booked not found",
+          data: null,
+        });
+      }
+
+      // cek isi seats
+      for (const seat of seatsBooked) {
+        if (seat > movie.seats) {
+          return res.status(400).json({
+            status: "failed",
+            message: "seat tidak valid",
+            data: null,
+          });
+        }
+      }
+
+      // cek ketersediaan seat
+      if (booked.seatsBooked.length >= movie.seats) {
+        return res.status(400).json({
+          status: "failed",
+          message: "seat sudah penuh",
+          data: null,
+        });
+      }
+
+      // console
+      console.log(booked.seatsBooked);
+
+      // cek seats
+      for (const seat of seatsBooked) {
+        if (booked.seatsBooked.includes(seat)) {
+          return res.status(400).json({
+            status: "failed",
+            message: "seat already booked",
+            data: null,
+          });
+        }
+      }
+
+      // get service
+      const response = await MovieService.seatBooked(+req.params.id, {
+        seatsBooked: [...movie.seatsBooked.flat(), ...seatsBooked],
+        times: req.body.times,
+      });
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil update movie",
+        data: response,
+      });
+    } catch (error) {
+      // next error
+      next(error);
+    }
+  }
+
+  // check booked
+  static async checkBooked(
+    _req: Request,
+    res: Response<ResponseType<BookedResponseType[] | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get service
+      const response = await MovieService.checkBooked();
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca movie",
+        data: response,
+      });
+    } catch (error) {
       // next error
       next(error);
     }
