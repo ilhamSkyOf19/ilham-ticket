@@ -78,6 +78,9 @@ const router = createBrowserRouter([
           },
           {
             path: "/setting",
+            loader: async () => {
+              return await CheckAuth.useCustomer();
+            },
             element: <SettingPage />,
           },
         ],
@@ -97,10 +100,16 @@ const router = createBrowserRouter([
       },
       {
         path: "/choose-theater/:id",
+        loader: async ({ params }) => {
+          return await useReadMovieDetail(Number(params.id));
+        },
         element: <ChooseTheaterPage />,
       },
       {
         path: "/choose-times/:id",
+        loader: async ({ params }) => {
+          return await useReadMovieDetail(Number(params.id));
+        },
         element: <ChooseTimePage />,
       },
       {

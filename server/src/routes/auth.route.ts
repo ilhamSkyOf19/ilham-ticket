@@ -26,5 +26,9 @@ authRouter.post('/signup', validation<Omit<UserCreateType, "avatar">>(UserValida
 // signin
 authRouter.post('/signin', validation<LoginRequest>(AuthValidation.LOGIN), AuthController.login);
 
+
+// logout
+authRouter.post('/logout', AuthController.logout);
+
 // export 
 export default authRouter;

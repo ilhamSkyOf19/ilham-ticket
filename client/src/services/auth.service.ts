@@ -54,4 +54,16 @@ export class AuthService {
         return response;
     }
 
+
+    // logout 
+    static async logout(): Promise<ResponseType<null>> {
+
+        // fetch with API
+        const response = await api.post('/auth/logout')
+            .then(res => res.data)
+
+        // return response data
+        return response;
+    }
+
 }

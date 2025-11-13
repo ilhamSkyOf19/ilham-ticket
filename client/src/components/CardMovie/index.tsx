@@ -42,7 +42,7 @@ const CardMovie: FC<Props> = ({
             {/* thumbnail */}
             <div className="bg-white rounded-3xl w-28 h-32 flex flex-col justify-center items-center overflow-hidden">
               <img
-                src={movie.url_thumbnail}
+                src={movie.url_thumbnail ?? ""}
                 alt="thumbnail"
                 className="w-full h-full object-cover"
               />
@@ -130,7 +130,7 @@ const CardMovie: FC<Props> = ({
             {/* thumbnail */}
             <div className="bg-white rounded-3xl w-26 h-30 overflow-hidden flex flex-col justify-center items-center">
               <img
-                src={movie.url_thumbnail}
+                src={movie.url_thumbnail ?? ""}
                 alt="thumbnail"
                 className="w-full h-full object-cover"
               />

@@ -30,7 +30,7 @@ const MovieDetailPage: FC = () => {
 
           {/* button */}
           <Link
-            to={"/choose-theater/1"}
+            to={`/choose-theater/${movie?.data?.id}`}
             className="text-base font-bold text-black h-full flex justify-center items-center px-4 bg-white rounded-full capitalize"
           >
             buy ticket

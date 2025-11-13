@@ -3,7 +3,7 @@ import { Payload } from "../types/payload";
 import { AuthRequest } from "../types/request-auth";
 import { ResponseType } from "../types/request-response-type";
 import { AuthService } from "../services/auth.service";
-import { LoginRequest, toAuthResponse } from "../models/auth-model";
+import { AuthResponseType, LoginRequest, toAuthResponse } from "../models/auth-model";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { UserCreateType, UserResponseType } from "../models/user-model";
@@ -181,6 +181,33 @@ export class AuthController {
         } catch (error) {
             // next error
             next(error);
+        }
+    }
+
+
+    // logout 
+    static async logout(_req: Request, res: Response<ResponseType<null>>, next: NextFunction) {
+        try {
+            
+            // set cookie
+            res.clearCookie('token', {
+                httpOnly: false,
+                secure: true,
+                sameSite: 'none'
+            })
+
+
+            // return response
+            return res.status(200).json({
+                status: "success",
+                message: "Logout successful",
+                data: null
+            });
+
+        } catch (error) {
+
+            // next error
+            next(error)
         }
     }
 }
