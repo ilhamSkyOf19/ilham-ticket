@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import HeaderBack from "../../components/HeaderBack";
 import CardMovie from "../../components/CardMovie";
@@ -10,8 +10,13 @@ import type {
   TheaterResponseType,
   TheaterWithMovieResponseType,
 } from "../../models/theater-model";
+import { useAppDispatch } from "../../helpers/redux/hook";
+import { setTheaterId } from "../../store/transactionSlice";
 
 const ChooseTheaterPage: FC = () => {
+  // inisialisasi dispatch
+  const dispatch = useAppDispatch();
+
   // loader movie
   const theaters =
     useLoaderData() as ResponseType<TheaterWithMovieResponseType | null>;
@@ -29,11 +34,14 @@ const ChooseTheaterPage: FC = () => {
   const handleActive = (id: number) => setActive(id);
 
   // handle continue
-  const handleContinue = () => {
+  const handleContinue = (id: number | undefined) => {
     // cek active
     if (active) {
       // set warning
       setWarning(false);
+
+      // set movie
+      dispatch(setTheaterId(id as number));
 
       // redirect
       navigate(`/choose-times/${theaters.data?.movie.id}`);
@@ -42,10 +50,6 @@ const ChooseTheaterPage: FC = () => {
       setWarning(true);
     }
   };
-
-  useEffect(() => {
-    console.log(active);
-  }, [active]);
 
   return (
     <div className="w-full min-h-screen flex flex-col justify-start items-start relative bg-black pt-12 gap-6 pb-32">
@@ -75,7 +79,11 @@ const ChooseTheaterPage: FC = () => {
       </div>
 
       {/* button continue */}
-      <ButtonContinue handleContinue={handleContinue} />
+      <ButtonContinue
+        handleContinueWithId={handleContinue}
+        label="continue"
+        id={active as number}
+      />
     </div>
   );
 };

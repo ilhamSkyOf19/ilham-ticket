@@ -1,5 +1,5 @@
 import { useEffect, type FC } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { formatIDR } from "../../helpers/formated";
 import MovieDetail from "../../fragments/MovieDetail";
 import type { ResponseType } from "../../types/types";
@@ -10,6 +10,8 @@ import { setMovieId } from "../../store/transactionSlice";
 // Props
 
 const MovieDetailPage: FC = () => {
+  // navigate
+  const navigate = useNavigate();
   // call hook redux
   const dispatch = useAppDispatch();
 
@@ -23,7 +25,11 @@ const MovieDetailPage: FC = () => {
 
   // handle set movie id
   const handleSetMovieIdForTransaction = (id: number) => {
+    // set movie
     dispatch(setMovieId(id));
+
+    // set navigate
+    navigate(`/choose-theater/${movie?.data?.id}`);
   };
 
   return (
@@ -39,12 +45,13 @@ const MovieDetailPage: FC = () => {
           </h2>
 
           {/* button */}
-          <Link
-            to={`/choose-theater/${movie?.data?.id}`}
+          <button
+            type="button"
+            onClick={() => handleSetMovieIdForTransaction(movie?.data?.id ?? 0)}
             className="text-base font-bold text-black h-full flex justify-center items-center px-4 bg-white rounded-full capitalize"
           >
             buy ticket
-          </Link>
+          </button>
         </div>
       </div>
     </div>

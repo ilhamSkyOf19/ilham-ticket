@@ -3,10 +3,20 @@ import HeaderBack from "../../components/HeaderBack";
 import bgScreen from "../../assets/images/backgrounds/screen-light.svg";
 import Seat from "../../components/Seat";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import ButtonPayment from "../../components/ButtonPayment";
+import type { ResponseType } from "../../types/types";
+import type { SeatsResponseType } from "../../models/seats-model";
+import { useAppDispatch } from "../../helpers/redux/hook";
+import { addSeats } from "../../store/transactionSlice";
 
 const ChooseSeats: FC = () => {
+  // loader
+  const data = useLoaderData() as ResponseType<SeatsResponseType | null>;
+
+  // dispatch
+  const dispatch = useAppDispatch();
+
   // navigate
   const navigate = useNavigate();
 
@@ -37,7 +47,7 @@ const ChooseSeats: FC = () => {
     setActive(false);
 
     // set price
-    setPrice(choose.length * 50000);
+    setPrice(choose.length * (data?.data?.price ?? 0));
   }, [choose]);
 
   // handle continue
@@ -45,6 +55,9 @@ const ChooseSeats: FC = () => {
     if (choose.length > 0) {
       // set active
       setActive(false);
+
+      // set seats
+      dispatch(addSeats(choose));
 
       // navigate
       navigate(`/tickets-payment`);
@@ -70,7 +83,7 @@ const ChooseSeats: FC = () => {
 
       {/* seats */}
       <div className="w-[70%] grid grid-cols-5 gap-6">
-        {[...Array(30)].map((_, index) => (
+        {[...Array(data?.data?.seat ?? 0)].map((_, index) => (
           <Seat
             key={index}
             label={

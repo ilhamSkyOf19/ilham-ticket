@@ -1,29 +1,51 @@
 import { useEffect, useState, type FC } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import HeaderBack from "../../components/HeaderBack";
 import CardMovie from "../../components/CardMovie";
 import ListTheater from "../../components/ListTheater";
 import CardTime from "../../components/CardTime";
-import type { ResponseType, TimeType } from "../../types/types";
 import ButtonContinue from "../../components/ButtonContinue";
-import type { MovieResponseType } from "../../models/movie-model";
+import type { MovieHighlightResponseType } from "../../models/movie-model";
 import type { TheaterResponseType } from "../../models/theater-model";
+import { useQuery } from "@tanstack/react-query";
+import { useAppDispatch, useAppSelector } from "../../helpers/redux/hook";
+import { useReadMovieByMovieIdAndTheaterId } from "../../hooks/useMovie";
+import { setTime } from "../../store/transactionSlice";
 
 const ChooseTimePage: FC = () => {
-  // loader movie
-  const movie = useLoaderData() as ResponseType<MovieResponseType | null>;
+  // get hook redux
+  const dataHook = useAppSelector((state) => state.transaction);
+
+  // get dispatch redux
+  const dispatch = useAppDispatch();
+  // movie
+  const { data } = useQuery({
+    queryKey: ["data", dataHook.movieId, dataHook.theaterId],
+    queryFn: () =>
+      useReadMovieByMovieIdAndTheaterId(
+        dataHook.movieId ?? 0,
+        dataHook.theaterId ?? 0
+      ),
+  });
+
+  // cek data
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
 
   // navigate
   const navigate = useNavigate();
 
   // state active
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<string | null>(null);
 
   // state warning
   const [warning, setWarning] = useState<boolean>(false);
 
   // handle active
-  const handleActive = (id: number) => setActive(id);
+  const handleActive = (id: string) => setActive(id);
 
   // handle continue
   const handleContinue = () => {
@@ -31,46 +53,17 @@ const ChooseTimePage: FC = () => {
     if (active) {
       // set warning
       setWarning(false);
+
+      // set time
+      dispatch(setTime(active));
+
       // redirect
-      navigate(`/choose-seats`);
+      navigate(`/choose-seats/${data?.data?.movie.id}`);
     } else {
       // set warning
       setWarning(true);
     }
   };
-
-  const dataTime: TimeType[] = [
-    {
-      id: 1,
-      status: "available",
-      time: "10:00",
-      date: new Date(),
-    },
-    {
-      id: 2,
-      status: "full",
-      time: "12:00",
-      date: new Date(),
-    },
-    {
-      id: 3,
-      status: "available",
-      time: "14:00",
-      date: new Date(),
-    },
-    {
-      id: 4,
-      status: "available",
-      time: "16:00",
-      date: new Date(),
-    },
-    {
-      id: 5,
-      status: "available",
-      time: "18:00",
-      date: new Date(),
-    },
-  ];
 
   useEffect(() => {
     console.log(active);
@@ -85,12 +78,18 @@ const ChooseTimePage: FC = () => {
 
       {/* thumbnail movie */}
       <div className="w-full px-4 flex flex-row justify-center items-start">
-        <CardMovie movie={movie.data as MovieResponseType} />
+        {data?.data ? (
+          <CardMovie movie={data?.data?.movie as MovieHighlightResponseType} />
+        ) : null}
       </div>
 
       {/* list theater */}
       <div className="w-full px-4">
-        <ListTheater theaters={movie.data?.theaters as TheaterResponseType[]} />
+        {data?.data ? (
+          <ListTheater
+            theaters={[data?.data?.theater as TheaterResponseType]}
+          />
+        ) : null}
       </div>
 
       {/* choose time */}
@@ -108,14 +107,14 @@ const ChooseTimePage: FC = () => {
         {/* time */}
         <div className="w-full grid grid-cols-2 auto-cols-max gap-3 md:grid-cols-3">
           {/* card  time */}
-          {dataTime.length > 0 &&
-            dataTime.map((item: TimeType, index: number) => (
+          {data?.data &&
+            data?.data.movie.times.length > 0 &&
+            data?.data.movie.times.map((item: string, index: number) => (
               <CardTime
                 key={index}
-                id={item.id}
-                status={item.status}
-                time={item.time}
-                date={item.date}
+                status={"available"}
+                time={item}
+                date={new Date()}
                 selected={handleActive}
                 active={active}
                 warning={warning}
@@ -125,7 +124,7 @@ const ChooseTimePage: FC = () => {
       </div>
 
       {/* button continue */}
-      <ButtonContinue handleContinue={handleContinue} />
+      <ButtonContinue handleContinueWithId={handleContinue} label="continue" />
     </div>
   );
 };

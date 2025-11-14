@@ -2,6 +2,7 @@ import api from "../lib/axios";
 import type {
   MovieHighlightResponseType,
   MovieResponseType,
+  MovieTheaterTimesResponseType,
 } from "../models/movie-model";
 import type { ResponseType } from "../types/types";
 
@@ -83,6 +84,20 @@ export class MovieService {
     // call api
     const response = await api
       .get(`/movie/read-highlight`)
+      .then((res) => res.data);
+
+    // return response data
+    return response;
+  }
+
+  // read by movie & by theater
+  static async readByMovieIdAndTheaterId(
+    movieId: number,
+    theaterId: number
+  ): Promise<ResponseType<MovieTheaterTimesResponseType | null>> {
+    // call api
+    const response = await api
+      .get(`/movie/read-with-theater/${movieId}/${theaterId}`)
       .then((res) => res.data);
 
     // return response data

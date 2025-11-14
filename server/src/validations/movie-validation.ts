@@ -172,13 +172,13 @@ export class MovieValidation {
           try {
             return JSON.parse(val);
           } catch {
-            throw new Error("theaterId harus berupa JSON array valid");
+            throw new Error("times harus berupa JSON array valid");
           }
         })
         .refine(
           (arr) =>
-            Array.isArray(arr) && arr.every((n) => typeof n === "number"),
-          "theaterId harus berupa array berisi number"
+            Array.isArray(arr) && arr.every((n) => typeof n === "string"),
+          "times harus berupa array berisi string"
         )
         .optional(),
       seats: z

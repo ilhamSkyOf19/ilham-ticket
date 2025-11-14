@@ -32,10 +32,12 @@ const transactionSlice = createSlice({
       state.time = action.payload;
     },
 
-    addSeat: (state, action: PayloadAction<number>) => {
-      if (!state.seats.includes(action.payload)) {
-        state.seats.push(action.payload);
-      }
+    addSeats: (state, action: PayloadAction<number[]>) => {
+      action.payload.forEach((seat) => {
+        if (!state.seats.includes(seat)) {
+          state.seats.push(seat);
+        }
+      });
     },
 
     // reset
@@ -46,7 +48,7 @@ const transactionSlice = createSlice({
 // remove
 
 // export
-export const { setMovieId, setTheaterId, setTime, addSeat, resetTransaction } =
+export const { setMovieId, setTheaterId, setTime, addSeats, resetTransaction } =
   transactionSlice.actions;
 
 export default transactionSlice.reducer;

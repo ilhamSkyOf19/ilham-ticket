@@ -36,6 +36,7 @@ import { useReadBonus, useReadBonusDetail } from "../hooks/useBonus";
 import AdminBonusAddPage from "../pages/AdminBonusAddPage";
 import AdminListGenrePage from "../pages/AdminListGenrePage";
 import AdminGenreAddPage from "../pages/AdminGenreAddPage";
+import { useReadSeatsByMovieId } from "../hooks/useSeats";
 
 // router
 const router = createBrowserRouter([
@@ -111,13 +112,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/choose-times/:id",
-        loader: async ({ params }) => {
-          return await useReadMovieDetail(Number(params.id));
-        },
         element: <ChooseTimePage />,
       },
       {
-        path: "/choose-seats",
+        path: "/choose-seats/:id",
+        loader: async ({ params }) => {
+          return await useReadSeatsByMovieId(Number(params.id));
+        },
         element: <ChooseSeats />,
       },
       {

@@ -4,10 +4,13 @@ import {
   MovieCreateType,
   MovieHighlightResponseType,
   MovieResponseType,
+  MovieTheaterTimesResponseType,
   MovieUpdateType,
+  toMovieAndTheaterResponse,
   toMovieHighlightResponse,
   toMovieResponse,
 } from "../models/movie-model";
+import { TheaterWithMovieResponseType } from "../models/theater-model";
 import { BonusService } from "./bonus.service";
 import { FileService } from "./file.service";
 import { GenreService } from "./genre.service";
@@ -717,5 +720,71 @@ export class MovieService {
         genre: movie.genre.name,
       })
     );
+  }
+
+  // read movie by movieId & theaterId
+  static async readByMovieIdAndTheaterId(
+    movieId: number,
+    theaterId: number
+  ): Promise<MovieTheaterTimesResponseType | null> {
+    // get movie
+    const movie = await prisma.movie.findFirstOrThrow({
+      where: {
+        id: movieId,
+        movieTheaters: {
+          some: {
+            theaterId: theaterId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        thumbnail: true,
+        url_thumbnail: true,
+        rating: true,
+
+        // relasi yang difilter
+        movieTheaters: {
+          where: {
+            theaterId: theaterId,
+          },
+          select: {
+            theater: {
+              select: {
+                id: true,
+                name: true,
+                city: true,
+                img: true,
+                url_img: true,
+              },
+            },
+          },
+        },
+
+        booked: {
+          select: {
+            times: true,
+          },
+        },
+
+        genre: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    // ubah hasilnya ke MovieResponseType
+    return toMovieAndTheaterResponse({
+      movie: {
+        ...movie,
+        city: movie.movieTheaters[0].theater.city,
+        times: movie.booked.map((b) => JSON.parse(b.times)),
+        genre: movie.genre.name,
+      },
+      theater: movie.movieTheaters[0].theater,
+    });
   }
 }

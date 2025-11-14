@@ -67,3 +67,29 @@ export const toMovieHighlightResponse = (
     rating: movie.rating,
   };
 };
+
+// response movie & theater & times
+export type MovieTheaterTimesResponseType = {
+  movie: MovieHighlightResponseType & {
+    times: string[];
+  };
+  theater: TheaterResponseType;
+};
+
+export const toMovieAndTheaterResponse = (
+  movie: MovieTheaterTimesResponseType
+): MovieTheaterTimesResponseType => {
+  return {
+    movie: {
+      id: movie.movie.id,
+      title: movie.movie.title,
+      thumbnail: movie.movie.thumbnail,
+      url_thumbnail: movie.movie.url_thumbnail,
+      genre: movie.movie.genre,
+      city: movie.movie.city,
+      rating: movie.movie.rating,
+      times: movie.movie.times,
+    },
+    theater: movie.theater,
+  };
+};

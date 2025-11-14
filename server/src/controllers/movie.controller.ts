@@ -3,6 +3,7 @@ import {
   MovieCreateType,
   MovieHighlightResponseType,
   MovieResponseType,
+  MovieTheaterTimesResponseType,
   MovieUpdateType,
 } from "../models/movie-model";
 import validationService from "../services/validation.service";
@@ -12,6 +13,7 @@ import { generateUrl } from "../helpers/helper";
 import { MovieService } from "../services/movie.service";
 import { ResponseType } from "../types/request-response-type";
 import { BookedResponseType } from "../models/booked-model";
+import { TheaterWithMovieResponseType } from "../models/theater-model";
 
 export class MovieController {
   // create
@@ -333,6 +335,34 @@ export class MovieController {
       });
     } catch (error) {
       // next
+      next(error);
+    }
+  }
+
+  // read by id movie & id theater
+  static async readByMovieIdAndTheaterId(
+    req: Request<{ movieId: string; theaterId: string }>,
+    res: Response<ResponseType<MovieTheaterTimesResponseType | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get params
+      const { movieId, theaterId } = req.params;
+
+      // call service
+      const response = await MovieService.readByMovieIdAndTheaterId(
+        +movieId,
+        +theaterId
+      );
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca movie",
+        data: response,
+      });
+    } catch (error) {
+      // next error
       next(error);
     }
   }

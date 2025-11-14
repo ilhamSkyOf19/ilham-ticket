@@ -53,3 +53,25 @@ export const useReadHighlight = async () => {
     console.log(error);
   }
 };
+
+// read movie by movie id & theate id
+export const useReadMovieByMovieIdAndTheaterId = async (
+  movieId: number,
+  theaterId: number
+) => {
+  try {
+    // call service
+    const response = await MovieService.readByMovieIdAndTheaterId(
+      movieId,
+      theaterId
+    );
+
+    // cek response
+    if (!response) return;
+
+    // return
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

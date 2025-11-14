@@ -18,6 +18,12 @@ movieRoute.get("/read-detail/:id", MovieController.readDetail);
 // read movie highlight
 movieRoute.get("/read-highlight", MovieController.readHighlight);
 
+// read movie with theater
+movieRoute.get(
+  "/read-with-theater/:movieId/:theaterId",
+  MovieController.readByMovieIdAndTheaterId
+);
+
 // auth middleware
 movieRoute.use(AuthMiddleware("admin"));
 
