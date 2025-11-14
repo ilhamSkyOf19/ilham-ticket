@@ -2,8 +2,10 @@ import { prisma } from "../lib/prisma";
 import { BookedResponseType, toBookedResponse } from "../models/booked-model";
 import {
   MovieCreateType,
+  MovieHighlightResponseType,
   MovieResponseType,
   MovieUpdateType,
+  toMovieHighlightResponse,
   toMovieResponse,
 } from "../models/movie-model";
 import { BonusService } from "./bonus.service";
@@ -674,5 +676,46 @@ export class MovieService {
       ...response,
       seatsBooked: JSON.parse(response.seatsBooked),
     });
+  }
+
+  // read for highlight
+  static async readHighlight(): Promise<MovieHighlightResponseType[] | null> {
+    // call
+    const response = await prisma.movie.findMany({
+      select: {
+        id: true,
+        title: true,
+        thumbnail: true,
+        url_thumbnail: true,
+        genre: {
+          select: {
+            name: true,
+          },
+        },
+        movieTheaters: {
+          select: {
+            theater: {
+              select: {
+                city: true,
+              },
+            },
+          },
+        },
+        rating: true,
+      },
+      orderBy: {
+        rating: "desc",
+      },
+      take: 5,
+    });
+
+    // return
+    return response.map((movie) =>
+      toMovieHighlightResponse({
+        ...movie,
+        city: movie.movieTheaters[0].theater.city,
+        genre: movie.genre.name,
+      })
+    );
   }
 }

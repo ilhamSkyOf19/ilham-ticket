@@ -22,11 +22,15 @@ import { CheckAuth } from "../hooks/useCheckAuth";
 import AdminMoviePage from "../pages/AdminMoviePage";
 import AdminMovieDetailPage from "../pages/AdminMovieDetailPage";
 import AdminMovieAddPage from "../pages/AdminMovieAddPage";
-import { useReadTheater, useReadTheaterDetail } from "../hooks/useTheater";
+import {
+  useReadTheater,
+  useReadTheaterDetail,
+  useReadTheaterWithMovie,
+} from "../hooks/useTheater";
 import AdminTheaterAddPage from "../pages/AdminTheaterAddPage";
 import AdminListTheaterPage from "../pages/AdminListTheaterPage";
 import { useReadGenre } from "../hooks/useGenre";
-import { useReadMovie, useReadMovieDetail } from "../hooks/useMovie";
+import { useReadHighlight, useReadMovieDetail } from "../hooks/useMovie";
 import AdminListBonusPage from "../pages/AdminListBonusPage";
 import { useReadBonus, useReadBonusDetail } from "../hooks/useBonus";
 import AdminBonusAddPage from "../pages/AdminBonusAddPage";
@@ -59,7 +63,7 @@ const router = createBrowserRouter([
             loader: async () => {
               const [user, movies, genres] = await Promise.all([
                 CheckAuth.useCustomer(),
-                useReadMovie(),
+                useReadHighlight(),
                 useReadGenre(),
               ]);
 
@@ -101,7 +105,7 @@ const router = createBrowserRouter([
       {
         path: "/choose-theater/:id",
         loader: async ({ params }) => {
-          return await useReadMovieDetail(Number(params.id));
+          return await useReadTheaterWithMovie(Number(params.id));
         },
         element: <ChooseTheaterPage />,
       },
@@ -142,15 +146,15 @@ const router = createBrowserRouter([
   // dashboard
   {
     path: "/dashboard",
-    loader: async () => {
-      return await CheckAuth.useCheckAuth("admin");
-    },
+    // loader: async () => {
+    //   return await CheckAuth.useCheckAuth("admin");
+    // },
     element: <DashboardLayout />,
     children: [
       {
         index: true,
         loader: async () => {
-          return await useReadMovie();
+          return await useReadHighlight();
         },
         element: <AdminMoviePage />,
       },

@@ -15,6 +15,9 @@ movieRoute.get("/read", MovieController.read);
 // read detail
 movieRoute.get("/read-detail/:id", MovieController.readDetail);
 
+// read movie highlight
+movieRoute.get("/read-highlight", MovieController.readHighlight);
+
 // auth middleware
 movieRoute.use(AuthMiddleware("admin"));
 

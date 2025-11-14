@@ -14,14 +14,14 @@ import CardMovie from "../../components/CardMovie";
 import CardComingSoon from "../../components/CardComingSoon";
 import type { Genre, ResponseType } from "../../types/types";
 import type { SignResponseType } from "../../models/auth-model";
-import type { MovieResponseType } from "../../models/movie-model";
+import type { MovieHighlightResponseType } from "../../models/movie-model";
 import { useLoaderData } from "react-router-dom";
 import type { GenreResponseType } from "../../models/genre-model";
 
 // type for loader data
 type LoaderType = {
   user: ResponseType<SignResponseType | null>;
-  movies: ResponseType<MovieResponseType[] | null>;
+  movies: ResponseType<MovieHighlightResponseType[] | null>;
   genres: ResponseType<GenreResponseType[] | null>;
 };
 
@@ -61,13 +61,15 @@ const HomePage: FC = () => {
         {/* spacer */}
         <div className="shrink-0 snap-start" />
         {/* thumbnails Movie */}
-        {movies?.data?.map((movie: MovieResponseType, index: number) => (
-          <CardHighlightMovie
-            key={index}
-            id={movie.id}
-            thumbnail={movie.url_thumbnail}
-          />
-        ))}
+        {movies?.data?.map(
+          (movie: MovieHighlightResponseType, index: number) => (
+            <CardHighlightMovie
+              key={index}
+              id={movie.id}
+              thumbnail={movie.url_thumbnail}
+            />
+          )
+        )}
         {/* spacer */}
         <div className="shrink-0 snap-start" />
       </div>
@@ -106,9 +108,11 @@ const HomePage: FC = () => {
 
         {/* content card */}
         <div className="w-full flex flex-col justify-start items-start gap-5">
-          {movies?.data?.map((movie: MovieResponseType, index: number) => (
-            <CardMovie key={index} movie={movie} />
-          ))}
+          {movies?.data?.map(
+            (movie: MovieHighlightResponseType, index: number) => (
+              <CardMovie key={index} movie={movie} />
+            )
+          )}
         </div>
       </div>
 
@@ -122,15 +126,17 @@ const HomePage: FC = () => {
         {/* content card */}
         <div className="w-full flex flex-row justify-start items-start gap-5 snap-x snap-mandatory overflow-x-auto scrollbar-hide">
           <div className="shrink-0 snap-start" />
-          {movies?.data?.map((movie: MovieResponseType, index: number) => (
-            <CardComingSoon
-              key={index}
-              thumbnail={movie.url_thumbnail}
-              id={movie.id}
-              genre={movie.genres.name}
-              title={movie.title}
-            />
-          ))}
+          {movies?.data?.map(
+            (movie: MovieHighlightResponseType, index: number) => (
+              <CardComingSoon
+                key={index}
+                thumbnail={movie.url_thumbnail}
+                id={movie.id}
+                genre={movie.genre}
+                title={movie.title}
+              />
+            )
+          )}
           <div className="shrink-0 snap-start" />
         </div>
       </div>

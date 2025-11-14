@@ -4,10 +4,15 @@ import { formatIDR } from "../../helpers/formated";
 import MovieDetail from "../../fragments/MovieDetail";
 import type { ResponseType } from "../../types/types";
 import type { MovieResponseType } from "../../models/movie-model";
+import { useAppDispatch } from "../../helpers/redux/hook";
+import { setMovieId } from "../../store/transactionSlice";
 
 // Props
 
 const MovieDetailPage: FC = () => {
+  // call hook redux
+  const dispatch = useAppDispatch();
+
   // movie detail
   const movie = useLoaderData() as ResponseType<MovieResponseType | null>;
 
@@ -15,6 +20,11 @@ const MovieDetailPage: FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // handle set movie id
+  const handleSetMovieIdForTransaction = (id: number) => {
+    dispatch(setMovieId(id));
+  };
 
   return (
     <div className="w-full min-h-screen flex flex-col justify-start items-start overflow-hidden bg-black">

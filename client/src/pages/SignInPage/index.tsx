@@ -39,7 +39,7 @@ const SignInPage: FC = () => {
   // mutation
   const { isPending, mutateAsync } = useMutation({
     mutationFn: async (data: SignInType) => {
-      await AuthService.signIn(data);
+      return await AuthService.signIn(data);
     },
 
     // on error
@@ -68,8 +68,14 @@ const SignInPage: FC = () => {
       // cek data
       console.log(data);
 
-      // redirect to home
-      navigate("/dashboard");
+      // cek role
+      if (data.data?.role === "admin") {
+        // redirect to admin dashboard
+        navigate("/dashboard");
+      } else {
+        // redirect to home
+        navigate("/");
+      }
     },
   });
 

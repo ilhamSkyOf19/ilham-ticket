@@ -1,69 +1,93 @@
 import api from "../lib/axios";
-import type { TheaterCreateType, TheaterResponseType, TheaterUpdateType } from "../models/theater-model";
+import type {
+  TheaterCreateType,
+  TheaterResponseType,
+  TheaterUpdateType,
+  TheaterWithMovieResponseType,
+} from "../models/theater-model";
 import type { ResponseType } from "../types/types";
 
 export class TheaterService {
-    // read
-    static async read(): Promise<ResponseType<TheaterResponseType[] | null>> {
+  // read
+  static async read(): Promise<ResponseType<TheaterResponseType[] | null>> {
+    // call api
+    const response = await api.get("/theater/read").then((res) => res.data);
 
-        // call api 
-        const response = await api.get('/theater/read').then(res => res.data);
+    // return response data
+    return response;
+  }
 
-        // return response data
-        return response
-    }
+  // read detail
+  static async readDetail(
+    id: number
+  ): Promise<ResponseType<TheaterResponseType | null>> {
+    // call api
+    const response = await api
+      .get(`/theater/read-detail/${id}`)
+      .then((res) => res.data);
 
+    // return response data
+    return response;
+  }
 
-    // read detail 
-    static async readDetail(id: number): Promise<ResponseType<TheaterResponseType | null>> {
+  // create
+  static async create(
+    data: TheaterCreateType
+  ): Promise<ResponseType<TheaterResponseType[] | null>> {
+    // call api
+    const response = await api
+      .post("/theater/create", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res.data);
 
-        // call api 
-        const response = await api.get(`/theater/read-detail/${id}`)
-            .then(res => res.data);
+    // return response data
+    return response;
+  }
 
-        // return response data
-        return response
-    }
+  // update
+  static async update(
+    id: number,
+    data: TheaterUpdateType
+  ): Promise<ResponseType<TheaterResponseType[] | null>> {
+    // call api
+    const response = await api
+      .patch(`/theater/update/${id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res.data);
 
-    // create
-    static async create(data: TheaterCreateType): Promise<ResponseType<TheaterResponseType[] | null>> {
+    // return response data
+    return response;
+  }
 
-        // call api 
-        const response = await api.post('/theater/create', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(res => res.data);
+  // delete
+  static async delete(
+    id: number
+  ): Promise<ResponseType<TheaterResponseType[] | null>> {
+    // call api
+    const response = await api
+      .delete(`/theater/delete/${id}`)
+      .then((res) => res.data);
 
-        // return response data
-        return response
-    }
+    // return response data
+    return response;
+  }
 
+  // read with movie
+  static async readWithMovie(
+    id: number
+  ): Promise<ResponseType<TheaterWithMovieResponseType | null>> {
+    // call api
+    const response = await api
+      .get(`/theater/read-with-movie/${id}`)
+      .then((res) => res.data);
 
-    // update 
-    static async update(id: number, data: TheaterUpdateType): Promise<ResponseType<TheaterResponseType[] | null>> {
-
-        // call api 
-        const response = await api.patch(`/theater/update/${id}`, data, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(res => res.data);
-
-        // return response data
-        return response
-    }
-
-
-    // delete 
-    static async delete(id: number): Promise<ResponseType<TheaterResponseType[] | null>> {
-
-        // call api 
-        const response = await api.delete(`/theater/delete/${id}`)
-            .then(res => res.data);
-
-        // return response data
-        return response
-    }
+    // return response data
+    return response;
+  }
 }

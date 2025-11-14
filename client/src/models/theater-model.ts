@@ -1,19 +1,44 @@
-// create 
+import type { MovieHighlightResponseType } from "./movie-model";
+
+// create
 export type TheaterCreateType = {
-    name: string;
-    city: string;
-    img: File
-}
+  name: string;
+  city: string;
+  img: File;
+};
 
-// update 
-export type TheaterUpdateType = Partial<TheaterCreateType>
+// update
+export type TheaterUpdateType = Partial<TheaterCreateType>;
 
-
-// response 
+// response
 export type TheaterResponseType = {
-    id: number;
-    name: string;
-    city: string;
-    img: string;
-    url_img: string;
-}
+  id: number;
+  name: string;
+  city: string;
+  img: string;
+  url_img: string;
+};
+
+// response theaters with movie
+export type TheaterWithMovieResponseType = {
+  movie: MovieHighlightResponseType;
+  theater: TheaterResponseType[];
+};
+
+// to response theaters with movie
+export const toTheaterWithMovieResponse = (
+  theaterWithMovie: TheaterWithMovieResponseType
+): TheaterWithMovieResponseType => {
+  return {
+    movie: theaterWithMovie.movie,
+    theater: theaterWithMovie.theater.map((theater) => {
+      return {
+        id: theater.id,
+        img: theater.img,
+        url_img: theater.url_img,
+        name: theater.name,
+        city: theater.city,
+      };
+    }),
+  };
+};

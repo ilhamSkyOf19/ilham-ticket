@@ -7,12 +7,12 @@ import Rating from "../Rating";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import ButtonAction from "../ButtonAction";
-import type { MovieResponseType } from "../../models/movie-model";
+import type { MovieHighlightResponseType } from "../../models/movie-model";
 
 type Props = {
   disable?: boolean;
   dashboard?: boolean;
-  movie: MovieResponseType;
+  movie: MovieHighlightResponseType;
   handleModalActive?: (id: number) => void;
 };
 const CardMovie: FC<Props> = ({
@@ -65,13 +65,10 @@ const CardMovie: FC<Props> = ({
                   </h2>
 
                   {/* genre */}
-                  <ComponentInfo icon={iconVideo} label={movie.genres.name} />
+                  <ComponentInfo icon={iconVideo} label={movie.genre} />
 
                   {/* location */}
-                  <ComponentInfo
-                    icon={iconLocation}
-                    label={movie?.theaters?.[0]?.city}
-                  />
+                  <ComponentInfo icon={iconLocation} label={movie?.city} />
                 </div>
                 {/* rating */}
                 <div className="h-full flex-1 flex flex-col justify-center items-end">
@@ -153,13 +150,10 @@ const CardMovie: FC<Props> = ({
                   </h2>
 
                   {/* genre */}
-                  <ComponentInfo icon={iconVideo} label={movie.genres.name} />
+                  <ComponentInfo icon={iconVideo} label={movie.genre} />
 
                   {/* location */}
-                  <ComponentInfo
-                    icon={iconLocation}
-                    label={movie?.theaters?.[0]?.city}
-                  />
+                  <ComponentInfo icon={iconLocation} label={movie.city} />
                 </div>
                 {/* rating */}
                 <div className="h-full flex-1 flex flex-col justify-center items-end">

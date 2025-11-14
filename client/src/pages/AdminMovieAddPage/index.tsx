@@ -123,6 +123,8 @@ const AdminMovieAddPage: FC = () => {
       formData.append("genreId", String(data.genreId));
       formData.append("theaterId", JSON.stringify(data.theaterId));
       formData.append("bonus", JSON.stringify(data.bonus));
+      formData.append("seats", String(data.seats));
+      formData.append("times", JSON.stringify(data.times));
 
       // for (const [key, value] of formData.entries()) {
       //     console.log(key, value);

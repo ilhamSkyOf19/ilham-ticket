@@ -151,7 +151,9 @@ model Booked {
   seatsBooked String
   movieId     Int
 
-  movie Movie @relation(fields: [movieId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  
 
   @@unique([movieId, times])
 }

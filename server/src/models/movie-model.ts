@@ -90,3 +90,29 @@ export const toMovieResponse = (
     times: movie.times,
   };
 };
+
+// response for highlight
+export type MovieHighlightResponseType = {
+  id: number;
+  title: string;
+  thumbnail: string;
+  url_thumbnail: string;
+  genre: string;
+  city: string;
+  rating: number;
+};
+
+// to response
+export const toMovieHighlightResponse = (
+  movie: MovieHighlightResponseType
+): MovieHighlightResponseType => {
+  return {
+    id: movie.id,
+    title: movie.title,
+    thumbnail: movie.thumbnail,
+    url_thumbnail: movie.url_thumbnail,
+    genre: movie.genre,
+    city: movie.city,
+    rating: movie.rating,
+  };
+};

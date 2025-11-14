@@ -5,14 +5,16 @@ import CardMovie from "../../components/CardMovie";
 import ListTheater from "../../components/ListTheater";
 import ButtonContinue from "../../components/ButtonContinue";
 import type { ResponseType } from "../../types/types";
-import type { MovieResponseType } from "../../models/movie-model";
-import type { TheaterResponseType } from "../../models/theater-model";
+import type { MovieHighlightResponseType } from "../../models/movie-model";
+import type {
+  TheaterResponseType,
+  TheaterWithMovieResponseType,
+} from "../../models/theater-model";
 
 const ChooseTheaterPage: FC = () => {
   // loader movie
-  const movie = useLoaderData() as ResponseType<MovieResponseType | null>;
-
-  console.log(movie);
+  const theaters =
+    useLoaderData() as ResponseType<TheaterWithMovieResponseType | null>;
 
   // navigate
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const ChooseTheaterPage: FC = () => {
       setWarning(false);
 
       // redirect
-      navigate(`/choose-times/${movie.data?.id}`);
+      navigate(`/choose-times/${theaters.data?.movie.id}`);
     } else {
       // set warning
       setWarning(true);
@@ -54,15 +56,17 @@ const ChooseTheaterPage: FC = () => {
 
       {/* thumbnail movie */}
       <div className="w-full px-4 flex flex-row justify-center items-start">
-        {movie.status === "success" && movie.data ? (
-          <CardMovie movie={movie?.data as MovieResponseType} />
+        {theaters.status === "success" && theaters.data ? (
+          <CardMovie
+            movie={theaters?.data.movie as MovieHighlightResponseType}
+          />
         ) : null}
       </div>
 
       {/* list theater */}
       <div className="w-full px-4">
         <ListTheater
-          theaters={movie?.data?.theaters as TheaterResponseType[]}
+          theaters={theaters?.data?.theater as TheaterResponseType[]}
           choose={true}
           warning={warning}
           active={active as number}

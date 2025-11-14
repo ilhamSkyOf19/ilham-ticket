@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   MovieCreateType,
+  MovieHighlightResponseType,
   MovieResponseType,
   MovieUpdateType,
 } from "../models/movie-model";
@@ -310,6 +311,28 @@ export class MovieController {
       });
     } catch (error) {
       // next error
+      next(error);
+    }
+  }
+
+  // read for highlight
+  static async readHighlight(
+    _req: Request,
+    res: Response<ResponseType<MovieHighlightResponseType[] | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get service
+      const response = await MovieService.readHighlight();
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca movie",
+        data: response,
+      });
+    } catch (error) {
+      // next
       next(error);
     }
   }
