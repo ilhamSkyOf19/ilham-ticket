@@ -8,10 +8,72 @@ import {
 export class WalletService {
   // create
   static async create(
-    req: WalletCreateType & { userId: number }
+    req: WalletCreateType & { email: string }
   ): Promise<WalletResponseType | null> {
     // get response
     const response = await prisma.wallet.create({
+      data: {
+        balance: req.balance,
+        branch: "BNI",
+        user: {
+          connect: {
+            email: req.email,
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    // return
+    return toWalletResponse({
+      ...response,
+      name: response.user.name,
+      email: response.user.email,
+      expired: "0",
+    });
+  }
+
+  // read by email
+  static async readByEmail(email: string): Promise<WalletResponseType | null> {
+    // get response
+    const response = await prisma.wallet.findFirstOrThrow({
+      where: {
+        email,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    // return
+    return toWalletResponse({
+      ...response,
+      name: response.user.name,
+      expired: "0",
+    });
+  }
+
+  // update
+  static async update(
+    email: string,
+    req: Omit<WalletCreateType, "type">
+  ): Promise<WalletResponseType | null> {
+    // get response
+    const response = await prisma.wallet.update({
+      where: {
+        email,
+      },
       data: {
         ...req,
         branch: "BNI",
@@ -45,8 +107,6 @@ export class WalletService {
         },
       },
     });
-
-    // expired
 
     // return
     return response.map((res) => {

@@ -3,6 +3,7 @@ import { AuthRequest } from "../types/request-auth";
 import MidtransClient from "midtrans-client";
 import { ResponseType } from "../types/request-response-type";
 import { WalletCreateType } from "../models/wallet-model";
+import { TransactionWalletService } from "../services/transactionWallet.service";
 
 export const createPayment = async (
   req: AuthRequest<{}, {}, WalletCreateType>,
@@ -11,10 +12,16 @@ export const createPayment = async (
 ) => {
   try {
     // get body
-    const { balance } = req.body;
+    const { balance, type } = req.body;
 
     // get req
-    const email = req?.data?.email as string;
+    const { email } = req?.data ?? { email: "" };
+
+    // create transaction wallet
+    const transactionWallet = await TransactionWalletService.create({
+      total: balance,
+      email: email,
+    });
 
     // snap
     const snap = new MidtransClient.Snap({
@@ -32,6 +39,9 @@ export const createPayment = async (
       customer_details: {
         email: email,
       },
+      custom_field1: email,
+      custom_field2: type,
+      custom_field3: transactionWallet?.id,
     };
 
     // transaction

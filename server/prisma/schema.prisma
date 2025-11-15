@@ -168,9 +168,9 @@ model Wallet {
   balance Int
   branch String
 
-  userId Int @unique
+  email String @unique
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [email], references: [email], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -183,19 +183,24 @@ enum TypeTransactionWallet {
 }
 
 
+// status 
+enum Status {
+  success
+  pending
+  failed
+}
+
+
 // history transaction 
 model TransactionWallet {
   id Int @unique @default(autoincrement())
   total Int
-  url_thumbnail String?
-  title String
+  status Status @default(pending)
   type TypeTransactionWallet
 
+  userEmail String 
 
-
-  userId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

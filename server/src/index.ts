@@ -15,6 +15,7 @@ import reviewRoute from "./routes/review.route";
 import seatRoute from "./routes/seats.route";
 import walletRoute from "./routes/wallet.route";
 import paymentRoute from "./routes/payment.route";
+import transactionWalletRoute from "./routes/transactionWallet.route";
 
 // initialize express
 const app = express();
@@ -68,6 +69,9 @@ app.use("/api/wallet", walletRoute);
 
 // transaction
 app.use("/api/transaction", paymentRoute);
+
+// transaction wallet callback
+app.use("/api/transaction-wallet", transactionWalletRoute);
 
 // next handler error
 app.use(errorHandler);

@@ -79,7 +79,7 @@ export class AuthController {
       if (response.role === "customer") {
         await WalletService.create({
           balance: 0,
-          userId: response.id,
+          email: response.email,
         });
       }
 
