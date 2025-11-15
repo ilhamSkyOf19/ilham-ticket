@@ -1,24 +1,30 @@
-// type link 
+// type link
 export type LinkType = {
-    name: string;
-    icon: string;
-    path: string;
-}
+  name: string;
+  icon: string;
+  path: string;
+};
 
-export type Genre = 'Animation' | 'Comedy' | 'Drama' | 'Fantasy' | 'Horror' | 'Romance' | 'Thriller' | 'Action' | 'All';
-
+export type Genre =
+  | "Animation"
+  | "Comedy"
+  | "Drama"
+  | "Fantasy"
+  | "Horror"
+  | "Romance"
+  | "Thriller"
+  | "Action"
+  | "All";
 
 // bonus
-export type BonusType = 'PS1' | 'PS2' | 'PS3' | 'M1' | 'M2';
-
+export type BonusType = "PS1" | "PS2" | "PS3" | "M1" | "M2";
 
 // type Reviews
 export type ReviewsType = {
-    rating: 1 | 2 | 3 | 4 | 5;
-    comments: string;
-    author: string;
-}
-
+  rating: 1 | 2 | 3 | 4 | 5;
+  comments: string;
+  author: string;
+};
 
 // type Theaters
 // export type TheatersType = {
@@ -28,19 +34,17 @@ export type ReviewsType = {
 //     city: string;
 // }
 
-
-// type time 
+// type time
 export type TimeType = {
-    id: number;
-    status: 'available' | 'full';
-    time: string;
-    date: Date;
-}
-
+  id: number;
+  status: "available" | "full";
+  time: string;
+  date: Date;
+};
 
 // type response form API
 export type ResponseType<T> = {
-    status: 'success' | 'error';
-    message: string;
-    data: T;
-}
+  status: "success" | "failed";
+  message: string;
+  data: T;
+};

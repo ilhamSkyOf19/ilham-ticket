@@ -6,16 +6,16 @@ import { ResponseType } from "../types/request-response-type";
 export class SeatsController {
   // read seats by movie
   static async readByMovieId(
-    req: Request<{ id: string }>,
+    req: Request<{ id: string; time: string }>,
     res: Response<ResponseType<SeatsResponseType | null>>,
     next: NextFunction
   ) {
     try {
       // get params
-      const { id } = req.params;
+      const { id, time } = req.params;
 
       // get service
-      const response = await SeatsService.readByMovieId(+id);
+      const response = await SeatsService.readByMovieId(+id, time);
 
       // return
       return res.status(200).json({

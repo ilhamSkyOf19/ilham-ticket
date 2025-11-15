@@ -7,7 +7,7 @@ import { SeatsController } from "../controllers/seats.controller";
 const seatRoute: Router = Router();
 
 // read seats by movie
-seatRoute.get("/read-by-movie/:id", SeatsController.readByMovieId);
+seatRoute.get("/read-by-movie/:id/:time", SeatsController.readByMovieId);
 
 // export
 export default seatRoute;

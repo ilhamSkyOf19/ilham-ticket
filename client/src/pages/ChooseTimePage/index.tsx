@@ -58,7 +58,7 @@ const ChooseTimePage: FC = () => {
       dispatch(setTime(active));
 
       // redirect
-      navigate(`/choose-seats/${data?.data?.movie.id}`);
+      navigate(`/choose-seats`);
     } else {
       // set warning
       setWarning(true);

@@ -2,6 +2,7 @@
 export type SeatsResponseType = {
   movieId: number;
   seat: number;
+  seatsBooked: number[];
   price: number;
   url_thumbnail: string;
 };
@@ -13,6 +14,7 @@ export const toSeatsResponse = (
   return {
     movieId: seats.movieId,
     seat: seats.seat,
+    seatsBooked: seats.seatsBooked,
     price: seats.price,
     url_thumbnail: seats.url_thumbnail,
   };

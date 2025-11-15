@@ -75,11 +75,11 @@ const InputTime: FC<Props> = ({ setValue, error, clearErrors }) => {
         {/* card times */}
         {choose.length > 0 ? (
           choose.map((item: string, index: number) => (
-            <div className="h-10 bg-white/20 backdrop-blur-sm flex flex-row justify-start items-center rounded-xl gap-2 overflow-hidden">
-              <h2
-                key={index}
-                className="text-white font-semibold text-base pl-3"
-              >
+            <div
+              key={index}
+              className="h-10 bg-white/20 backdrop-blur-sm flex flex-row justify-start items-center rounded-xl gap-2 overflow-hidden"
+            >
+              <h2 className="text-white font-semibold text-base pl-3">
                 {item}
               </h2>
 

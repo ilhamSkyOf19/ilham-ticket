@@ -3,16 +3,22 @@ import HeaderBack from "../../components/HeaderBack";
 import bgScreen from "../../assets/images/backgrounds/screen-light.svg";
 import Seat from "../../components/Seat";
 import clsx from "clsx";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ButtonPayment from "../../components/ButtonPayment";
-import type { ResponseType } from "../../types/types";
-import type { SeatsResponseType } from "../../models/seats-model";
-import { useAppDispatch } from "../../helpers/redux/hook";
+import { useAppDispatch, useAppSelector } from "../../helpers/redux/hook";
 import { addSeats } from "../../store/transactionSlice";
+import { useQuery } from "@tanstack/react-query";
+import { useReadSeatsByMovieId } from "../../hooks/useSeats";
 
 const ChooseSeats: FC = () => {
-  // loader
-  const data = useLoaderData() as ResponseType<SeatsResponseType | null>;
+  // get data from store
+  const store = useAppSelector((state) => state.transaction);
+
+  // state data seats with useQuery
+  const { data, isLoading } = useQuery({
+    queryKey: ["seats", store.movieId, store.time],
+    queryFn: () => useReadSeatsByMovieId(store.movieId ?? 0, store.time ?? ""),
+  });
 
   // dispatch
   const dispatch = useAppDispatch();
@@ -22,9 +28,6 @@ const ChooseSeats: FC = () => {
 
   // state choose
   const [choose, setChoose] = useState<number[]>([]);
-
-  // state booked
-  const booked: number[] = [1, 5, 9, 10, 12, 17, 29, 30];
 
   // state price
   const [price, setPrice] = useState<number>(0);
@@ -83,27 +86,29 @@ const ChooseSeats: FC = () => {
 
       {/* seats */}
       <div className="w-[70%] grid grid-cols-5 gap-6">
-        {[...Array(data?.data?.seat ?? 0)].map((_, index) => (
-          <Seat
-            key={index}
-            label={
-              index < 5
-                ? `A${index + 1}`
-                : index < 10
-                ? `B${index - 5 + 1}`
-                : index < 15
-                ? `C${index - 10 + 1}`
-                : index < 20
-                ? `D${index - 15 + 1}`
-                : index < 25
-                ? `E${index - 20 + 1}`
-                : `F${index - 25 + 1}`
-            }
-            active={choose.includes(index + 1)}
-            booked={booked.includes(index + 1)}
-            handleChoose={() => handleChoose(index + 1)}
-          />
-        ))}
+        {isLoading
+          ? null
+          : [...Array(data?.data?.seat ?? 0)].map((_, index) => (
+              <Seat
+                key={index}
+                label={
+                  index < 5
+                    ? `A${index + 1}`
+                    : index < 10
+                    ? `B${index - 5 + 1}`
+                    : index < 15
+                    ? `C${index - 10 + 1}`
+                    : index < 20
+                    ? `D${index - 15 + 1}`
+                    : index < 25
+                    ? `E${index - 20 + 1}`
+                    : `F${index - 25 + 1}`
+                }
+                active={choose.includes(index + 1)}
+                booked={data?.data?.seatsBooked.includes(index + 1) ?? false}
+                handleChoose={() => handleChoose(index + 1)}
+              />
+            ))}
       </div>
 
       {/* description */}

@@ -5,10 +5,11 @@ import type { ResponseType } from "../types/types";
 export class SeatsService {
   // read seats by movie
   static async readByMovieId(
-    id: number
+    id: number,
+    time: string
   ): Promise<ResponseType<SeatsResponseType | null>> {
     const response = await api
-      .get(`/seats/read-by-movie/${id}`)
+      .get(`/seats/read-by-movie/${id}/${time}`)
       .then((res) => res.data);
 
     // return response data

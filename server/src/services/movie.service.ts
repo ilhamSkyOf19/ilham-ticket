@@ -359,7 +359,7 @@ export class MovieService {
               deleteMany: {},
               createMany: {
                 data: req.times.map((time) => ({
-                  times: JSON.stringify(time),
+                  times: time,
                   seatsBooked: JSON.stringify([]),
                 })),
               },
@@ -455,7 +455,7 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: response.booked.map((b) => JSON.parse(b.times)),
+      times: response.booked.map((b) => b.times),
       seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
     });
   }
@@ -536,7 +536,7 @@ export class MovieService {
         rating: r.rating,
         comment: r.comment,
       })),
-      times: response.booked.map((b) => JSON.parse(b.times)),
+      times: response.booked.map((b) => b.times),
       seatsBooked: response.booked.map((b) => JSON.parse(b.seatsBooked)),
     });
   }
@@ -781,7 +781,7 @@ export class MovieService {
       movie: {
         ...movie,
         city: movie.movieTheaters[0].theater.city,
-        times: movie.booked.map((b) => JSON.parse(b.times)),
+        times: movie.booked.map((b) => b.times),
         genre: movie.genre.name,
       },
       theater: movie.movieTheaters[0].theater,
