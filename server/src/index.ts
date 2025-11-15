@@ -13,6 +13,8 @@ import authRouter from "./routes/auth.route";
 import bonusRoute from "./routes/bonus.route";
 import reviewRoute from "./routes/review.route";
 import seatRoute from "./routes/seats.route";
+import walletRoute from "./routes/wallet.route";
+import paymentRoute from "./routes/payment.route";
 
 // initialize express
 const app = express();
@@ -60,6 +62,12 @@ app.use("/api/review", reviewRoute);
 
 // seats
 app.use("/api/seats", seatRoute);
+
+// wallet
+app.use("/api/wallet", walletRoute);
+
+// transaction
+app.use("/api/transaction", paymentRoute);
 
 // next handler error
 app.use(errorHandler);

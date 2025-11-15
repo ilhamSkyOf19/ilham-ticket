@@ -3,29 +3,27 @@ import { UserController } from "../controllers/user.controller";
 import { FileService } from "../services/file.service";
 import AuthMiddleware from "../middlewares/auth";
 
-
-// initialize router 
+// initialize router
 const userRoute: Router = Router();
 
-
-// read 
-userRoute.get('/read', UserController.read);
-
+// read
+userRoute.get("/read", UserController.read);
 
 // read detail
-userRoute.get('/read-detail/:id', UserController.readDetail);
+userRoute.get("/read-detail/:id", UserController.readDetail);
 
-// auth middleware 
-userRoute.use(AuthMiddleware('admin'));
+// auth middleware
+userRoute.use(AuthMiddleware("admin"));
 
+// update
+userRoute.patch(
+  "/update/:id",
+  FileService.upload("avatars", "avatar"),
+  UserController.update
+);
 
-// update 
-userRoute.patch('/update/:id', FileService.upload('avatars', 'avatar'), UserController.update);
+// delete
+userRoute.delete("/delete/:id", UserController.delete);
 
-
-// delete 
-userRoute.delete('/delete/:id', UserController.delete);
-
-
-// export 
+// export
 export default userRoute;

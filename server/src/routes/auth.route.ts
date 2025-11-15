@@ -7,28 +7,39 @@ import { UserCreateType } from "../models/user-model";
 import { UserValidation } from "../validations/user-validation";
 import AuthMiddleware from "../middlewares/auth";
 
-
-// initial router 
+// initial router
 const authRouter = Router();
 
+// signup
+authRouter.post(
+  "/signup",
+  validation<Omit<UserCreateType, "avatar">>(UserValidation.CREATE),
+  AuthController.create
+);
 
+authRouter.post(
+  "/signin",
+  validation<LoginRequest>(AuthValidation.LOGIN),
+  AuthController.login
+);
 
-// cek auth 
-authRouter.get('/cek-auth-customer', AuthMiddleware('customer'), AuthController.checkAuth);
+// cek auth
+authRouter.get(
+  "/cek-auth-customer",
+  AuthMiddleware("customer"),
+  AuthController.checkAuth
+);
 
-
-authRouter.get('/cek-auth-admin', AuthMiddleware('admin'), AuthController.checkAuth);
-
-// signup 
-authRouter.post('/signup', validation<Omit<UserCreateType, "avatar">>(UserValidation.CREATE), AuthController.create);
-
+authRouter.get(
+  "/cek-auth-admin",
+  AuthMiddleware("admin"),
+  AuthController.checkAuth
+);
 
 // signin
-authRouter.post('/signin', validation<LoginRequest>(AuthValidation.LOGIN), AuthController.login);
-
 
 // logout
-authRouter.post('/logout', AuthController.logout);
+authRouter.post("/logout", AuthController.logout);
 
-// export 
+// export
 export default authRouter;

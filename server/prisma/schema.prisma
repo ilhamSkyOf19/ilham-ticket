@@ -29,6 +29,10 @@ model User {
   url_avatar String
   role       Role   @default(customer)
 
+  wallet Wallet?
+
+  transactionWallet TransactionWallet[]
+
   review Review[]
 
   createdAt DateTime @default(now())
@@ -156,4 +160,43 @@ model Booked {
   
 
   @@unique([movieId, times])
+}
+
+// wallet
+model Wallet {
+  id Int @unique @default(autoincrement())
+  balance Int
+  branch String
+
+  userId Int @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// enum 
+enum TypeTransactionWallet {
+  plus
+  min
+}
+
+
+// history transaction 
+model TransactionWallet {
+  id Int @unique @default(autoincrement())
+  total Int
+  url_thumbnail String?
+  title String
+  type TypeTransactionWallet
+
+
+
+  userId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
