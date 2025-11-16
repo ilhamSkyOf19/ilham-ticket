@@ -51,16 +51,3 @@ export type TheaterHighlightResponseType = {
   name: string;
   city: string;
 };
-
-// to response
-export const toResponseTheaterHighlight = (
-  theater: TheaterHighlightResponseType
-): TheaterHighlightResponseType => {
-  return {
-    id: theater.id,
-    thumbnail: theater.thumbnail,
-    url_thumbnail: theater.url_thumbnail,
-    name: theater.name,
-    city: theater.city,
-  };
-};

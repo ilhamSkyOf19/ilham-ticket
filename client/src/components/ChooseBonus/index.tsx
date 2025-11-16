@@ -1,102 +1,98 @@
-import { useEffect, useState, type FC } from 'react'
-import type { UseFormClearErrors, UseFormSetValue } from 'react-hook-form';
-import type { MovieCreateType, MovieUpdateType } from '../../models/movie-model';
-import clsx from 'clsx';
-import ErrorMessage from '../ErrorMessage';
-import type { BonusResponseType } from '../../models/bonus-model';
+import { useEffect, useState, type FC } from "react";
+import type { UseFormClearErrors, UseFormSetValue } from "react-hook-form";
+import type {
+  MovieCreateType,
+  MovieUpdateType,
+} from "../../models/movie-model";
+import clsx from "clsx";
+import ErrorMessage from "../ErrorMessage";
+import type { BonusResponseType } from "../../models/bonus-model";
 
 type Props = {
-    setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
-    clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
-    error?: string;
-    bonus: BonusResponseType[] | null;
-    defaultValue?: BonusResponseType[]
-}
+  setValue: UseFormSetValue<MovieCreateType | MovieUpdateType>;
+  clearErrors?: UseFormClearErrors<MovieCreateType | MovieUpdateType>;
+  error?: string;
+  bonus: BonusResponseType[] | null;
+  defaultValue?: BonusResponseType[];
+};
 
+const ChooseBonus: FC<Props> = ({
+  setValue,
+  clearErrors,
+  bonus,
+  error,
+  defaultValue,
+}) => {
+  // state choose
+  const [choose, setChoose] = useState<number[]>([]);
 
-const ChooseBonus: FC<Props> = ({ setValue, clearErrors, bonus, error, defaultValue }) => {
-
-
-    // state choose 
-    const [choose, setChoose] = useState<number[]>([]);
-
-
-    // useEffect to set default value
-    useEffect(() => {
-        if (defaultValue) {
-            setChoose(defaultValue.map(bonus => bonus.id));
-        }
-    }, [defaultValue])
-
-
-    // handle choose 
-    const handleChoose = (id: number) => {
-        // cek choose & filter 
-        if (choose && !choose.includes(id)) {
-
-            // set choose
-            setChoose([...choose, id]);
-
-            // clear errors
-            clearErrors?.('bonus');
-        } else {
-            setChoose(choose.filter((item) => item !== id));
-
-
-        }
+  // useEffect to set default value
+  useEffect(() => {
+    if (defaultValue) {
+      setChoose(defaultValue.map((bonus) => bonus.id));
     }
+  }, [defaultValue]);
 
+  // handle choose
+  const handleChoose = (id: number) => {
+    // cek choose & filter
+    if (choose && !choose.includes(id)) {
+      // set choose
+      setChoose([...choose, id]);
 
+      // clear errors
+      clearErrors?.("bonus");
+    } else {
+      setChoose(choose.filter((item) => item !== id));
+    }
+  };
 
-    // cek state for set value 
-    useEffect(() => {
+  // cek state for set value
+  useEffect(() => {
+    // set value
+    setValue("bonus", choose);
+  }, [choose]);
 
-        // set value
-        setValue('bonus', choose);
-    }, [choose])
+  return (
+    <div className="w-full flex flex-col justify-start items-start gap-2">
+      {/* label */}
+      <h3 className="text-white text-base font-medium">Choose Bonus</h3>
 
-    return (
-        <div className='w-full flex flex-col justify-start items-start gap-2'>
+      {/* container card bonus */}
+      <div className="w-full flex flex-row justify-start items-start flex-wrap gap-2">
+        {/* card */}
 
-            {/* label */}
-            <h3 className='text-white text-base font-medium'>
-                Choose Bonus
-            </h3>
+        {bonus && bonus.length > 0
+          ? bonus.map((item: BonusResponseType, index: number) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleChoose(item.id)}
+                className={clsx(
+                  "w-auto h-14 flex flex-col justify-between items-start rounded-2xl bg-white/10 px-4 py-2 border-2 transition-all duration-200 ease-in-out hover:bg-white/20",
+                  choose.includes(item.id)
+                    ? "border-blue-500"
+                    : error
+                    ? "border-red-500"
+                    : "border-transparent"
+                )}
+              >
+                {/* name */}
+                <p className="text-white text-xs font-semibold">
+                  {item.name.concat(" - ")}
+                </p>
 
-            {/* container card bonus */}
-            <div className='w-full flex flex-row justify-start items-start flex-wrap gap-2'>
-                {/* card */}
+                {/* size */}
+                <p className="text-white text-xs font-light">{item.size}</p>
+              </button>
+            ))
+          : null}
+      </div>
 
-                {
-                    bonus && bonus.length > 0 ? (
-                        bonus.map((item: BonusResponseType, index: number) => (
-                            <button key={index} type='button' onClick={() => handleChoose(item.id)} className={clsx(
-                                'w-auto h-14 flex flex-col justify-between items-start rounded-2xl bg-white/10 px-4 py-2 border-2 transition-all duration-200 ease-in-out hover:bg-white/20',
-                                choose.includes(item.id) ? 'border-blue-500' : error ? 'border-red-500' : 'border-transparent'
-                            )}>
+      {/* error */}
+      <ErrorMessage message={error} />
+    </div>
+  );
+};
 
-                                {/* name */}
-                                <p className='text-white text-xs font-light'>
-                                    {(item.name).concat(' - ')}
-                                </p>
-
-                                {/* size */}
-                                <p className='text-white text-xs font-light'>
-                                    {item.size}
-                                </p>
-                            </button>
-                        ))
-                    ) : (
-                        null
-                    )
-                }
-            </div>
-
-            {/* error */}
-            <ErrorMessage message={error} />
-
-        </div>
-    )
-}
-
-export default ChooseBonus
+export default ChooseBonus;

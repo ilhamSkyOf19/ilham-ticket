@@ -80,6 +80,7 @@ export class AuthController {
         await WalletService.create({
           balance: 0,
           email: response.email,
+          type: "wallet",
         });
       }
 

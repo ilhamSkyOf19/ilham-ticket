@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 import SearchBox from "../../components/SearchBox";
 import { useForm } from "react-hook-form";
 import { SearchValidation } from "../../validations/search-validation";
@@ -28,11 +28,6 @@ type LoaderType = {
 const HomePage: FC = () => {
   // loader
   const { user, movies, genres } = useLoaderData() as LoaderType;
-
-  // cek genres
-  useEffect(() => {
-    console.log(genres);
-  }, [genres]);
 
   // use hook form
   const { register, watch, setValue } = useForm<SearchModel>({

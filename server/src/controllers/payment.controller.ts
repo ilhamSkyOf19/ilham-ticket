@@ -7,7 +7,7 @@ import { TransactionWalletService } from "../services/transactionWallet.service"
 
 export const createPayment = async (
   req: AuthRequest<{}, {}, WalletCreateType>,
-  res: Response<ResponseType<string | null>>,
+  res: Response<ResponseType<{ token: string; redirect_url: string } | null>>,
   next: NextFunction
 ) => {
   try {
@@ -15,43 +15,55 @@ export const createPayment = async (
     const { balance, type } = req.body;
 
     // get req
-    const { email } = req?.data ?? { email: "" };
+    const { email, id: userId } = req?.data ?? { email: "", id: 0 };
 
     // create transaction wallet
     const transactionWallet = await TransactionWalletService.create({
       total: balance,
-      email: email,
+      userId: userId,
     });
 
-    // snap
-    const snap = new MidtransClient.Snap({
-      isProduction: false,
-      serverKey: process.env.MIDTRANS_SERVER_KEY as string,
-      clientKey: process.env.MIDTRANS_CLIENT_KEY as string,
-    });
+    // auth string
+    const midtransAuth = process.env.MIDTRANS_AUTH as string;
 
-    // params
-    const parameter = {
+    // payload
+    const payload = {
       transaction_details: {
         order_id: `ORDER-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
         gross_amount: balance,
       },
+      credit_card: {
+        secure: true,
+      },
       customer_details: {
         email: email,
       },
-      custom_field1: email,
+      custom_field1: userId,
       custom_field2: type,
       custom_field3: transactionWallet?.id,
     };
 
-    // transaction
-    const transaction = await snap.createTransaction(parameter);
+    const response = await fetch(process.env.MIDTRANS_URL as string, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Basic ${midtransAuth}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // respon to json
+    const data = await response.json();
 
     // return
     return res.status(200).json({
       status: "success",
       message: "berhasil membuat transaksi",
-      data: transaction.redirect_url,
+      data: {
+        token: data.token,
+        redirect_url: data.redirect_url,
+      },
     });
   } catch (error) {
     console.log(error);

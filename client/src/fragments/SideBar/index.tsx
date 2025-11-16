@@ -35,7 +35,7 @@ const SideBar: FC<Props> = ({ ref, sidebarOpen, handleSidebarToggle }) => {
     <div
       ref={ref}
       className={clsx(
-        "w-[60%] h-screen fixed flex flex-col justify-start bg-white/10 backdrop-blur-2xl pt-3 transition-transform duration-300 ease-in-out z-30",
+        "w-[60%] h-screen fixed flex flex-col justify-start bg-white/10 backdrop-blur-2xl pt-3 transition-transform duration-300 ease-in-out z-50",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}
     >

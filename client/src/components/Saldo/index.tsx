@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { formatIDR } from "../../helpers/formated";
+import { formatDateSlash, formatIDR } from "../../helpers/formated";
 import logo from "../../assets/images/logos/wallet.svg";
 import lines from "../../assets/images/backgrounds/wallet-lines.svg";
 
@@ -39,7 +39,7 @@ const Saldo: FC<Props> = ({ saldo, name, expired, branch }) => {
         <KetSaldo label="name" value={name.slice(0, 7).concat("...")} />
 
         {/* expired */}
-        <KetSaldo label="expired at" value={expired} />
+        <KetSaldo label="expired at" value={formatDateSlash(expired)} />
 
         {/* branch */}
         <KetSaldo label="branch" value={branch} />

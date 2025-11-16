@@ -17,7 +17,7 @@ export class TransactionWalletService {
         type: "plus",
         user: {
           connect: {
-            email: data.email,
+            id: data.userId,
           },
         },
       },

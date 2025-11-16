@@ -1,7 +1,7 @@
 import { TransactionWallet } from "../../generated/prisma";
 
 export type TransactionWalletCreateType = {
-  email: string;
+  userId: number;
   total: number;
 };
 
@@ -11,6 +11,7 @@ export type TransactionWalletResponseType = {
   email: string;
   total: number;
   status: "success" | "pending" | "failed";
+  type: "plus" | "min";
   createdAt: Date;
   updatedAt: Date;
 };
@@ -21,6 +22,7 @@ export const toTransactionWalletResponse = (
 ): TransactionWalletResponseType => {
   return {
     id: transactionWallet.id,
+    type: transactionWallet.type,
     email: transactionWallet.userEmail,
     total: transactionWallet.total,
     status: transactionWallet.status,

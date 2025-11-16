@@ -1,3 +1,4 @@
+import { expiredBalance } from "../helpers/expired-balance";
 import { prisma } from "../lib/prisma";
 import {
   toWalletResponse,
@@ -41,11 +42,11 @@ export class WalletService {
   }
 
   // read by email
-  static async readByEmail(email: string): Promise<WalletResponseType | null> {
+  static async readById(id: number): Promise<WalletResponseType | null> {
     // get response
     const response = await prisma.wallet.findFirstOrThrow({
       where: {
-        email,
+        id,
       },
       include: {
         user: {
@@ -55,24 +56,26 @@ export class WalletService {
         },
       },
     });
+    const expiredValue = expiredBalance(response.balance, response.updatedAt);
 
     // return
+
     return toWalletResponse({
       ...response,
       name: response.user.name,
-      expired: "0",
+      expired: expiredValue,
     });
   }
 
   // update
   static async update(
-    email: string,
+    id: number,
     req: Omit<WalletCreateType, "type">
   ): Promise<WalletResponseType | null> {
     // get response
     const response = await prisma.wallet.update({
       where: {
-        email,
+        id,
       },
       data: {
         ...req,
@@ -110,15 +113,7 @@ export class WalletService {
 
     // return
     return response.map((res) => {
-      let expiredValue = "0";
-
-      if (res.balance > 0) {
-        const updatedDate = new Date(res.updatedAt);
-        const expiredDate = new Date(updatedDate);
-        expiredDate.setDate(updatedDate.getDate() + 30);
-
-        expiredValue = expiredDate.toISOString();
-      }
+      const expiredValue = expiredBalance(res.balance, res.updatedAt);
 
       return toWalletResponse({
         ...res,

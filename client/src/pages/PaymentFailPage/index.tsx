@@ -3,18 +3,18 @@ import dumyThumb from "../../assets/images/thumbnails/th3.png";
 import SuccessPageLayout from "../../Layouts/SuccessPageLayout";
 import { useParams } from "react-router-dom";
 
-const PaymentSuccessPage: FC = () => {
+const PaymentFailPage: FC = () => {
   // get params
   const params = useParams() as { type: "ticket" | "wallet" };
 
   return (
     <SuccessPageLayout
       thumbnail={dumyThumb}
-      title={params.type === "ticket" ? "Payment Success" : "Topup Successful"}
+      title={params.type === "ticket" ? "Payment Failed" : "Topup Failed"}
       subtitle={
         params.type === "ticket"
-          ? "Tiket anda telah berhasil dibeli silahkan periksa pada menu my ticket"
-          : "Kami telat mengupdate saldo Ewallet anda silahkan periksa kembali"
+          ? "Pembayaran tiket gagal diproses. Silakan coba kembali atau periksa metode pembayaran Anda."
+          : "Topup e-wallet gagal diproses. Silakan coba kembali dalam beberapa saat."
       }
       buttonFirst={params.type === "ticket" ? "Book More" : "View My Ewallet"}
       buttonSecond={
@@ -28,4 +28,4 @@ const PaymentSuccessPage: FC = () => {
   );
 };
 
-export default PaymentSuccessPage;
+export default PaymentFailPage;

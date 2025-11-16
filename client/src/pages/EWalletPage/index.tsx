@@ -1,90 +1,86 @@
-import { type FC } from 'react'
-import HeaderPage from '../../components/HeaderPage'
-import CardHistoryTransaction from '../../components/CardHistoryTransaction'
+import { useEffect, type FC } from "react";
+import HeaderPage from "../../components/HeaderPage";
+import CardHistoryTransaction from "../../components/CardHistoryTransaction";
 
+// logo
 
-// logo 
+import Saldo from "../../components/Saldo";
+import ButtonTopup from "../../components/ButtonTopup";
+import { useLoaderData } from "react-router-dom";
+import type { ResponseType } from "../../types/types";
+import type { WalletResponseType } from "../../models/wallet-model";
+import type { TransactionWalletResponseType } from "../../models/transactionWallet-model";
 
-import th3 from '../../assets/images/thumbnails/th3.png'
-import Saldo from '../../components/Saldo'
-import ButtonTopup from '../../components/ButtonTopup'
-
+type LoaderType = {
+  wallet: ResponseType<WalletResponseType | null>;
+  transactionWallet: ResponseType<TransactionWalletResponseType[] | null>;
+};
 const EWalletPage: FC = () => {
-    return (
-        <div className='w-full flex flex-col justify-start items-center px-6 gap-6 pb-12'>
+  // loader
+  const { wallet, transactionWallet } = useLoaderData() as LoaderType;
 
-            {/* header */}
-            <HeaderPage label='my wallet'>
-                {/* button top up */}
-                <ButtonTopup />
-            </HeaderPage>
+  // cek
+  useEffect(() => {
+    console.log(wallet);
+    console.log(transactionWallet);
+  }, [wallet, transactionWallet]);
 
+  return (
+    <div className="w-full flex flex-col justify-start items-center px-6 gap-6 pb-12">
+      {/* header */}
+      <HeaderPage label="my wallet">
+        {/* button top up */}
+        <ButtonTopup />
+      </HeaderPage>
 
-            {/* saldo */}
-            <Saldo
-                saldo={19234432}
-                name={'Ilham Rohmatulloh'}
-                expired={'12/12/2023'}
-                branch={'BNI'}
-            />
+      {/* saldo */}
+      <Saldo
+        saldo={wallet?.data?.balance || 0}
+        name={wallet?.data?.name || ""}
+        expired={(wallet?.data?.expired as string) || ""}
+        branch={wallet?.data?.branch || ""}
+      />
 
-            {/* history transaction */}
-            <HistoryTransaction />
-        </div>
-    )
-}
-
-
-
-
-
-
-
-
+      {/* history transaction */}
+      <HistoryTransaction transactionWallet={transactionWallet} />
+    </div>
+  );
+};
 
 // component History Transaction
-const HistoryTransaction: FC = () => {
-    return (
-        <div className='w-full flex flex-col justify-start items-start gap-3'>
-            {/* header */}
-            <h2 className='text-white font-medium text-base capitalize'>latest transaction</h2>
+type TransactionWalletType = {
+  transactionWallet: ResponseType<TransactionWalletResponseType[] | null>;
+};
+const HistoryTransaction: FC<TransactionWalletType> = ({
+  transactionWallet,
+}) => {
+  return (
+    <div className="w-full flex flex-col justify-start items-start gap-3">
+      {/* header */}
+      <h2 className="text-white font-medium text-base capitalize">
+        latest transaction
+      </h2>
 
-            {/* history */}
-            <div className='w-full flex flex-col justify-start items-start gap-4'>
-                {/* card */}
+      {/* history */}
+      <div className="w-full flex flex-col justify-start items-start gap-4">
+        {/* card */}
+        {transactionWallet?.status === "success" && transactionWallet?.data
+          ? transactionWallet.data.map(
+              (item: TransactionWalletResponseType, index: number) => (
+                <CardHistoryTransaction
+                  key={index}
+                  plus={item.type === "plus"}
+                  nominal={item.total}
+                  name={"top up wallet"}
+                  status={item.status}
+                  date={item.createdAt.toString()}
+                />
+              )
+            )
+          : null}
+      </div>
+    </div>
+  );
+};
 
-                {
-                    [1, 2, 3, 4, 5].map((_, index: number) => (
-                        <CardHistoryTransaction
-                            key={index}
-                            plus={true}
-                            nominal={3442000}
-                            name={'start wars 3'}
-                            status={'success'}
-                            date='10/10/2025'
-                            thumbnail={th3}
-                        />
-                    ))
-                }
-                {
-                    [1, 2, 3].map((_, index: number) => (
-                        <CardHistoryTransaction
-                            key={index}
-                            plus={false}
-                            nominal={3442000}
-                            name={'start wars 3'}
-                            status={'failed'}
-                            date='10/10/2025'
-                        />
-                    ))
-                }
-
-
-            </div>
-        </div>
-    )
-}
-
-
-
-export default EWalletPage
+export default EWalletPage;

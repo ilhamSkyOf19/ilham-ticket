@@ -17,17 +17,17 @@ export const paymentCallback = async (
     const fraudStatus = data.fraud_status;
 
     // ambil dari custom field
-    const email = data.custom_field1;
+    const id = Number(data.custom_field1);
     const type = data.custom_field2;
     const idTransactionWallet = Number(data.custom_field3);
 
     // cek wallet
-    const wallet = await WalletService.readByEmail(email);
+    const wallet = await WalletService.readById(id);
 
     switch (transactionStatus) {
       case "capture":
         if (fraudStatus === "accept" && type === "wallet") {
-          await WalletService.update(email, {
+          await WalletService.update(id, {
             balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
           });
 
@@ -37,18 +37,22 @@ export const paymentCallback = async (
 
       case "settlement":
         if (type === "wallet") {
-          await WalletService.update(email, {
+          await WalletService.update(id, {
             balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
           });
 
           await TransactionWalletService.update(idTransactionWallet, "success");
         }
         break;
+      case "pending":
+        if (type === "wallet") {
+          await TransactionWalletService.update(idTransactionWallet, "pending");
+        }
+        break;
 
       case "deny":
       case "cancel":
       case "expire":
-      case "pending":
         if (type === "wallet") {
           await TransactionWalletService.update(idTransactionWallet, "failed");
         }

@@ -16,7 +16,6 @@ import TicketsPaymentPage from "../pages/TicketsPaymentPage";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import TopUpPage from "../pages/TopUpPage";
 import MidtransPaymentPage from "../pages/MidtransPaymentPage";
-import TopupSuccessPage from "../pages/TopupSuccessPage";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { CheckAuth } from "../hooks/useCheckAuth";
 import AdminMoviePage from "../pages/AdminMoviePage";
@@ -36,6 +35,9 @@ import { useReadBonus, useReadBonusDetail } from "../hooks/useBonus";
 import AdminBonusAddPage from "../pages/AdminBonusAddPage";
 import AdminListGenrePage from "../pages/AdminListGenrePage";
 import AdminGenreAddPage from "../pages/AdminGenreAddPage";
+import { useReadWalletByEmail } from "../hooks/useWallet";
+import { useReadTransactionWalletByUser } from "../hooks/useTransaction";
+import PaymentFailPage from "../pages/PaymentFailPage";
 
 // router
 const router = createBrowserRouter([
@@ -47,6 +49,14 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUpPage />,
+  },
+  {
+    path: "/payment-success/:type",
+    element: <PaymentSuccessPage />,
+  },
+  {
+    path: "/payment-fail/:type",
+    element: <PaymentFailPage />,
   },
 
   // layout client
@@ -78,6 +88,14 @@ const router = createBrowserRouter([
           },
           {
             path: "/wallet",
+            loader: async () => {
+              const [wallet, transactionWallet] = await Promise.all([
+                useReadWalletByEmail(),
+                useReadTransactionWalletByUser(),
+              ]);
+
+              return { wallet, transactionWallet };
+            },
             element: <EWalletPage />,
           },
           {
@@ -121,21 +139,17 @@ const router = createBrowserRouter([
         path: "/tickets-payment",
         element: <TicketsPaymentPage />,
       },
-      {
-        path: "/payment-success",
-        element: <PaymentSuccessPage />,
-      },
+
       {
         path: "/topup-wallet",
+        loader: async () => {
+          return await useReadWalletByEmail();
+        },
         element: <TopUpPage />,
       },
       {
         path: "/midtrans-payment",
         element: <MidtransPaymentPage />,
-      },
-      {
-        path: "/topup-success",
-        element: <TopupSuccessPage />,
       },
     ],
   },
