@@ -47,6 +47,7 @@ const HomePage: FC = () => {
     <div className="w-full flex flex-col justify-start items-start gap-6">
       {/* header */}
       <HeaderComponent
+        url_avatar={user?.data?.url_avatar || dumy}
         name={user?.data?.name || ""}
         role={user?.data?.role || ""}
       />
@@ -143,16 +144,21 @@ const HomePage: FC = () => {
 type PropsHeaderComponent = {
   name: string;
   role: string;
+  url_avatar: string;
 };
-const HeaderComponent: FC<PropsHeaderComponent> = ({ name, role }) => {
+const HeaderComponent: FC<PropsHeaderComponent> = ({
+  name,
+  role,
+  url_avatar,
+}) => {
   return (
     <div className="w-full flex flex-row justify-between items-center px-4">
       {/* profile */}
       <div className="flex-3/4 flex flex-row justify-start items-center gap-4">
         {/* img */}
-        <div className="w-15 h-15 rounded-full bg-white">
+        <div className="w-15 h-15 rounded-full  overflow-hidden">
           <img
-            src={dumy}
+            src={url_avatar}
             alt="profile"
             className="w-full h-full object-cover"
           />

@@ -2,30 +2,28 @@ import { prisma } from "../lib/prisma";
 import { AuthResponseType, toAuthResponse } from "../models/auth-model";
 
 export class AuthService {
+  // cek user
+  static async checkUser(
+    email: string
+  ): Promise<AuthResponseType & { password: string }> {
+    // cek user with email
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-
-
-    // cek user 
-    static async checkUser(email: string): Promise<AuthResponseType & { password: string }> {
-
-
-        // cek user with email
-        const user = await prisma.user.findUnique({
-            where: {
-                email: email
-            }
-        });
-
-        // return
-        return {
-            ...toAuthResponse({
-                id: user?.id || 0,
-                name: user?.name || '',
-                email: user?.email || '',
-                role: user?.role || 'customer'
-            }),
-            password: user?.password || ''
-        }
-    }
-
+    // return
+    return {
+      ...toAuthResponse({
+        id: user?.id || 0,
+        name: user?.name || "",
+        email: user?.email || "",
+        role: user?.role || "customer",
+        avatar: user?.avatar || "",
+        url_avatar: user?.url_avatar || "",
+      }),
+      password: user?.password || "",
+    };
+  }
 }

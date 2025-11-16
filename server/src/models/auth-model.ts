@@ -1,21 +1,22 @@
 import { Payload } from "../types/payload";
 
-// login request 
+// login request
 export type LoginRequest = {
-    email: string;
-    password: string;
-}
+  email: string;
+  password: string;
+};
 
 // auth response type
 export type AuthResponseType = Payload;
 
-
-// to response 
+// to response
 export const toAuthResponse = (data: Payload): AuthResponseType => {
-    return {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        role: data.role
-    }
-}
+  return {
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    role: data.role,
+    avatar: data.avatar,
+    url_avatar: data.url_avatar,
+  };
+};

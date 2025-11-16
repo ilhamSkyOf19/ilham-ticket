@@ -13,13 +13,20 @@ userRoute.get("/read", UserController.read);
 userRoute.get("/read-detail/:id", UserController.readDetail);
 
 // auth middleware
-userRoute.use(AuthMiddleware("admin"));
+userRoute.use(AuthMiddleware("customer"));
 
 // update
 userRoute.patch(
   "/update/:id",
   FileService.upload("avatars", "avatar"),
   UserController.update
+);
+
+// update avatar
+userRoute.patch(
+  "/update-avatar/:id",
+  FileService.upload("avatars", "avatar"),
+  UserController.avatar
 );
 
 // delete

@@ -59,12 +59,6 @@ export class AuthController {
       // get body
       const body = req.body;
 
-      // base url
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
-
-      // generate
-      const url_avatar = generateUrl(baseUrl, "avatars", "default-avatar.png");
-
       // hash password
       body.password = await bcrypt.hash(body.password, 10);
 
@@ -72,7 +66,7 @@ export class AuthController {
       const response = await UserService.create({
         ...body,
         avatar: req.file?.filename ?? "",
-        url_avatar,
+        url_avatar: "",
       });
 
       // create wallet
@@ -145,7 +139,7 @@ export class AuthController {
         user?.password as string
       );
 
-      // cek password
+      // cek password x
       if (!passwordCompare) {
         return res.status(401).json({
           status: "failed",
@@ -182,6 +176,8 @@ export class AuthController {
           name: user.name,
           email: user.email,
           role: user.role,
+          avatar: user.avatar,
+          url_avatar: user.url_avatar,
         }),
       });
     } catch (error) {

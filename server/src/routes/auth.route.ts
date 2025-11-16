@@ -36,8 +36,6 @@ authRouter.get(
   AuthController.checkAuth
 );
 
-// signin
-
 // logout
 authRouter.post("/logout", AuthController.logout);
 
