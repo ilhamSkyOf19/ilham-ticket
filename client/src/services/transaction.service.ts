@@ -1,5 +1,8 @@
 import api from "../lib/axios";
-import type { TransactionWalletResponseType } from "../models/transactionWallet-model";
+import type {
+  TransactionWalletResponseType,
+  TransactionWalletWithPaginationResponseType,
+} from "../models/transactionWallet-model";
 import type { ResponseType } from "../types/types";
 
 export class TransactionService {
@@ -17,12 +20,18 @@ export class TransactionService {
   }
 
   //   read transaction wallet by user
-  static async readTransactionWalletByUser(): Promise<
-    ResponseType<TransactionWalletResponseType[] | null>
-  > {
+  static async readTransactionWalletByUser(
+    page: number,
+    limit: number
+  ): Promise<ResponseType<TransactionWalletWithPaginationResponseType | null>> {
     // call api
     const response = await api
-      .get(`/transaction-wallet/read-by-user`)
+      .get(`/transaction-wallet/read-by-user`, {
+        params: {
+          page,
+          limit,
+        },
+      })
       .then((res) => res.data);
 
     //  return response data

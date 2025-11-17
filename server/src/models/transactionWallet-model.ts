@@ -30,3 +30,28 @@ export const toTransactionWalletResponse = (
     updatedAt: transactionWallet.updatedAt,
   };
 };
+
+export type TransactionWalletWithPaginationResponseType = {
+  transaction: TransactionWalletResponseType[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+};
+
+// to response
+export const toTransactionWalletWithPaginationResponse = (transactionWallet: {
+  transaction: TransactionWalletResponseType[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+}): TransactionWalletWithPaginationResponseType => {
+  return {
+    transaction: transactionWallet.transaction,
+    totalItems: transactionWallet.totalItems,
+    totalPages: transactionWallet.totalPages,
+    currentPage: transactionWallet.currentPage,
+    pageSize: transactionWallet.pageSize,
+  };
+};

@@ -36,7 +36,6 @@ import AdminBonusAddPage from "../pages/AdminBonusAddPage";
 import AdminListGenrePage from "../pages/AdminListGenrePage";
 import AdminGenreAddPage from "../pages/AdminGenreAddPage";
 import { useReadWalletByEmail } from "../hooks/useWallet";
-import { useReadTransactionWalletByUser } from "../hooks/useTransaction";
 import PaymentFailPage from "../pages/PaymentFailPage";
 
 // router
@@ -89,12 +88,7 @@ const router = createBrowserRouter([
           {
             path: "/wallet",
             loader: async () => {
-              const [wallet, transactionWallet] = await Promise.all([
-                useReadWalletByEmail(),
-                useReadTransactionWalletByUser(),
-              ]);
-
-              return { wallet, transactionWallet };
+              return await useReadWalletByEmail();
             },
             element: <EWalletPage />,
           },

@@ -1,8 +1,10 @@
 import { prisma } from "../lib/prisma";
 import {
   toTransactionWalletResponse,
+  toTransactionWalletWithPaginationResponse,
   TransactionWalletCreateType,
   TransactionWalletResponseType,
+  TransactionWalletWithPaginationResponseType,
 } from "../models/transactionWallet-model";
 
 export class TransactionWalletService {
@@ -28,16 +30,47 @@ export class TransactionWalletService {
   }
 
   //   read by email
-  static async readByUseremail(email: string): Promise<any> {
+  static async readByUseremail(
+    email: string,
+    page: number,
+    limit: number
+  ): Promise<TransactionWalletWithPaginationResponseType | null> {
     // get response
-    const response = await prisma.transactionWallet.findMany({
-      where: {
-        userEmail: email,
-      },
+    // total items untuk menghitung total pages
+    const totalItems = await prisma.transactionWallet.count({
+      where: { userEmail: email },
     });
 
-    // return response
-    return response.map(toTransactionWalletResponse);
+    // ambil data halaman tertentu
+    const transaction = await prisma.transactionWallet.findMany({
+      where: { userEmail: email },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: "desc" }, // optional: urutkan terbaru dulu
+    });
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // buat response sesuai type
+    const response: TransactionWalletWithPaginationResponseType = {
+      transaction: transaction.map((transaction) => {
+        return {
+          id: transaction.id,
+          type: transaction.type,
+          email: transaction.userEmail,
+          total: transaction.total,
+          status: transaction.status,
+          createdAt: transaction.createdAt,
+          updatedAt: transaction.updatedAt,
+        };
+      }),
+      totalItems,
+      totalPages,
+      currentPage: page,
+      pageSize: limit,
+    };
+
+    return toTransactionWalletWithPaginationResponse(response);
   }
 
   //   update

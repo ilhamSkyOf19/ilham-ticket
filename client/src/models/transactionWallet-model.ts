@@ -12,3 +12,11 @@ export type TransactionWalletResponseType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type TransactionWalletWithPaginationResponseType = {
+  transaction: TransactionWalletResponseType[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+};
