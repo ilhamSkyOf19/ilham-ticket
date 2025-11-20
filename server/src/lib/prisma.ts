@@ -1,16 +1,15 @@
-import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClient | undefined;
+  prisma: PrismaClient | undefined;
 };
 
-// Gunakan global prisma agar tidak membuat instance baru di setiap reload
 export const prisma =
-    globalForPrisma.prisma ??
-    new PrismaClient({
-        log: ['query', 'error', 'warn'], // optional
-    });
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: ["query", "error", "warn"],
+  });
 
-if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
 }

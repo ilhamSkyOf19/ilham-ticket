@@ -6,6 +6,8 @@ import { WalletCreateType } from "../models/wallet-model";
 import { PaymentValidation } from "../validations/payment-validation";
 import AuthMiddleware from "../middlewares/auth";
 import { paymentCallback } from "../controllers/payment-callback.controller";
+import { TransactionTicketCreateType } from "../models/transactionTicket-model";
+import { TransactionTicketController } from "../controllers/transactionTicket.controller";
 
 // initialize router
 const paymentRoute: Router = Router();
@@ -21,6 +23,15 @@ paymentRoute.post(
   "/wallet",
   validation<WalletCreateType>(PaymentValidation.WALLET_TRANSACTION),
   createPayment
+);
+
+// payment ticket
+paymentRoute.post(
+  "/ticket",
+  validation<Omit<TransactionTicketCreateType, "userId" | "type">>(
+    PaymentValidation.TICKET_TRANSACTION
+  ),
+  TransactionTicketController.payment
 );
 
 // export

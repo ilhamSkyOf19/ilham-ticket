@@ -1,8 +1,5 @@
 import api from "../lib/axios";
-import type {
-  TransactionWalletResponseType,
-  TransactionWalletWithPaginationResponseType,
-} from "../models/transactionWallet-model";
+import type { TransactionWalletWithPaginationResponseType } from "../models/transactionWallet-model";
 import type { ResponseType } from "../types/types";
 
 export class TransactionService {
