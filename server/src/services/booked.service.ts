@@ -27,10 +27,30 @@ export class BookedService {
     });
   }
 
+  // get by id
+  static async getById(id: number): Promise<BookedResponseType | null> {
+    // get response
+    const response = await prisma.booked.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        movieId: true,
+        times: true,
+        seatsBooked: true,
+      },
+    });
+    // return response
+    return toBookedResponse({
+      ...response,
+      seatsBooked: JSON.parse(response.seatsBooked),
+    });
+  }
+
   //   update seatsbooked by movie id & times
   static async updateSeatsBooked(
     id: number,
-    times: string,
     seatsBooked: number[]
   ): Promise<BookedResponseType | null> {
     // get response

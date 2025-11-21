@@ -2,36 +2,83 @@ import { Request, Response } from "express";
 import { ResponseType } from "../types/request-response-type";
 import { WalletService } from "../services/wallet.service";
 import { TransactionWalletService } from "../services/transactionWallet.service";
+import { TransactionTicketService } from "../services/transactionTicket.service";
+import { BookedService } from "../services/booked.service";
+import crypto from "crypto";
 
 export const paymentCallback = async (
   req: Request,
   res: Response<ResponseType<null>>
 ) => {
   try {
+    const {
+      order_id,
+      status_code,
+      gross_amount,
+      signature_key,
+      transaction_status,
+      fraud_status,
+    } = req.body;
+
     const data = req.body;
 
-    console.log("callback from midtrans:", data);
+    // generate signature untuk verifikasi
+    const expectedSignature = crypto
+      .createHash("sha512")
+      .update(
+        order_id + status_code + gross_amount + process.env.MIDTRANS_SERVER_KEY
+      )
+      .digest("hex");
 
-    // status transaksi
-    const transactionStatus = data.transaction_status;
-    const fraudStatus = data.fraud_status;
+    // cek apakah signature valid
+    if (signature_key !== expectedSignature) {
+      return res.status(400).json({
+        status: "failed",
+        message: "invalid signature",
+        data: null,
+      });
+    }
+
+    console.log("callback from midtrans:", req.body);
 
     // ambil dari custom field
+
+    // id
     const id = Number(data.custom_field1);
-    const type = data.custom_field2;
-    const idTransactionWallet = Number(data.custom_field3);
+
+    // type
+    const type: "wallet" | "ticket" = data.custom_field2;
+
+    // custom id trnasaction
+    const idTransaction = Number(data.custom_field3);
+
+    // custom seats
+    const seats: number[] = data.metadata.seats ?? [];
 
     // cek wallet
     const wallet = await WalletService.readById(id);
 
-    switch (transactionStatus) {
+    switch (transaction_status) {
       case "capture":
-        if (fraudStatus === "accept" && type === "wallet") {
-          await WalletService.update(id, {
-            balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
-          });
+        if (fraud_status === "accept") {
+          if (type === "wallet") {
+            await WalletService.update(id, {
+              balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
+            });
 
-          await TransactionWalletService.update(idTransactionWallet, "success");
+            await TransactionWalletService.update(idTransaction, "success");
+          } else if (type === "ticket") {
+            // cek booked
+            const booked = await BookedService.getById(id);
+            // update seats
+            await BookedService.updateSeatsBooked(id, [
+              ...(booked?.seatsBooked ?? []),
+              ...seats,
+            ]);
+
+            // update transaction ticket
+            await TransactionTicketService.update(idTransaction, "success");
+          }
         }
         break;
 
@@ -41,12 +88,25 @@ export const paymentCallback = async (
             balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
           });
 
-          await TransactionWalletService.update(idTransactionWallet, "success");
+          await TransactionWalletService.update(idTransaction, "success");
+        } else if (type === "ticket") {
+          // cek booked
+          const booked = await BookedService.getById(id);
+          // update seats
+          await BookedService.updateSeatsBooked(id, [
+            ...(booked?.seatsBooked ?? []),
+            ...seats,
+          ]);
+
+          // update transaction ticket
+          await TransactionTicketService.update(idTransaction, "success");
         }
         break;
       case "pending":
         if (type === "wallet") {
-          await TransactionWalletService.update(idTransactionWallet, "pending");
+          await TransactionWalletService.update(idTransaction, "pending");
+        } else if (type === "ticket") {
+          await TransactionTicketService.update(idTransaction, "pending");
         }
         break;
 
@@ -54,12 +114,14 @@ export const paymentCallback = async (
       case "cancel":
       case "expire":
         if (type === "wallet") {
-          await TransactionWalletService.update(idTransactionWallet, "failed");
+          await TransactionWalletService.update(idTransaction, "failed");
+        } else if (type === "ticket") {
+          await TransactionTicketService.update(idTransaction, "failed");
         }
         break;
 
       default:
-        console.log("Unhandled status:", transactionStatus);
+        console.log("Unhandled status:", transaction_status);
     }
 
     return res.status(200).json({
