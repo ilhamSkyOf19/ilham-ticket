@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import ButtonPayment from "../../components/ButtonPayment";
 import { useAppDispatch, useAppSelector } from "../../helpers/redux/hook";
 import { addSeats } from "../../store/transactionSlice";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useReadSeatsByMovieId } from "../../hooks/useSeats";
+import type { TransactionTicketCreateType } from "../../models/transactionTicket-model";
+import { TransactionService } from "../../services/transaction.service";
 
 const ChooseSeats: FC = () => {
   // get data from store
@@ -18,6 +20,19 @@ const ChooseSeats: FC = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["seats", store.movieId, store.time],
     queryFn: () => useReadSeatsByMovieId(store.movieId ?? 0, store.time ?? ""),
+  });
+
+  // use mutation
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (payload: TransactionTicketCreateType) => {
+      return TransactionService.paymentTicket(payload);
+    },
+    onError: (error) => console.log(error),
+    onSuccess: (data) => {
+      console.log(data);
+      // navigate
+      navigate(`/tickets-payment`);
+    },
   });
 
   // dispatch
@@ -54,7 +69,7 @@ const ChooseSeats: FC = () => {
   }, [choose]);
 
   // handle continue
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (choose.length > 0) {
       // set active
       setActive(false);
@@ -62,8 +77,17 @@ const ChooseSeats: FC = () => {
       // set seats
       dispatch(addSeats(choose));
 
+      // payload
+      const payload = {
+        ...store,
+        seats: choose,
+      };
+
+      // set transaction
+      await mutateAsync(payload);
+
       // navigate
-      navigate(`/tickets-payment`);
+      // navigate(`/tickets-payment`);
     } else {
       setActive(true);
     }
@@ -135,6 +159,7 @@ const ChooseSeats: FC = () => {
 
       {/* button total price & continue */}
       <ButtonPayment
+        loading={isPending}
         price={price}
         handleContinue={handleContinue}
         labelPrice="/Seat"

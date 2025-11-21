@@ -1,14 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { TransactionTicketCreateType } from "../models/transactionTicket-model";
 
 // type transaction
-export interface TransactionState {
-  movieId: number | null;
-  theaterId: number | null;
-  time: string | null;
-  seats: number[];
-}
 
-const initialState: TransactionState = {
+const initialState: TransactionTicketCreateType = {
   movieId: null,
   theaterId: null,
   time: null,

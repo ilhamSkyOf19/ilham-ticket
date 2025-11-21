@@ -215,13 +215,18 @@ model TransactionWallet {
 
 // transaction ticket 
 model TransactionTicket {
-  id Int @unique @default(autoincrement())
-  total Int
+  id BigInt @unique @default(autoincrement())
+  url String
   movieId Int
   userId Int
   theaterId Int
   time String
   seats String
+  ppn Int
+  bookingFee Int
+  discount Int
+  subTotal Int
+  total Int
   type TypeTransactionWallet
   status Status @default(pending)
 

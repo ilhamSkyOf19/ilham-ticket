@@ -1,4 +1,8 @@
 import api from "../lib/axios";
+import type {
+  TransactionTicketCreateType,
+  TransactionTicketResponseType,
+} from "../models/transactionTicket-model";
 import type { TransactionWalletWithPaginationResponseType } from "../models/transactionWallet-model";
 import type { ResponseType } from "../types/types";
 
@@ -32,6 +36,19 @@ export class TransactionService {
       .then((res) => res.data);
 
     //  return response data
+    return response;
+  }
+
+  // payment ticket
+  static async paymentTicket(
+    req: TransactionTicketCreateType
+  ): Promise<ResponseType<TransactionTicketResponseType | null>> {
+    // call api
+    const response = await api
+      .post(`/transaction/ticket`, req)
+      .then((res) => res.data);
+
+    // return response data
     return response;
   }
 }

@@ -14,11 +14,12 @@ export class PaymentValidation {
   // ticket transaction
   static readonly TICKET_TRANSACTION = z
     .object({
-      total: z.number("total is required"),
       movieId: z.number("movieId is required"),
       theaterId: z.number("theaterId is required"),
       time: z.string("time is required"),
       seats: z.array(z.number("seats is required"), "seats is required"),
     })
-    .strict() as ZodType<Omit<TransactionTicketCreateType, "userId" | "type">>;
+    .strict() as ZodType<
+    Omit<TransactionTicketCreateType, "userId" | "type" | "total">
+  >;
 }

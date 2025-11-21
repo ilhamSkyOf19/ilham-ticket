@@ -55,13 +55,13 @@ export const paymentCallback = async (
     // custom seats
     const seats: number[] = data.metadata.seats ?? [];
 
-    // cek wallet
-    const wallet = await WalletService.readById(id);
-
     switch (transaction_status) {
       case "capture":
         if (fraud_status === "accept") {
           if (type === "wallet") {
+            // cek wallet
+            const wallet = await WalletService.readById(id);
+
             await WalletService.update(id, {
               balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
             });
@@ -84,6 +84,8 @@ export const paymentCallback = async (
 
       case "settlement":
         if (type === "wallet") {
+          // cek wallet
+          const wallet = await WalletService.readById(id);
           await WalletService.update(id, {
             balance: (wallet?.balance ?? 0) + Number(data.gross_amount),
           });

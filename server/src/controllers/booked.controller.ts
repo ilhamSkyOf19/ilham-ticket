@@ -17,6 +17,15 @@ export class BookedController {
       // get service
       const response = await BookedService.getBookedByMovieId(+id, times);
 
+      // cek response
+      if (!response) {
+        return res.status(404).json({
+          status: "failed",
+          message: "booked not found",
+          data: null,
+        });
+      }
+
       // return
       return res.status(200).json({
         status: "success",

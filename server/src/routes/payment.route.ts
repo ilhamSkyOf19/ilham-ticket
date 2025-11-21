@@ -28,7 +28,7 @@ paymentRoute.post(
 // payment ticket
 paymentRoute.post(
   "/ticket",
-  validation<Omit<TransactionTicketCreateType, "userId" | "type">>(
+  validation<Omit<TransactionTicketCreateType, "userId" | "type" | "total">>(
     PaymentValidation.TICKET_TRANSACTION
   ),
   TransactionTicketController.payment

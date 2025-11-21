@@ -9,6 +9,7 @@ import { MovieService } from "../services/movie.service";
 import { BookedService } from "../services/booked.service";
 import { TheaterService } from "../services/thater.service";
 import { TransactionTicketService } from "../services/transactionTicket.service";
+import { generateTotal } from "../helpers/formula";
 
 export class TransactionTicketController {
   // payment
@@ -16,7 +17,7 @@ export class TransactionTicketController {
     req: AuthRequest<
       {},
       {},
-      Omit<TransactionTicketCreateType, "userId" | "type">
+      Omit<TransactionTicketCreateType, "userId" | "type" | "total">
     >,
     res: Response<ResponseType<TransactionTicketResponseType | null>>,
     next: NextFunction
@@ -26,7 +27,7 @@ export class TransactionTicketController {
       const id = req.data?.id ?? 0;
 
       // get body
-      const { movieId, time, seats, theaterId, total } = req.body;
+      const { movieId, time, seats, theaterId } = req.body;
 
       // cek req seats if same
       const hasSameSeats = new Set(seats).size !== seats.length;
@@ -41,7 +42,10 @@ export class TransactionTicketController {
       }
 
       // cek movie
-      await MovieService.readDetail(movieId);
+      const priceMovie = await MovieService.readPrice(movieId);
+
+      // get total movie
+      const total = priceMovie! * seats.length;
 
       // cek theater
       await TheaterService.readDetail(theaterId);
@@ -69,16 +73,17 @@ export class TransactionTicketController {
         }
       }
 
-      // get service
+      // generate id
+      const idTransaction: number =
+        Date.now() + Math.floor(Math.random() * 1000);
 
-      const transsaction = await TransactionTicketService.payment({
-        movieId,
-        time,
-        seats,
-        theaterId,
-        total,
-        userId: id,
-      });
+      // ppn
+      const ppn = 11; // %
+      const bookingFee = 3000; // rupiah
+      const discount = 2000; // rupiah
+
+      // generate total
+      const finalTotal = generateTotal(total, ppn, discount, bookingFee);
 
       // get midtrans auth string
       const midtransAuth = process.env.MIDTRANS_AUTH as string;
@@ -86,8 +91,8 @@ export class TransactionTicketController {
       // payload for midtrans
       const payload = {
         transaction_details: {
-          order_id: `ORDER-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-          gross_amount: total,
+          order_id: `TICKET-${idTransaction}`,
+          gross_amount: finalTotal,
         },
         credit_card: {
           secure: true,
@@ -100,7 +105,7 @@ export class TransactionTicketController {
         },
         custom_field1: booked.id,
         custom_field2: "ticket",
-        custom_field3: transsaction?.id,
+        custom_field3: idTransaction,
       };
 
       const midtransResponse = await fetch(process.env.MIDTRANS_URL as string, {
@@ -116,11 +121,25 @@ export class TransactionTicketController {
       // convert json
       const data = await midtransResponse.json();
 
+      const transsaction = await TransactionTicketService.payment({
+        id: idTransaction,
+        movieId,
+        time,
+        seats,
+        theaterId,
+        total: finalTotal,
+        userId: id,
+        bookingFee,
+        discount,
+        ppn,
+        url: data.redirect_url,
+        subTotal: total,
+      });
       // return
       return res.status(200).json({
         status: "success",
         message: "berhasil membuat transaction ticket",
-        data: data,
+        data: transsaction,
       });
     } catch (error) {
       // next error

@@ -149,6 +149,17 @@ export class MovieService {
     });
   }
 
+  // read get price by id
+  static async readPrice(id: number): Promise<number | null> {
+    const response = await prisma.movie.findFirstOrThrow({
+      where: { id },
+      select: {
+        price: true,
+      },
+    });
+    return response.price;
+  }
+
   // read
   static async read(): Promise<MovieResponseType[] | null> {
     // get genre

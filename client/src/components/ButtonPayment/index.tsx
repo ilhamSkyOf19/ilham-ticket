@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import clsx from "clsx";
 import { formatIDR } from "../../helpers/formated";
+import iconLoading from "../../assets/animation/loading-black.svg";
 
 type Props = {
   price: number;
@@ -8,12 +9,14 @@ type Props = {
   labelPrice: string;
   labelButton: string;
   col?: boolean;
+  loading: boolean;
 };
 const ButtonPayment: FC<Props> = ({
   price,
   handleContinue,
   labelPrice,
   labelButton,
+  loading,
   col,
 }) => {
   return (
@@ -46,7 +49,11 @@ const ButtonPayment: FC<Props> = ({
           className="flex-1 flex flex-col justify-end items-center  rounded-full bg-white py-3 px-3 font-bold"
           onClick={handleContinue}
         >
-          {labelButton}
+          {loading ? (
+            <img src={iconLoading} alt="loading" className="w-6 h-6" />
+          ) : (
+            labelButton
+          )}
         </button>
       </div>
     </div>

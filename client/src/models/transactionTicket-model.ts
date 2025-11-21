@@ -1,12 +1,8 @@
-import { TransactionTicket } from "@prisma/client";
-
 export type TransactionTicketCreateType = {
-  userId: number;
-  theaterId: number;
-  movieId: number;
-  time: string;
+  movieId: number | null;
+  theaterId: number | null;
+  time: string | null;
   seats: number[];
-  total: number;
 };
 
 // response
@@ -31,10 +27,7 @@ export type TransactionTicketResponseType = {
 
 // to response
 export const toTransactionTicketResponse = (
-  transactionTicket: Omit<TransactionTicket, "seats" | "id"> & {
-    seats: number[];
-    id: string;
-  }
+  transactionTicket: TransactionTicketResponseType
 ): TransactionTicketResponseType => {
   return {
     id: transactionTicket.id,
