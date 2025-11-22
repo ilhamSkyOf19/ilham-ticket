@@ -2,6 +2,7 @@ import api from "../lib/axios";
 import type {
   TransactionTicketCreateType,
   TransactionTicketResponseType,
+  TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
 import type { TransactionWalletWithPaginationResponseType } from "../models/transactionWallet-model";
 import type { ResponseType } from "../types/types";
@@ -49,6 +50,25 @@ export class TransactionService {
       .then((res) => res.data);
 
     // return response data
+    return response;
+  }
+
+  // read transaction ticket by user id
+  static async readTransactionTicketByUser(
+    page: number,
+    limit: number
+  ): Promise<ResponseType<TransactionTicketWithPaginationResponseType | null>> {
+    // call api
+    const response = await api
+      .get(`/transaction-ticket/read-by-id`, {
+        params: {
+          page,
+          limit,
+        },
+      })
+      .then((res) => res.data);
+
+    //  return response data
     return response;
   }
 }

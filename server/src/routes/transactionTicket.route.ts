@@ -9,10 +9,7 @@ const transactionTicketRoute: Router = Router();
 transactionTicketRoute.use(AuthMiddleware("customer"));
 
 // read by id
-transactionTicketRoute.get(
-  "/read-by-id",
-  TransactionTicketController.readByUserId
-);
+transactionTicketRoute.get("/read-by-id", TransactionTicketController.readAll);
 
 // export
 export default transactionTicketRoute;

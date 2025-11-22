@@ -9,15 +9,10 @@ import ButtonTopup from "../../components/ButtonTopup";
 import { useLoaderData } from "react-router-dom";
 import type { ResponseType } from "../../types/types";
 import type { WalletResponseType } from "../../models/wallet-model";
-import type {
-  TransactionWalletResponseType,
-  TransactionWalletWithPaginationResponseType,
-} from "../../models/transactionWallet-model";
-import ButtonPagination from "../../components/ButtonPagination";
-import ButtonNextPage from "../../components/ButtonNextPage";
-import ButtonPrevPage from "../../components/ButtonPrevPage";
+import type { TransactionWalletResponseType } from "../../models/transactionWallet-model";
 import { useQuery } from "@tanstack/react-query";
 import { TransactionService } from "../../services/transaction.service";
+import Pagination from "../../components/Pagination";
 
 const EWalletPage: FC = () => {
   // loader
@@ -51,13 +46,7 @@ const HistoryTransaction: FC = () => {
   const [activePage, setActivePage] = useState<number>(1);
 
   // get transaction wallet by user
-  const {
-    isLoading,
-    data: transactionWallet,
-    refetch,
-  } = useQuery<
-    ResponseType<TransactionWalletWithPaginationResponseType | null>
-  >({
+  const { isLoading, data: transactionWallet } = useQuery({
     queryKey: ["transaction-wallet-by-user", activePage, 15],
     queryFn: () =>
       TransactionService.readTransactionWalletByUser(activePage, 15),
@@ -82,9 +71,6 @@ const HistoryTransaction: FC = () => {
       }
       return prev;
     });
-
-    // refetch
-    refetch();
   };
 
   // handle prev
@@ -132,26 +118,14 @@ const HistoryTransaction: FC = () => {
       </div>
 
       {/* container pagination */}
-      <div className="w-full flex flex-row justify-start items-center mt-4 gap-3">
-        {activePage > 3 && <ButtonPrevPage handlePrev={handlePrev} />}
-        {/* pagination */}
-        {Array.from(
-          { length: transactionWallet?.data?.totalPages ?? 0 },
-          (_, i) => i + 1
-        )
-          .slice(paginationRange.start - 1, paginationRange.end)
-          .map((i) => (
-            <ButtonPagination
-              key={i}
-              page={i}
-              active={i === activePage}
-              handlePage={handlePage}
-            />
-          ))}
-
-        {/* next page */}
-        <ButtonNextPage handleNext={handleNext} />
-      </div>
+      <Pagination
+        activePage={activePage}
+        handlePage={handlePage}
+        handlePrev={handlePrev}
+        handleNext={handleNext}
+        paginationRange={paginationRange}
+        totalPages={transactionWallet?.data?.totalPages || 0}
+      />
     </div>
   );
 };

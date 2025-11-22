@@ -1,8 +1,13 @@
+import type { GenreResponseType } from "./genre-model";
+import type { TheaterResponseType } from "./theater-model";
+
 export type TransactionTicketCreateType = {
-  movieId: number | null;
-  theaterId: number | null;
-  time: string | null;
+  userId: number;
+  theaterId: number;
+  movieId: number;
+  time: string;
   seats: number[];
+  total: number;
 };
 
 // response
@@ -49,8 +54,19 @@ export const toTransactionTicketResponse = (
   };
 };
 
+// type transaction for pagination
+export type TransactionTicketType = {
+  id: string;
+  title: string;
+  url_thumbnail: string;
+  genre: Pick<GenreResponseType, "name">;
+  theater: Pick<TheaterResponseType, "name" | "city">;
+  status: "success" | "pending" | "failed";
+  time: string;
+};
+
 export type TransactionTicketWithPaginationResponseType = {
-  transaction: TransactionTicketResponseType[];
+  transaction: TransactionTicketType[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -58,13 +74,9 @@ export type TransactionTicketWithPaginationResponseType = {
 };
 
 // to response
-export const toTransactionWalletWithPaginationResponse = (transactionTicket: {
-  transaction: TransactionTicketResponseType[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-  pageSize: number;
-}): TransactionTicketWithPaginationResponseType => {
+export const toTransactionTicketWithPaginationResponse = (
+  transactionTicket: TransactionTicketWithPaginationResponseType
+): TransactionTicketWithPaginationResponseType => {
   return {
     transaction: transactionTicket.transaction,
     totalItems: transactionTicket.totalItems,

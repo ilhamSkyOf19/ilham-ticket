@@ -3,6 +3,7 @@ import { ResponseType } from "../types/request-response-type";
 import {
   TransactionTicketCreateType,
   TransactionTicketResponseType,
+  TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
 import { AuthRequest } from "../types/request-auth";
 import { MovieService } from "../services/movie.service";
@@ -148,17 +149,26 @@ export class TransactionTicketController {
   }
 
   // read
-  static async readByUserId(
-    req: AuthRequest,
-    res: Response<ResponseType<TransactionTicketResponseType[] | null>>,
+  static async readAll(
+    req: AuthRequest<{}, {}, {}, { page: string; limit: string }>,
+    res: Response<
+      ResponseType<TransactionTicketWithPaginationResponseType | null>
+    >,
     next: NextFunction
   ) {
     try {
+      // get query
+      const { page, limit } = req.query;
+
       // get id from req data
       const id = req.data?.id ?? 0;
 
       // get data
-      const data = await TransactionTicketService.readByUserId(id);
+      const data = await TransactionTicketService.readAll(
+        id,
+        Number(page) || 1,
+        Number(limit) || 10
+      );
 
       // return
       return res.status(200).json({

@@ -1,9 +1,12 @@
 import { prisma } from "../lib/prisma";
 import {
   toTransactionTicketResponse,
+  toTransactionTicketWithPaginationResponse,
   TransactionTicketCreateType,
   TransactionTicketResponseType,
+  TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
+import { toTransactionWalletWithPaginationResponse } from "../models/transactionWallet-model";
 
 export class TransactionTicketService {
   // payment
@@ -122,45 +125,83 @@ export class TransactionTicketService {
     });
   }
 
-  // read by email user id
-  static async readByUserId(
-    userId: number
-  ): Promise<TransactionTicketResponseType[] | null> {
-    // get response
-    const response = await prisma.transactionTicket.findMany({
+  // read for highlight ticket
+  static async readAll(
+    userId: number,
+    page: number,
+    limit: number
+  ): Promise<TransactionTicketWithPaginationResponseType | null> {
+    // total items for calculating total pages
+    const totalItems = await prisma.transactionTicket.count({
       where: {
         userId: userId,
       },
-      include: {
+    });
+
+    // get response
+    const response = await prisma.transactionTicket.findMany({
+      where: {
+        userId,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        status: true,
+        seats: true,
+        time: true,
+
         movie: {
           select: {
             id: true,
+            title: true,
+            url_thumbnail: true,
+            genre: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
+
         theater: {
           select: {
             id: true,
+            name: true,
+            city: true,
           },
         },
+
         user: {
           select: {
             id: true,
+            name: true,
           },
         },
       },
     });
 
     // return response
-    return response.map((item) => {
-      return toTransactionTicketResponse({
-        ...item,
-        id: item.id.toString(),
-        seats: JSON.parse(item.seats),
-        time: item.time,
-        movieId: item.movie.id,
-        theaterId: item.theater.id,
-        userId: item.user.id,
-      });
+    return toTransactionTicketWithPaginationResponse({
+      transaction: response.map((transaction) => {
+        return {
+          id: transaction.id.toString(),
+          title: transaction.movie.title,
+          url_thumbnail: transaction.movie.url_thumbnail,
+          status: transaction.status,
+          genre: transaction.movie.genre,
+          theater: transaction.theater,
+          seats: JSON.parse(transaction.seats),
+          time: transaction.time,
+        };
+      }),
+      totalItems: totalItems,
+      totalPages: Math.ceil(totalItems / limit),
+      currentPage: page,
+      pageSize: limit,
     });
   }
 }
