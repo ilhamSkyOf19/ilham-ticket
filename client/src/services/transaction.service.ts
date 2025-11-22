@@ -1,6 +1,7 @@
 import api from "../lib/axios";
 import type {
   TransactionTicketCreateType,
+  TransactionTicketDetailType,
   TransactionTicketResponseType,
   TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
@@ -66,6 +67,19 @@ export class TransactionService {
           limit,
         },
       })
+      .then((res) => res.data);
+
+    //  return response data
+    return response;
+  }
+
+  // read detail
+  static async readDetail(
+    id: number
+  ): Promise<ResponseType<TransactionTicketDetailType | null>> {
+    // call api
+    const response = await api
+      .get(`/transaction-ticket/read-detail/${id}`)
       .then((res) => res.data);
 
     //  return response data

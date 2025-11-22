@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ResponseType } from "../types/request-response-type";
 import {
   TransactionTicketCreateType,
+  TransactionTicketDetailType,
   TransactionTicketResponseType,
   TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
@@ -133,7 +134,7 @@ export class TransactionTicketController {
         bookingFee,
         discount,
         ppn,
-        url: data.redirect_url,
+        token: data.token,
         subTotal: total,
       });
       // return
@@ -175,6 +176,33 @@ export class TransactionTicketController {
         status: "success",
         message: "berhasil membaca transaction ticket",
         data: data,
+      });
+    } catch (error) {
+      // next error
+      next(error);
+    }
+  }
+
+  // read detail transaction
+  static async readDetail(
+    req: AuthRequest<{ id: string }>,
+    res: Response<ResponseType<TransactionTicketDetailType | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get user id from req data
+      const userId = req.data?.id ?? 0;
+      // get params
+      const id = req.params.id;
+
+      // get service
+      const response = await TransactionTicketService.readDetail(+id, userId);
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca transaction ticket",
+        data: response,
       });
     } catch (error) {
       // next error

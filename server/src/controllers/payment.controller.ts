@@ -38,6 +38,9 @@ export const createPayment = async (
       customer_details: {
         email: email,
       },
+      metadata: {
+        seats: [],
+      },
       custom_field1: userId,
       custom_field2: type,
       custom_field3: transactionWallet?.id,

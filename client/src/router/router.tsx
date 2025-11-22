@@ -37,6 +37,7 @@ import AdminListGenrePage from "../pages/AdminListGenrePage";
 import AdminGenreAddPage from "../pages/AdminGenreAddPage";
 import { useReadWalletByEmail } from "../hooks/useWallet";
 import PaymentFailPage from "../pages/PaymentFailPage";
+import { useReadDetailTransactionTicket } from "../hooks/useTransaction";
 
 // router
 const router = createBrowserRouter([
@@ -130,7 +131,15 @@ const router = createBrowserRouter([
         element: <ChooseSeats />,
       },
       {
-        path: "/tickets-payment",
+        path: "/tickets-payment/:id",
+        loader: async ({ params }) => {
+          const [transaction, wallet] = await Promise.all([
+            useReadDetailTransactionTicket(Number(params.id)),
+            useReadWalletByEmail(),
+          ]);
+
+          return { transaction, wallet };
+        },
         element: <TicketsPaymentPage />,
       },
 

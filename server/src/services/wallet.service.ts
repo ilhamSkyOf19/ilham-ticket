@@ -122,4 +122,33 @@ export class WalletService {
       });
     });
   }
+
+  // update balance by email
+  static async balanceMinus(
+    email: string,
+    balance: number
+  ): Promise<{ balance: number } | null> {
+    // get wallet by email
+    const wallet = await prisma.wallet.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!wallet) return null;
+
+    // update
+    balance = wallet.balance - balance;
+
+    const response = await prisma.wallet.update({
+      where: {
+        email,
+      },
+      data: {
+        balance,
+      },
+    });
+
+    return response;
+  }
 }

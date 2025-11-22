@@ -11,5 +11,10 @@ transactionTicketRoute.use(AuthMiddleware("customer"));
 // read by id
 transactionTicketRoute.get("/read-by-id", TransactionTicketController.readAll);
 
+// read detail
+transactionTicketRoute.get(
+  "/read-detail/:id",
+  TransactionTicketController.readDetail
+);
 // export
 export default transactionTicketRoute;

@@ -53,7 +53,10 @@ export const paymentCallback = async (
     const idTransaction = Number(data.custom_field3);
 
     // custom seats
-    const seats: number[] = data.metadata.seats ?? [];
+    const seats: number[] = data?.metadata?.seats ?? [];
+
+    // email from customer_details
+    const email = data?.customer_details?.email;
 
     switch (transaction_status) {
       case "capture":
@@ -75,6 +78,12 @@ export const paymentCallback = async (
               ...(booked?.seatsBooked ?? []),
               ...seats,
             ]);
+
+            // update balance
+            await WalletService.balanceMinus(
+              email,
+              Number(data.gross_amount ?? 0)
+            );
 
             // update transaction ticket
             await TransactionTicketService.update(idTransaction, "success");
@@ -99,6 +108,12 @@ export const paymentCallback = async (
             ...(booked?.seatsBooked ?? []),
             ...seats,
           ]);
+
+          // update balance
+          await WalletService.balanceMinus(
+            email,
+            Number(data.gross_amount ?? 0)
+          );
 
           // update transaction ticket
           await TransactionTicketService.update(idTransaction, "success");

@@ -17,11 +17,11 @@ export const useTransactionWallet = async (total: number) => {
   }
 };
 
-// read transaction wallet by user
-export const useReadTransactionWalletByUser = async () => {
+// read transaction ticket by id
+export const useReadDetailTransactionTicket = async (id: number) => {
   try {
-    // call service
-    const response = await TransactionService.readTransactionWalletByUser();
+    // call response
+    const response = await TransactionService.readDetail(id);
 
     // cek response
     if (!response) return;
@@ -29,7 +29,6 @@ export const useReadTransactionWalletByUser = async () => {
     // return response
     return response;
   } catch (error) {
-    // cek error
     console.log(error);
   }
 };

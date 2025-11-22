@@ -216,7 +216,7 @@ model TransactionWallet {
 // transaction ticket 
 model TransactionTicket {
   id BigInt @unique @default(autoincrement())
-  url String
+  token String
   movieId Int
   userId Int
   theaterId Int

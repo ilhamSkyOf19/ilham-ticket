@@ -18,6 +18,7 @@ import paymentRoute from "./routes/payment.route";
 import transactionWalletRoute from "./routes/transactionWallet.route";
 import bookedRoute from "./routes/booked.route";
 import transactionTicketRoute from "./routes/transactionTicket.route";
+import historyTransactionRoute from "./routes/historyTransaction.route";
 
 // initialize express
 const app = express();
@@ -80,6 +81,9 @@ app.use("/api/transaction-ticket", transactionTicketRoute);
 
 // booked
 app.use("/api/booked", bookedRoute);
+
+// read history
+app.use("/api/history-transaction", historyTransactionRoute);
 
 // next handler error
 app.use(errorHandler);

@@ -36,7 +36,10 @@ const Saldo: FC<Props> = ({ saldo, name, expired, branch }) => {
       {/* footer saldo */}
       <div className="flex-1 w-full bg-white/20 backdrop-blur-3xl flex flex-row justify-between items-start z-10 px-6">
         {/* name */}
-        <KetSaldo label="name" value={name.slice(0, 7).concat("...")} />
+        <KetSaldo
+          label="name"
+          value={name.length > 7 ? name.slice(0, 7).concat("...") : name}
+        />
 
         {/* expired */}
         <KetSaldo label="expired at" value={formatDateSlash(expired)} />

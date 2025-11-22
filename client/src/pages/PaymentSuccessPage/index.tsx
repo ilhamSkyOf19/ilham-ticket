@@ -20,10 +20,8 @@ const PaymentSuccessPage: FC = () => {
       buttonSecond={
         params.type === "ticket" ? "View My Tickets" : "Topup Again"
       }
-      linkButtonFirst={params.type === "ticket" ? "/ticket" : "/wallet"}
-      linkButtonSecond={
-        params.type === "ticket" ? "/my-ticket" : "/topup-wallet"
-      }
+      linkButtonFirst={params.type === "ticket" ? "/" : "/wallet"}
+      linkButtonSecond={params.type === "ticket" ? "/ticket" : "/topup-wallet"}
     />
   );
 };

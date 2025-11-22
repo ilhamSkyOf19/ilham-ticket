@@ -9,10 +9,10 @@ import ButtonTopup from "../../components/ButtonTopup";
 import { useLoaderData } from "react-router-dom";
 import type { ResponseType } from "../../types/types";
 import type { WalletResponseType } from "../../models/wallet-model";
-import type { TransactionWalletResponseType } from "../../models/transactionWallet-model";
 import { useQuery } from "@tanstack/react-query";
-import { TransactionService } from "../../services/transaction.service";
 import Pagination from "../../components/Pagination";
+import { HistoryTransactionService } from "../../services/historyTransaction.service";
+import type { HistoryType } from "../../models/historyTransaction-model";
 
 const EWalletPage: FC = () => {
   // loader
@@ -48,8 +48,7 @@ const HistoryTransaction: FC = () => {
   // get transaction wallet by user
   const { isLoading, data: transactionWallet } = useQuery({
     queryKey: ["transaction-wallet-by-user", activePage, 15],
-    queryFn: () =>
-      TransactionService.readTransactionWalletByUser(activePage, 15),
+    queryFn: () => HistoryTransactionService.readAll(activePage, 15),
   });
 
   // start pagination
@@ -103,12 +102,15 @@ const HistoryTransaction: FC = () => {
         ) : transactionWallet?.status === "success" &&
           transactionWallet?.data ? (
           transactionWallet.data?.transaction.map(
-            (item: TransactionWalletResponseType, index: number) => (
+            (item: HistoryType, index: number) => (
               <CardHistoryTransaction
                 key={index}
+                thumbnail={item.url_thumbnail}
                 plus={item.type === "plus"}
                 nominal={item.total}
-                name={"top up wallet"}
+                name={
+                  item.type === "min" ? (item.name as string) : "top up wallet"
+                }
                 status={item.status}
                 date={item.createdAt.toString()}
               />

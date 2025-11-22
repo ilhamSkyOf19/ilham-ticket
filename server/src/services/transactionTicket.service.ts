@@ -1,8 +1,10 @@
 import { prisma } from "../lib/prisma";
 import {
+  toTransactionTicketDetailResponse,
   toTransactionTicketResponse,
   toTransactionTicketWithPaginationResponse,
   TransactionTicketCreateType,
+  TransactionTicketDetailType,
   TransactionTicketResponseType,
   TransactionTicketWithPaginationResponseType,
 } from "../models/transactionTicket-model";
@@ -17,7 +19,7 @@ export class TransactionTicketService {
       bookingFee: number;
       discount: number;
       subTotal: number;
-      url: string;
+      token: string;
     }
   ): Promise<TransactionTicketResponseType | null> {
     // get response
@@ -48,7 +50,7 @@ export class TransactionTicketService {
         bookingFee: req.bookingFee,
         discount: req.discount,
         subTotal: req.subTotal,
-        url: req.url,
+        token: req.token,
       },
       include: {
         movie: {
@@ -202,6 +204,79 @@ export class TransactionTicketService {
       totalPages: Math.ceil(totalItems / limit),
       currentPage: page,
       pageSize: limit,
+    });
+  }
+
+  // read detail transaction by id transaction
+  static async readDetail(
+    id: number,
+    userId: number
+  ): Promise<TransactionTicketDetailType | null> {
+    // get response
+    const response = await prisma.transactionTicket.findFirstOrThrow({
+      where: { id, userId },
+      include: {
+        movie: {
+          select: {
+            id: true,
+            title: true,
+            url_thumbnail: true,
+            price: true,
+            genre: {
+              select: {
+                name: true,
+              },
+            },
+            movieBonus: {
+              select: {
+                bonus: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        theater: {
+          select: {
+            name: true,
+            city: true,
+          },
+        },
+      },
+    });
+
+    // return response
+    return toTransactionTicketDetailResponse({
+      id: response.id.toString(),
+      transaction: {
+        time: response.time,
+        status: response.status,
+        seats: JSON.parse(response.seats),
+        bookingFee: response.bookingFee,
+        discount: response.discount,
+        ppn: response.ppn,
+        subTotal: response.subTotal,
+        total: response.total,
+        type: response.type,
+        token: response.token,
+        createdAt: response.createdAt,
+        updatedAt: response.updatedAt,
+      },
+      movie: {
+        title: response.movie.title,
+        price: response.movie.price,
+        bonus: response.movie.movieBonus.map((b) => b.bonus.name),
+        theater: {
+          name: response.theater.name,
+          city: response.theater.city,
+        },
+        genre: {
+          name: response.movie.genre.name,
+        },
+        url_thumbnail: response.movie.url_thumbnail,
+      },
     });
   }
 }

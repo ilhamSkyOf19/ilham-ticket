@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import HeaderBack from "../../components/HeaderBack";
 import Saldo from "../../components/Saldo";
 import { formatIDR } from "../../helpers/formated";
@@ -34,20 +34,6 @@ const TopUpPage: FC = () => {
       setTotalTopup([...totalTopup, amount]);
     }
   };
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-    script.setAttribute(
-      "data-client-key",
-      import.meta.env.VITE_MIDTRANS_CLIENT_KEY
-    );
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   // handle continue
   const handleContinue = async () => {

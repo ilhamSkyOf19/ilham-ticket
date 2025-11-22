@@ -15,7 +15,7 @@ export type TransactionTicketCreateType = {
 // response
 export type TransactionTicketResponseType = {
   id: string;
-  url: string;
+  token: string;
   userId: number;
   theaterId: number;
   movieId: number;
@@ -41,7 +41,7 @@ export const toTransactionTicketResponse = (
 ): TransactionTicketResponseType => {
   return {
     id: transactionTicket.id,
-    url: transactionTicket.url,
+    token: transactionTicket.token,
     type: transactionTicket.type,
     userId: transactionTicket.userId,
     theaterId: transactionTicket.theaterId,
@@ -59,16 +59,19 @@ export const toTransactionTicketResponse = (
   };
 };
 
+// transaction type for movie
+export type TransactionTicketType = {
+  id: string;
+  title: string;
+  url_thumbnail: string;
+  genre: Pick<GenreResponseType, "name">;
+  theater: Pick<TheaterResponseType, "name" | "city">;
+  status: "success" | "pending" | "failed";
+  time: string;
+};
+
 export type TransactionTicketWithPaginationResponseType = {
-  transaction: {
-    id: string;
-    title: string;
-    url_thumbnail: string;
-    genre: Pick<GenreResponseType, "name">;
-    theater: Pick<TheaterResponseType, "name" | "city">;
-    status: "success" | "pending" | "failed";
-    time: string;
-  }[];
+  transaction: TransactionTicketType[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -85,5 +88,29 @@ export const toTransactionTicketWithPaginationResponse = (
     totalPages: transactionTicket.totalPages,
     currentPage: transactionTicket.currentPage,
     pageSize: transactionTicket.pageSize,
+  };
+};
+
+// type ticket detail
+export type TransactionTicketDetailType = {
+  id: string;
+  movie: Omit<TransactionTicketType, "id" | "status" | "time"> & {
+    bonus: string[];
+    price: number;
+  };
+  transaction: Omit<
+    TransactionTicketResponseType,
+    "movieId" | "theaterId" | "userId" | "id"
+  >;
+};
+
+// to response for type ticket detail
+export const toTransactionTicketDetailResponse = (
+  transactionTicket: TransactionTicketDetailType
+): TransactionTicketDetailType => {
+  return {
+    id: transactionTicket.id,
+    movie: transactionTicket.movie,
+    transaction: transactionTicket.transaction,
   };
 };

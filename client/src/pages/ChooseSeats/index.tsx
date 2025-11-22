@@ -31,7 +31,7 @@ const ChooseSeats: FC = () => {
     onSuccess: (data) => {
       console.log(data);
       // navigate
-      navigate(`/tickets-payment`);
+      navigate(`/tickets-payment/${data?.data?.id}`);
     },
   });
 
