@@ -13,14 +13,10 @@ const reviewRoute: Router = Router();
 reviewRoute.get("/read-where-movie/:movieId", ReviewController.readWhereMovie);
 
 // auth middleware
-reviewRoute.use(AuthMiddleware("admin"));
+reviewRoute.use(AuthMiddleware("customer"));
 
 // create review
-reviewRoute.post(
-  "/create",
-  FileService.upload("theaters", "img"),
-  ReviewController.create
-);
+reviewRoute.post("/create", ReviewController.create);
 
 // delete
 reviewRoute.delete("/delete/:id", ReviewController.delete);

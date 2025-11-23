@@ -13,9 +13,9 @@ export class WalletController {
   ) {
     try {
       // get email from req data
-      const id = req.data?.id ?? 0;
+      const email = req.data?.email ?? "";
       // get service
-      const response = await WalletService.readById(id);
+      const response = await WalletService.readByEmail(email);
 
       // return
       return res.status(200).json({

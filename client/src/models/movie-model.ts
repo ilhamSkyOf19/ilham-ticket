@@ -1,6 +1,6 @@
-import type { ReviewsType } from "../types/types";
 import type { BonusResponseType } from "./bonus-model";
 import type { GenreResponseType } from "./genre-model";
+import type { ReviewResponseType } from "./review-model";
 import type { TheaterResponseType } from "./theater-model";
 
 //  create
@@ -33,7 +33,7 @@ export type MovieResponseType = {
   genres: GenreResponseType;
   thumbnail: string;
   url_thumbnail: string;
-  reviews: ReviewsType[];
+  reviews: ReviewResponseType[];
   theaters: TheaterResponseType[];
   bonus: BonusResponseType[];
   price: number;

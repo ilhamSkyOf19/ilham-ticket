@@ -4,12 +4,12 @@ import CardTicket from "../../components/CardTicket";
 
 // thumbnail
 import dumyThumb from "../../assets/images/thumbnails/th3.png";
-import ButtonBack from "../../components/ButtonBack";
 import TicketsDetail from "../../components/TicketsDetail";
 import type { ResponseType } from "../../types/types";
 import type { TransactionTicketDetailType } from "../../models/transactionTicket-model";
 import ButtonPayment from "../../components/ButtonPayment";
 import ModalErrorUp from "../../components/ModalErrorUp";
+import HeaderBack from "../../components/HeaderBack";
 
 const TicketDetailPage: FC = () => {
   // state message
@@ -22,10 +22,6 @@ const TicketDetailPage: FC = () => {
   const transaction =
     useLoaderData() as ResponseType<TransactionTicketDetailType | null>;
 
-  // cek transaction
-  //   useEffect(() => {
-  //     console.log(transaction);
-  //   }, [transaction]);
   // navigate
   const navigate = useNavigate();
 
@@ -66,15 +62,7 @@ const TicketDetailPage: FC = () => {
     <div className="w-full min-h-screen bg-blue-dark flex flex-col justify-start items-center pt-14 gap-8 pb-32">
       <div className="w-full flex flex-col justify-start items-center relative gap-8 px-4">
         {/* header */}
-        <div className="w-full h-12 relative flex flex-row justify-center items-center">
-          {/* nav back */}
-          <ButtonBack handleBack={() => navigate(-1)} />
-
-          {/* title */}
-          <h2 className="text-white text-base capitalize font-semibold">
-            Ticket Details
-          </h2>
-        </div>
+        <HeaderBack label="Ticket Details" />
 
         {/* thumbnail */}
         <CardTicket
@@ -103,10 +91,13 @@ const TicketDetailPage: FC = () => {
       {transaction?.data?.transaction?.status === "success" ? (
         <button
           type="button"
+          onClick={() =>
+            navigate(`/review/${transaction?.data?.movie.movieId}`)
+          }
           className="w-[90%] bg-white rounded-full fixed bottom-8 py-3"
         >
           <p className="text-black text-center font-bold text-base">
-            Give Rating
+            Give Review
           </p>
         </button>
       ) : transaction?.data?.transaction?.status === "pending" ? (

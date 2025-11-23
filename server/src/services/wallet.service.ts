@@ -42,11 +42,11 @@ export class WalletService {
   }
 
   // read by email
-  static async readById(id: number): Promise<WalletResponseType | null> {
+  static async readByEmail(email: string): Promise<WalletResponseType | null> {
     // get response
     const response = await prisma.wallet.findFirstOrThrow({
       where: {
-        id,
+        email,
       },
       include: {
         user: {
@@ -56,6 +56,8 @@ export class WalletService {
         },
       },
     });
+
+    // expired
     const expiredValue = expiredBalance(response.balance, response.updatedAt);
 
     // return

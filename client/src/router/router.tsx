@@ -38,6 +38,7 @@ import AdminGenreAddPage from "../pages/AdminGenreAddPage";
 import { useReadWalletByEmail } from "../hooks/useWallet";
 import PaymentFailPage from "../pages/PaymentFailPage";
 import { useReadDetailTransactionTicket } from "../hooks/useTransaction";
+import ReviewMoviePage from "../pages/ReviewMoviePage";
 
 // router
 const router = createBrowserRouter([
@@ -157,15 +158,24 @@ const router = createBrowserRouter([
         path: "/midtrans-payment",
         element: <MidtransPaymentPage />,
       },
+
+      // review movie
+      {
+        path: "/review/:id",
+        loader: async ({ params }) => {
+          return await useReadMovieDetail(Number(params.id));
+        },
+        element: <ReviewMoviePage />,
+      },
     ],
   },
 
   // dashboard
   {
     path: "/dashboard",
-    // loader: async () => {
-    //   return await CheckAuth.useCheckAuth("admin");
-    // },
+    loader: async () => {
+      return await CheckAuth.useCheckAuth("admin");
+    },
     element: <DashboardLayout />,
     children: [
       {

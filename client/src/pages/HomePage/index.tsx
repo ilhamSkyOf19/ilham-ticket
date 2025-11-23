@@ -8,7 +8,6 @@ import clsx from "clsx";
 import CardHighlightMovie from "../../components/CardHighlightMovie";
 
 // profile dumy
-import dumy from "../../assets/images/photos/dumy.png";
 import iconNotification from "../../assets/images/icons/notification-bell.svg";
 import CardMovie from "../../components/CardMovie";
 import CardComingSoon from "../../components/CardComingSoon";
@@ -17,6 +16,7 @@ import type { SignResponseType } from "../../models/auth-model";
 import type { MovieHighlightResponseType } from "../../models/movie-model";
 import { useLoaderData } from "react-router-dom";
 import type { GenreResponseType } from "../../models/genre-model";
+import { FaUserLarge } from "react-icons/fa6";
 
 // type for loader data
 type LoaderType = {
@@ -47,7 +47,7 @@ const HomePage: FC = () => {
     <div className="w-full flex flex-col justify-start items-start gap-6">
       {/* header */}
       <HeaderComponent
-        url_avatar={user?.data?.url_avatar || dumy}
+        url_avatar={user?.data?.url_avatar}
         name={user?.data?.name || ""}
         role={user?.data?.role || ""}
       />
@@ -144,7 +144,7 @@ const HomePage: FC = () => {
 type PropsHeaderComponent = {
   name: string;
   role: string;
-  url_avatar: string;
+  url_avatar?: string;
 };
 const HeaderComponent: FC<PropsHeaderComponent> = ({
   name,
@@ -157,11 +157,17 @@ const HeaderComponent: FC<PropsHeaderComponent> = ({
       <div className="flex-3/4 flex flex-row justify-start items-center gap-4">
         {/* img */}
         <div className="w-15 h-15 rounded-full  overflow-hidden">
-          <img
-            src={url_avatar}
-            alt="profile"
-            className="w-full h-full object-cover"
-          />
+          {url_avatar ? (
+            <img
+              src={url_avatar}
+              alt="profile"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden flex flex-row justify-center items-center">
+              <FaUserLarge className="w-10 h-10 text-gray-400" />
+            </div>
+          )}
         </div>
 
         {/* label */}
