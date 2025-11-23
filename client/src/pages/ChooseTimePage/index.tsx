@@ -79,7 +79,10 @@ const ChooseTimePage: FC = () => {
       {/* thumbnail movie */}
       <div className="w-full px-4 flex flex-row justify-center items-start">
         {data?.data ? (
-          <CardMovie movie={data?.data?.movie as MovieHighlightResponseType} />
+          <CardMovie
+            disable={true}
+            movie={data?.data?.movie as MovieHighlightResponseType}
+          />
         ) : null}
       </div>
 

@@ -113,6 +113,9 @@ const router = createBrowserRouter([
       // ticket detail
       {
         path: "/ticket/:id",
+        loader: async ({ params }) => {
+          return await useReadDetailTransactionTicket(Number(params.id));
+        },
         element: <TicketDetailPage />,
       },
       {

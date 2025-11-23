@@ -1,4 +1,4 @@
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import HeaderPage from "../../components/HeaderPage";
 import CardTicket from "../../components/CardTicket";
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +20,11 @@ const TicketPage: FC = () => {
     queryFn: () =>
       TransactionService.readTransactionTicketByUser(activePage, 15),
   });
+
+  //cek ticket
+  useEffect(() => {
+    console.log(ticket);
+  }, [ticket]);
 
   // handle page
   const handlePage = (page: number) => {

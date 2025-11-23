@@ -21,9 +21,7 @@ const PaymentFailPage: FC = () => {
         params.type === "ticket" ? "View My Tickets" : "Topup Again"
       }
       linkButtonFirst={params.type === "ticket" ? "/ticket" : "/wallet"}
-      linkButtonSecond={
-        params.type === "ticket" ? "/my-ticket" : "/topup-wallet"
-      }
+      linkButtonSecond={params.type === "ticket" ? "/ticket" : "/topup-wallet"}
     />
   );
 };

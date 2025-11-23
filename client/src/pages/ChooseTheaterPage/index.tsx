@@ -63,6 +63,7 @@ const ChooseTheaterPage: FC = () => {
         {theaters.status === "success" && theaters.data ? (
           <CardMovie
             movie={theaters?.data.movie as MovieHighlightResponseType}
+            disable={true}
           />
         ) : null}
       </div>

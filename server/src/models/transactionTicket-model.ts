@@ -95,6 +95,7 @@ export const toTransactionTicketWithPaginationResponse = (
 export type TransactionTicketDetailType = {
   id: string;
   movie: Omit<TransactionTicketType, "id" | "status" | "time"> & {
+    movieId: number;
     bonus: string[];
     price: number;
   };

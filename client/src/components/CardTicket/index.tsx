@@ -20,7 +20,7 @@ type Props = {
 const CardTicket: FC<Props> = ({ movie, detail }) => {
   return (
     <Link
-      to={`/ticket/${movie.id}`}
+      to={detail ? "" : `/ticket/${movie.id}`}
       className={clsx(
         "w-full flex flex-row justify-start gap-3",
         detail ? "items-center" : "items-start"
@@ -52,15 +52,11 @@ const CardTicket: FC<Props> = ({ movie, detail }) => {
           <ComponentInfo icon={locationIcon} label={movie.theater.city} />
         </div>
 
-        {!detail && (
-          <>
-            {/* date */}
-            <ComponentInfo icon={iconCalendar} label={movie.time} />
+        {/* date */}
+        <ComponentInfo icon={iconCalendar} label={movie.time} />
 
-            {/* status */}
-            <Status status={movie.status} />
-          </>
-        )}
+        {/* status */}
+        <Status status={movie.status} />
       </div>
     </Link>
   );

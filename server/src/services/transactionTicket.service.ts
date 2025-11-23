@@ -265,6 +265,7 @@ export class TransactionTicketService {
         updatedAt: response.updatedAt,
       },
       movie: {
+        movieId: response.movie.id,
         title: response.movie.title,
         price: response.movie.price,
         bonus: response.movie.movieBonus.map((b) => b.bonus.name),
