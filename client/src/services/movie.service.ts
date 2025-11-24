@@ -103,4 +103,17 @@ export class MovieService {
     // return response data
     return response;
   }
+
+  // read genre
+  static async readByGenre(
+    genreId: number
+  ): Promise<ResponseType<MovieHighlightResponseType[] | null>> {
+    // call api
+    const response = await api
+      .get(`/movie/read-by-genre/${genreId}`)
+      .then((res) => res.data);
+
+    // return response data
+    return response;
+  }
 }

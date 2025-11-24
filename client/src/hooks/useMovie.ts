@@ -75,3 +75,19 @@ export const useReadMovieByMovieIdAndTheaterId = async (
     console.log(error);
   }
 };
+
+// read movie by genre
+export const useReadMovieByGenre = async (genreId: number) => {
+  try {
+    // call service
+    const response = await MovieService.readByGenre(genreId);
+
+    // cek response
+    if (!response) return;
+
+    // return
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

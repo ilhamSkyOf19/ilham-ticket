@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useState, type FC } from "react";
 import SearchBox from "../../components/SearchBox";
 import { useForm } from "react-hook-form";
 import { SearchValidation } from "../../validations/search-validation";
@@ -17,6 +17,10 @@ import type { MovieHighlightResponseType } from "../../models/movie-model";
 import { useLoaderData } from "react-router-dom";
 import type { GenreResponseType } from "../../models/genre-model";
 import { FaUserLarge } from "react-icons/fa6";
+import { useQuery } from "@tanstack/react-query";
+import { MovieService } from "../../services/movie.service";
+import EmptyMessage from "../EmptyMessage";
+import iconLoading from "../../assets/animation/loading-small.svg";
 
 // type for loader data
 type LoaderType = {
@@ -26,16 +30,27 @@ type LoaderType = {
 };
 
 const HomePage: FC = () => {
+  // state genre
+  const [chooseGenre, setChooseGenre] = useState<number>(0);
   // loader
   const { user, movies, genres } = useLoaderData() as LoaderType;
 
   // use hook form
-  const { register, watch, setValue } = useForm<SearchModel>({
+  const { register } = useForm<SearchModel>({
     values: {
       keyword: "",
       genre: "All",
     },
     resolver: zodResolver(SearchValidation.SEARCH),
+  });
+
+  // use query
+  const { data: moviesByGenre, isPending } = useQuery({
+    queryKey: ["moviesByGenre", chooseGenre],
+    queryFn: () =>
+      chooseGenre === 0
+        ? MovieService.readHighlight()
+        : MovieService.readByGenre(chooseGenre),
   });
 
   // cek keyword
@@ -85,10 +100,10 @@ const HomePage: FC = () => {
           <div className="w-1 shrink-0 snap-start" />
           {genres?.data?.map((genre: GenreResponseType, index: number) => (
             <GenreComponent
-              active={genre.name === watch("genre")}
+              active={genre.id === chooseGenre}
               key={index}
               label={genre.name}
-              handleClick={() => setValue("genre", genre.name as string)}
+              handleClick={() => setChooseGenre(genre.id)}
             />
           ))}
           <div className="w-1 shrink-0 snap-start" />
@@ -104,10 +119,18 @@ const HomePage: FC = () => {
 
         {/* content card */}
         <div className="w-full flex flex-col justify-start items-start gap-5">
-          {movies?.data?.map(
-            (movie: MovieHighlightResponseType, index: number) => (
-              <CardMovie key={index} movie={movie} />
+          {isPending ? (
+            <div className="w-full flex flex-row justify-center items-center">
+              <img src={iconLoading} alt="loading" className="w-10 h-10" />
+            </div>
+          ) : moviesByGenre?.data && moviesByGenre?.data?.length > 0 ? (
+            movies?.data?.map(
+              (movie: MovieHighlightResponseType, index: number) => (
+                <CardMovie key={index} movie={movie} />
+              )
             )
+          ) : (
+            <EmptyMessage message="Movie not found" />
           )}
         </div>
       </div>
