@@ -116,4 +116,23 @@ export class MovieService {
     // return response data
     return response;
   }
+
+  // search by movie name
+  static async searchByTitle(
+    title?: string,
+    genre?: number
+  ): Promise<ResponseType<MovieHighlightResponseType[] | null>> {
+    // call api
+    const response = await api
+      .get(`/movie/search-by-title`, {
+        params: {
+          title,
+          genre,
+        },
+      })
+      .then((res) => res.data);
+
+    // return response data
+    return response;
+  }
 }

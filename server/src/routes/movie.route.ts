@@ -18,6 +18,9 @@ movieRoute.get("/read-detail/:id", MovieController.readDetail);
 // read movie highlight
 movieRoute.get("/read-highlight", MovieController.readHighlight);
 
+// search by movie title
+movieRoute.get("/search-by-title", MovieController.searchByTitle);
+
 // read movie with genre
 movieRoute.get("/read-by-genre/:genreId", MovieController.readByGenre);
 

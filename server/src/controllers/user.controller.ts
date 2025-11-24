@@ -131,11 +131,6 @@ export class UserController {
         url_avatar,
       });
 
-      // delete file form path
-      if (user.avatar) {
-        await FileService.deleteFIleFormPath("avatars", user.avatar);
-      }
-
       // return
       return res.status(200).json({
         status: "success",

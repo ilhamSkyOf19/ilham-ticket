@@ -844,4 +844,53 @@ export class MovieService {
       })
     );
   }
+
+  // search movie by title
+  static async searchByTitleAndGenre(
+    title?: string,
+    genre?: number
+  ): Promise<MovieHighlightResponseType[] | null> {
+    // call
+    const response = await prisma.movie.findMany({
+      where: {
+        AND: [
+          title
+            ? {
+                title: {
+                  contains: title,
+                },
+              }
+            : {},
+          genre && genre !== 0
+            ? {
+                genreId: {
+                  equals: genre,
+                },
+              }
+            : {},
+        ],
+      },
+      take: 5,
+      select: {
+        id: true,
+        title: true,
+        thumbnail: true,
+        url_thumbnail: true,
+        genre: { select: { name: true } },
+        movieTheaters: {
+          select: { theater: { select: { city: true } } },
+        },
+        rating: true,
+      },
+    });
+
+    // return
+    return response.map((movie) =>
+      toMovieHighlightResponse({
+        ...movie,
+        city: movie.movieTheaters[0].theater.city,
+        genre: movie.genre.name,
+      })
+    );
+  }
 }

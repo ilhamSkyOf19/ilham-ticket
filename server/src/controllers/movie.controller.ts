@@ -13,7 +13,6 @@ import { generateUrl } from "../helpers/helper";
 import { MovieService } from "../services/movie.service";
 import { ResponseType } from "../types/request-response-type";
 import { BookedResponseType } from "../models/booked-model";
-import { TheaterWithMovieResponseType } from "../models/theater-model";
 
 export class MovieController {
   // create
@@ -379,6 +378,46 @@ export class MovieController {
 
       // call service
       const response = await MovieService.readByGenre(+genreId);
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca movie",
+        data: response,
+      });
+    } catch (error) {
+      // next error
+      next(error);
+    }
+  }
+
+  // search movie by name
+  static async searchByTitle(
+    req: Request<{}, {}, { title?: string; genre?: string }>,
+    res: Response<ResponseType<MovieHighlightResponseType[] | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get params
+      const { title, genre } = req.query as { title?: string; genre?: string };
+
+      // cek title & genre
+      if (
+        (title === undefined || title === "") &&
+        (genre === undefined || genre === "0" || genre === "")
+      ) {
+        return res.status(400).json({
+          status: "failed",
+          message: "title & genre harus diisi",
+          data: null,
+        });
+      }
+
+      // call service
+      const response = await MovieService.searchByTitleAndGenre(
+        title,
+        Number(genre)
+      );
 
       // return
       return res.status(200).json({

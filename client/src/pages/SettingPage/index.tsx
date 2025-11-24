@@ -116,6 +116,9 @@ const SettingPage: FC = () => {
     // set preview
     setPreview(null);
 
+    // set active action
+    setActiveAction(false);
+
     // set value
     setValue("avatar", new File([], ""));
   };
@@ -185,7 +188,7 @@ const SettingPage: FC = () => {
           </button>
           {/* img profile */}
           <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden flex flex-row justify-center items-center">
-            {user?.data?.url_avatar === "" ? (
+            {user?.data?.url_avatar === "" && !preview ? (
               <FaUserLarge className="w-20 h-20 text-gray-400" />
             ) : (
               <img

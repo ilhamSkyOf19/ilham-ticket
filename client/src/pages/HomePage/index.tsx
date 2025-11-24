@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MovieService } from "../../services/movie.service";
 import EmptyMessage from "../EmptyMessage";
 import iconLoading from "../../assets/animation/loading-small.svg";
+import { useDebounce } from "../../hooks/useDebouncedValue";
 
 // type for loader data
 type LoaderType = {
@@ -36,21 +37,28 @@ const HomePage: FC = () => {
   const { user, movies, genres } = useLoaderData() as LoaderType;
 
   // use hook form
-  const { register } = useForm<SearchModel>({
-    values: {
-      keyword: "",
-      genre: "All",
-    },
+  const { register, watch } = useForm<SearchModel>({
     resolver: zodResolver(SearchValidation.SEARCH),
   });
 
+  // keyword
+  const keyword = watch("keyword");
+  const debouncedRaw = useDebounce<string>(keyword, 1000);
+
+  // debounced keyword
+  const debouncedKeyword = keyword === "" ? "" : debouncedRaw;
+
   // use query
   const { data: moviesByGenre, isPending } = useQuery({
-    queryKey: ["moviesByGenre", chooseGenre],
-    queryFn: () =>
-      chooseGenre === 0
-        ? MovieService.readHighlight()
-        : MovieService.readByGenre(chooseGenre),
+    queryKey: ["moviesByGenre", chooseGenre, debouncedKeyword],
+    queryFn: () => {
+      if (chooseGenre === 0 && keyword === "") {
+        return MovieService.readHighlight();
+      }
+      // Ini akan dipanggil setelah 800ms user berhenti mengetik
+      return MovieService.searchByTitle(debouncedKeyword || "", chooseGenre);
+    },
+    enabled: debouncedKeyword !== undefined, // optional
   });
 
   // cek keyword
