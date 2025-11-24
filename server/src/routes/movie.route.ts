@@ -18,6 +18,9 @@ movieRoute.get("/read-detail/:id", MovieController.readDetail);
 // read movie highlight
 movieRoute.get("/read-highlight", MovieController.readHighlight);
 
+// read movie with genre
+movieRoute.get("/read-by-genre/:genreId", MovieController.readByGenre);
+
 // read movie with theater
 movieRoute.get(
   "/read-with-theater/:movieId/:theaterId",

@@ -798,4 +798,50 @@ export class MovieService {
       theater: movie.movieTheaters[0].theater,
     });
   }
+
+  // read by genre
+  static async readByGenre(
+    genreId: number
+  ): Promise<MovieHighlightResponseType[] | null> {
+    // call
+    const response = await prisma.movie.findMany({
+      where: {
+        genreId: genreId,
+      },
+      orderBy: {
+        rating: "desc",
+      },
+      take: 5,
+      select: {
+        id: true,
+        title: true,
+        thumbnail: true,
+        url_thumbnail: true,
+        genre: {
+          select: {
+            name: true,
+          },
+        },
+        movieTheaters: {
+          select: {
+            theater: {
+              select: {
+                city: true,
+              },
+            },
+          },
+        },
+        rating: true,
+      },
+    });
+
+    // return
+    return response.map((movie) =>
+      toMovieHighlightResponse({
+        ...movie,
+        city: movie.movieTheaters[0].theater.city,
+        genre: movie.genre.name,
+      })
+    );
+  }
 }

@@ -366,4 +366,29 @@ export class MovieController {
       next(error);
     }
   }
+
+  // read by genre id
+  static async readByGenre(
+    req: Request<{ genreId: string }>,
+    res: Response<ResponseType<MovieHighlightResponseType[] | null>>,
+    next: NextFunction
+  ) {
+    try {
+      // get params
+      const { genreId } = req.params;
+
+      // call service
+      const response = await MovieService.readByGenre(+genreId);
+
+      // return
+      return res.status(200).json({
+        status: "success",
+        message: "berhasil membaca movie",
+        data: response,
+      });
+    } catch (error) {
+      // next error
+      next(error);
+    }
+  }
 }
