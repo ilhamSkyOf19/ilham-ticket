@@ -95,3 +95,11 @@ Secara ringkas, data utama yang dikelola meliputi:
 ```bash
 git clone <repository-url>
 cd <project-folder>
+
+## install depedencies backend
+cd backend
+npm install
+
+## install depedencies frontend
+cd frontend
+npm install
